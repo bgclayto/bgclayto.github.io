@@ -1,0 +1,530 @@
+\documentclass[11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[ampersand]{easylist}
+\usepackage{authblk}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\geometry{letterpaper}
+	\setlength{\oddsidemargin}{0cm}
+	\setlength{\evensidemargin}{0cm}
+	\setlength{\headheight}{0.5cm}
+	\setlength{\headsep}{0cm}
+	\setlength{\textwidth}{16cm}
+	\setlength{\textheight}{21.0cm}
+	\baselineskip=24pt
+
+\title{Applied/Numerical Qualifier Solution: August 2012}
+
+\author{Bennett Clayton}
+\affil{Texas A\&M University}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+{\bf Problem 1.} Consider the variational problem: find $u \in H^1(\Omega)$, such that $a(u,v) = L(v)$ for all $v\in H^1(\Omega)$, where $\Omega = (0,1) \times (0,1)$, $\Gamma$ is its boundary, and
+\begin{equation}
+a(u,v) = \int_\Omega \nabla u \cdot \nabla v \: dx \: dy + \int_0^1 u(s,0)v(s,0) \: ds \quad \text{and} \quad L(v) = \int_\Gamma gv \: ds.
+\end{equation}
+Let $V_h \subset H^1(\Omega)$ be a finite dimensional space of conforming piece-wise linear finite elements (Courant triangles) over regular partition of $\Omega$ into triangles. For continuous $v$, $w$ defined on $\tilde{\Gamma} \subset \Gamma$, let the bilinear form $\mathcal{Q}_{\tilde{\Gamma}} (v,w)$ come from the quadrature 
+\begin{equation}
+\mathcal{Q}_{\tilde{\Gamma}} (v,w) = \sum_{e\subset\tilde{\Gamma}} \frac{|e|}{2} (v(P^e_1)w(P^e_1) + v(P^e_2)w(P^e_2)) \approx \int_{\tilde{\Gamma}} vw \: ds.
+\end{equation}
+Here $e$ is an edge of the triangulation of length $|e|$ with end points $P^e_1$ and $P^e_2$. Consider the FEM: find $u_h \in V_h$ such that 
+\begin{equation}
+a_h(u_h, v) = L_h(v), \: \forall v\in V_h,
+\end{equation}
+where $a_h(u_h, v)$ and $L_h(v)$ are defined from $a(u_h,v)$ and $L(v)$ with the boundary integrals approximated using quadrature (2).
+
+\vskip 1cm
+
+{\bf a.} {\bf Derive} the strong form to the problem (1).
+
+\vskip 1cm
+
+{\bf Solution}: Let $\Hat{\Gamma} = \Gamma - \{y=0\} \times (0,1)$.
+Then performing integration by parts and we have,
+\begin{align*}
+    a(u,v) &= \int_\Omega \nabla u \cdot \nabla v \: dx \: dy + \int_0^1 u(s,0) v(s,0) \: ds  \\
+    &= \int_\Omega -\Delta u v \: dx \: dy + \int_\Gamma \frac{\partial u}{\partial n} v \: ds + \int_0^1 u(s,0) v(s,0) \: ds \\
+    &= \int_\Omega - \Delta u v \: dx \: dy + \int_{\Hat{\Gamma}} \frac{\partial u}{\partial n} v \: ds + \int_0^1 -\frac{\partial u}{\partial y}(s,0) v(s,0) \: ds + \int_0^1 u(s,0) v(s,0) \: ds. \\
+    &= \int_\Omega - \Delta u v \: dx \: dy + \int_{\Hat{\Gamma}} \frac{\partial u}{\partial n} v \: ds + \int_0^1 (u(s,0) - u_y(s,0) ) v(s,0) \: ds 
+\end{align*}
+Now, if we only consider $v \in H^1_0(\Omega)$, then this implies,
+\begin{equation*}
+    \int_\Omega -\Delta u v \: dx \: dy = 0.
+\end{equation*}
+By the Fundamental Theorem of Variational Calculus, if $\int_\Omega f \phi \: dx = 0$ for all $\phi \in C^\infty_c(\Omega)$, then $f \equiv 0$.
+Since $H^1_0(\Omega)$ is the closure of $C^\infty_c(\Omega)$ a similar result holds for all $v \in H^1_0(\Omega)$.
+Therefore $-\Delta u = 0$.
+Now, for the boundary conditions.
+Since $-\Delta u = 0$, we have
+\begin{equation}
+    \int_{\Hat{\Gamma}} \frac{\partial u}{\partial n} v \: ds + \int_0^1 (u(s,0) - u_y(s,0)) v(s,0) \: ds = \int_\Gamma g v \: ds,
+\end{equation}
+for all $v \in H^1(\Omega)$.
+Since this identity holds for all $v \in H^1(\Omega)$, we must have 
+\begin{equation}
+    \begin{cases}
+        -\Delta u = 0 \quad &\text{ in } \Omega \\
+        \frac{\partial u}{\partial n} = g \quad &\text{ on } \Hat{\Gamma} \\
+        \frac{\partial u}{\partial n} + u = g \quad &\text{ on } \Gamma - \Hat{\Gamma}.
+    \end{cases}
+\end{equation}
+$\blacksquare$
+
+\vskip 2cm
+
+
+
+
+
+{\bf b.} {\bf Prove} that the bilinear form $a(u,v)$ is {\bf coercive} on $H^1$.
+
+\vskip 1cm
+
+{\bf Solution}: In order to prove coercivity, we will first prove the following inequality,
+\begin{equation*}
+    ||u||^2_{L^2(\Omega)} \leq C \Big( \Big|\Big|\frac{\partial u}{\partial y}\Big|\Big|^2_{L^2(\Omega)} + \int_0^1 u^2(s,0) \: ds \Big).
+\end{equation*}
+So consider,
+\begin{align*}
+    ||u||^2_{L^2(\Omega)} &= \int_0^1 \int_0^1 u^2(x,y) \: dx \: dy \\
+    &= \int_0^1 \int_0^1 \Big( \int_0^y \frac{\partial u}{\partial \eta}(x, \eta) \: d\eta + u(x,0) \Big)^2 \: dx \: dy \\
+    &\leq \int_{[0,1]^2} 2 \Big( \int_0^y \frac{\partial u}{\partial \eta} (x,\eta) \: d\eta \Big)^2 + 2u^2(x,0) \: dx \: dy \\
+    &\leq 2\int_0^1\int_0^1 \Big| \frac{\partial u}{\partial y} \Big|^2 \: dx \: dy + 2 \int_0^1 u^2(s,0) \: ds.
+\end{align*}
+Note we have used the Cauchy-Schwarz inequality and the inequality, $(a + b)^2 \leq 2a^2 + 2b^2$.
+Now for the Poincar\`{e} inequality,
+\begin{align*}
+    a(u,u) &= \int_{[0,1]^2} \Big| \frac{\partial u}{\partial x} \Big|^2 + \Big| \frac{\partial u}{\partial y} \Big|^2 \: dx \: dy + \int_0^1 u^2(s,0) \: ds \\
+    &\geq \frac{1}{2}||\nabla u||^2_{L^2(\Omega)} + \frac{1}{2} \Big( \int_{[0,1]^2} \Big| \frac{\partial u}{\partial y} \Big|^2 \: dx \: dy + \int_0^1 u^2(s,0) \: ds \Big) \\
+    &\geq \frac{1}{2} ||\nabla u||^2_{L^2(\Omega))} + \frac{1}{4} ||u||^2_{L^2(\Omega)} \\
+    &\geq \frac{1}{4} ||u||^2_{H^1(\Omega)}.
+\end{align*}
+Thus $a(\cdot, \cdot)$ is coercive on $H^1(\Omega)$.
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+{\bf c.} {\bf Prove} that for $\tilde{\Gamma} = \{ (x,0), 0 < x < 1 \}$, there are constants $c_1$ and $c_2$, independent of $h$, such that 
+\begin{equation}
+    c_1\mathcal{Q}_{\tilde{\Gamma}} (v,v) \leq \int_0^1 v(x,0)^2 \: dx \leq c_2\mathcal{Q}_{\tilde{\Gamma}} (v,v), \: \forall v \in V_h.
+\end{equation}
+Note that this inequality and part b. immediately imply 
+\begin{equation}
+    a_h(v,v) \geq \alpha ||v||^2_{H^1(\Omega)}, \: \forall v \in V_h    
+\end{equation}
+for some $\alpha > 0$ independent of $h$.
+
+\vskip 1cm
+
+\textbf{Proof}: First note that $v|_e$ is linear and $(v|_e)^2$ will be a \textbf{convex} quadratic function. 
+Therefore, the trapezoidal rule will give an upper estimate of $\int_0^1 v(x,0)^2 \: dx$.
+So we have,
+\begin{equation*}
+    \int_0^1 v(x,0)^2 \: dx = \sum_{e\subset \Tilde{\Gamma}} \int_e v(x,0)^2 \: dx \leq \sum_{e \subset \Tilde{\Gamma}} \frac{|e|}{2}( v^2(P^e_1) + v^2(P^e_2)) = \mathcal{Q}_{\Tilde{\Gamma}}(v,v)
+\end{equation*}
+For the lower bound, let $T_e : [-1,1] \to e$ be the usual affine transformation, and define $\Hat{v}_e := v \circ T_e$.
+As before, $\hat{v}_e$ is linear, so we write $\Hat{v}_e(\Hat{x},0) = a_e\Hat{x} + b_e$, then through direct computation, we have,
+\begin{equation*}
+    \int_{-1}^1 (a_e\Hat{x}+b_e)^2 \: d\Hat{x} = \frac{1}{3}(2a_e^2 + 6b_e^2) \geq \frac{1}{3}(2a_e^2 + 2b_e^2).
+\end{equation*}
+But notice that $\Hat{v}_e^2(1,0) + \Hat{v}_e^2(-1,0) = 2a_e^2 + 2b_e^2$.
+Thus, we have that 
+\begin{align*}
+    \int_0^1 v(x,0)^2 \: dx &= \sum_{e \subset \Tilde{\Gamma}} \int_e v(x,0)^2 \: dx \\
+    &= \sum_{e\subset\Tilde{\Gamma}} \frac{|e|}{2} \int_{-1}^1 \Hat{v}_e^2(\Hat{x},0) \: d\Hat{x} \\
+    &\geq \sum_{e \subset \Tilde{\Gamma}} \frac{|e|}{2} \cdot \frac{1}{3}(\Hat{v}_e^2(1,0) + \Hat{v}_e^2(-1,0)) \\
+    &= \frac{1}{3}\sum_{e \subset \Tilde{\Gamma}} \frac{|e|}{2} ( v^2(P^e_1) + v^2(P^2_2)).
+\end{align*}
+Hence we can conclude that,
+\begin{equation*}
+    \frac{1}{3} \mathcal{Q}_{\Tilde{\Gamma}}(v,v) \leq \int_0^1 v^2(x,0) \: dx.
+\end{equation*}
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+
+{\bf d.} Apply Strang's First Lemma to {\bf estimate the error} in $H^1$-norm for the FEM (3). You may assume that $g$ is as regular (smooth) as needed by your analysis and you can use (without proof) standard approximation properties for the finite element space $V_h$.
+
+\vskip 1cm
+
+{\bf Solution}: Recall the inequality for Strang's lemma,
+\begin{equation*}
+    ||u - u_h||_{H^1(\Omega)} \leq c \big[ \inf_{v_h \in V_h} \big( ||u - v_h||_{H^1(\Omega)} + ||a(v_h, \cdot) - a_h(v_h, \cdot)||_{*,h} \big) + ||L - L_h||_{*,h} \big],
+\end{equation*}
+and in order to apply Strang's lemma, we must have that $a_h(\cdot, \cdot)$ is $V_h$-elliptic.
+But this result follows from part c.
+So note that $|L(v_h) - L_h(v_h)| = |\int_{\Tilde{\Gamma}} v_h g \: ds - \mathcal{Q}_{\Tilde{\Gamma}}(v_h, g)|$ by the assumption in the statement of the problem.
+Additionally, we have $|a(v_h, z_h) - a_h(v_h, z_h)| = |\int_{\Tilde{\Gamma}} v_h z_h \: ds - \mathcal{Q}_{\Tilde{\Gamma}}(v_h, z_h)|$, again by the statement of the problem. 
+So lets now focus on $|a(v_h, z_h) - a_h(v_h, z_h)|$,
+\begin{align*}
+	|a(v_h, z_h) - a_h(v_h, z_h)| &= \Big|\int_0^1 v_h(s,0) z_h(s,0) \: ds - \sum_{e \subset \Tilde{\Gamma}} \frac{|e|}{2} \big((v_hz_h)(P^e_1) + (v_h z_h)(P^e_2)\big) \Big| \\
+	&=  \Big| \sum_{e\subset \Tilde{\Gamma}} \int_e v_h(s,0) z_h(s,0) \: ds - \frac{|e|}{2} \big((v_h z_h)(P^e_1) + (v_h z_h)(P^e_2)\big) \Big| \\
+	&\leq \sum_{e \subset \Tilde{\Gamma}} \frac{|e|}{2} \Big| \int_{-1}^1 \Hat{v}_h(\hat{s},0) \Hat{z}_h(\hat{s},0) \: d\Hat{s} - ((\hat{v}_h \hat{z}_h)(-1,0) + (\Hat{v}_h \Hat{z}_h)(1,0)) \Big|
+\end{align*}
+Define the sublinear functional, $E : H^2(-1,1) \to \mathbb{R}$ by,
+\begin{equation*}
+	E(v) := \Big|\int_{-1}^1 v \: ds - (v(-1) + v(1))\Big|.
+\end{equation*}
+We show that $E$ is bounded,
+\begin{align*}
+	|E(v)| &\leq \int_{-1}^1 |v| \: ds + |v(-1)| + |v(1)| \\
+	&\leq \sqrt{2}||v||_{L^2(-1,1)} + \sqrt{2} ||v||_{\ell^2(-1,1)} \\
+	&\leq \sqrt{2}(||v||_{L^2(-1,1)} + C_{\text{trace}} ||v||_{H^1(-1,1)}) \\
+	&\leq C ||v||_{H^2(-1,1)},
+\end{align*}
+where we have used the Cauchy-Schwarz inequality and the trace theorem with $||v||_{\ell^2(-1,1)} := \sqrt{v(-1)^2 + v(1)^2}$.
+One can also verify that $E(p) = 0$ for all $p \in \mathbb{P}_1$.
+So by the Bramble-Hilbert lemma, we have $|E(u)| \leq C|u|_{H^2(-1,1)}$.
+For our problem, we have $|E(\Hat{v}_h \Hat{z}_h)| \leq C|\Hat{v}_h \Hat{z}_h|_{H^2(-1,1)}$.
+Applying this in our inequality, we have,
+\begin{align*}
+    |a(v_h, z_h) - a_h(v_h, z_h)| &\leq C \sum_{e \subset \Tilde{\Gamma}} \frac{|e|}{2} |\Hat{v}_h \Hat{z}_h|_{H^2(-1,1)} \\
+	&\leq Ch^{2+1/2} \sum_{e\subset\Tilde{\Gamma}} |v_h z_h|_{H^2(e)} \\ 
+	&\leq Ch^{2+1/2} \sum_{e \subset \Tilde{\Gamma}}  \Big( \int_e \big((v_h z_h)''(x,0)\big)^2 \: dx \Big)^{1/2} \\ 
+	&= Ch^{2+1/2} \sum_{e \subset \Tilde{\Gamma}} \Big( \int_e 4 (v_h'(x,0) z_h'(x,0))^2 \: dx \Big)^{1/2}.
+\end{align*}
+where the prime $'$ notation is differentiation with respect to $x$.
+Since $\Hat{v}_h$ and $\Hat{z}_h$ are linear on $(-1,1)$, their derivatives are constant.
+Therefore, we can write,
+\begin{align*}
+	|a(v_h, z_h) - a_h(v_h, z_h)| &\leq C h^{2+1/2} \sum_{e\subset\Tilde{\Gamma}} |v_h|_{H^1(e)} |z_h|_{H^1(e)} \\
+	&\leq C h^{2+1/2} \Big( \sum_{e\subset\Tilde{\Gamma}} |v_h|^2_{H^1(e)} \Big)^{1/2} \Big( \sum_{e\subset\Tilde{\Gamma}} |z_h|^2_{H^1(e)} \Big)^{1/2} \\
+	&\leq C h^{2+1/2} \Big( \sum_{e\subset\Tilde{\Gamma}} ||\nabla v_h||^2_{L^2(e)} \Big)^{1/2} \Big( \sum_{e\subset\Tilde{\Gamma}} ||\nabla z_h||^2_{L^2(e)} \Big)^{1/2}.
+\end{align*}
+Again using the fact that $\nabla v_h$ and $\nabla z_h$ are constant, we use this fact to write,
+\begin{equation}
+	||\nabla v_h||^2_{L^2(e)} = |e| \big|(\nabla v_h)|_e\big|^2 = |\tau_e| \big|(\nabla v_h)|_{\tau_e}\big|^2 \frac{|e|}{|\tau_e|} = \frac{|e|}{|\tau_e|} |v_h|^2_{H^1(\tau_e)},
+\end{equation}
+where $\tau_e$ is the triangle assosciated with the boundary edge $e$.
+We use this identity, to write,
+\begin{align*}
+	|a(v_h, z_h) - a_h(v_h, z_h)| &\leq C h^{2+1/2} \frac{|e|}{|\tau_e|} \Big( \sum_{e\subset\Tilde{\Gamma}} |v_h|^2_{H^1(\tau_e)} \Big)^{1/2} \Big( \sum_{e\subset\Tilde{\Gamma}} |z_h|^2_{H^1(\tau_e)} \Big)^{1/2} \\
+	&\leq C h^{1+1/2} \Big( \sum_{\tau \in \mathcal{T}_h} |v_h|^2_{H^1(\tau)} \Big)^{1/2} \Big( \sum_{\tau \in \mathcal{T}_h} |z_h|^2_{H^1(\tau)} \Big)^{1/2} \\
+	&= Ch^{1+1/2} |v_h|_{H^1(\Omega)} |z_h|_{H^1(\Omega)}.
+\end{align*}
+Now, notice from the definition of our operator norm, we have,
+\begin{align*}
+    ||a(v_h, \cdot) - a_h(v_h, \cdot)||_{*,h} &= \sup_{z_h \in V_h} \frac{|a(v_h, z_h) - a_h(v_h, z_h)|}{||z_h||_{H^1(\Omega)}} \\
+	&\leq \sup_{z_h \in V_h} \frac{Ch^{1+1/2}|v_h|_{H^1(\Omega)} |z_h|_{H^1(\Omega)} }{||z_h||_{H^1(\Omega)}} \\
+	&\leq Ch^{1+1/2} |v_h|_{H^1(\Omega)}.
+\end{align*}
+
+Looking back at the Bramble Hilbert lemma, we conclude,
+\begin{align*}
+	\inf_{v_h \in V_h} \big( ||u - v_h||_{H^1(\Omega)} + ||a(v_h, \cdot) - a_h(v_h, \cdot)||_{*,h} \big) &\leq \inf_{v_h \in V_h} \big( ||u - v_h||_{H^1(\Omega)} + Ch^{1+1/2}|v_h|_{H^1(\Omega)} \big) \\
+	&\leq ||u - \Pi_h u ||_{H^1(\Omega)} + Ch^{1+1/2} ||\Pi_h u||_{H^1(\Omega)} \\
+	&\leq Ch|u|_{H^1(\Omega)} + Ch^{1+1/2} ||\Pi_h|| ||u||_{H^1(\Omega)} \\
+    &\leq Ch ||u||_{H^1(\Omega)}.
+\end{align*}
+where we have used the usual approximation properties on for $||u - \Pi_h u ||_{H^1(\Omega)}$.
+
+Now for $||L - L_h||_{*,h}$.
+Consider,
+\begin{align*}
+    ||L - L_h||_{*,h} &= \sup_{v_h \in V_h} \frac{|L(v_h) - L_h(v_h)|}{||v_h||_{H^1(\Omega)}} \\
+    &= \sup_{v_h \in V_h} \frac{|\int_{\Tilde{\Gamma}} v_h g \: ds - \mathcal{Q}_{\Tilde{\Gamma}} (v_h, g)|}{||v_h||_{H^1(\Omega)}}.
+\end{align*}
+We will focus on the numerator in the supremum,
+\begin{align*}
+    \Big| \int_{\Tilde{\Gamma}} v_h g \: ds - \sum_{e \subset \Tilde{\Gamma}} \frac{|e|}{2} ( (v_hg)(P^e_1) + (v_hg)(P^e_2) ) \Big| &\leq \sum_{e \subset \Tilde{\Gamma}} \Big| \int_e v_h g \: ds - \frac{|e|}{2} ( (v_hg)(P^e_1) + (v_h g)(P^e_2) ) \Big| \\
+    &\leq \sum_{e \subset \Tilde{\Gamma}} \frac{|e|}{2} \Big| \int_{-1}^1 \Hat{v}_h \Hat{g} \: d\Hat{s} - ( (\Hat{v}_h \Hat{g})(-1) + (\Hat{v}_h \Hat{g})(1) ) \Big|.
+\end{align*}
+Notice that we can apply the Bramble-Hilbert lemma in the same way as we did for the error in the bilinear forms, $a - a_h$.
+Therefore,
+\begin{equation*}
+    |L(v_h) - L_h(v_h)| \leq C\sum_{e \subset \Tilde{\Gamma}} \frac{|e|}{2} |\Hat{v}_h \Hat{g}|_{H^2(-1,1)} \leq Ch^{2+1/2} \sum_{e \subset \Tilde{\Gamma}} |v_h g|_{H^2(e)}.
+\end{equation*}
+Now consider,
+\begin{align*}
+    |v_h g|_{H^2(e)}^2 &= \int_e \Big| \frac{d^2}{dx} (v_h g) \Big|^2 \: dx \\
+    &= \int_e | v_h'' g + 2 v_h' g' + v_h g''|^2 \: dx \\
+    &\leq C \int_e |v_h'|^2 |g'|^2 + |v_h|^2 |g''|^2 \: dx \\
+    &\leq C ||g||^2_{W^{2,\infty}(e)} ||v_h||^2_{H^1(e)}.
+\end{align*}
+Taking the square root and applying this inequality in our problem, we have,
+\begin{align*}
+    |L(v_h) - L_h(v_h)| &\leq C h^{2+1/2} \sum_{e \subset \Tilde{\Gamma}} ||g||_{W^{2,\infty}(e)} ||v_h||_{H^1(e)} \\
+	&\leq C h^{2+1/2} ||g||_{W^{2,\infty}(\partial \Omega)} \sum_{e \subset \partial\Omega} ||v_h||_{H^1(e)} \\
+	&\leq C h^{2+1/2} ||g||_{W^{2,\infty}(\partial \Omega)} \Big(\sum_{e\subset\partial\Omega} 1\Big)^{1/2} \Big(\sum_{e\subset\partial\Omega} ||v_h||^2_{H^1(e)} \Big)^{1/2} \\
+	&\leq C h^2 ||g||_{W^{2,\infty}(\partial \Omega)} ||v_h||_{H^1(\partial\Omega)},
+\end{align*}
+where we have used the fact that the number of edges in our triangulation is proportional to $|\partial\Omega|/h$.
+Next note that, $||v_h||^2_{H^1(\partial\Omega)} = ||v_h||^2_{L^2(\partial\Omega)} + ||\nabla v_h||^2_{L^2(\partial\Omega)}$. 
+Consider, 
+\begin{align*}
+	||\nabla v_h||^2_{L^2(\Omega)} &= \sum_{e\subset\partial\Omega} |v_h|^2_{H^1(e)} \\
+	&= \sum_{e\subset\partial\Omega} |e| \big|(\nabla v_h)|_e\big|^2 \\
+	&= \sum_{e\subset\partial\Omega} |\tau_e| \big|(\nabla v_h)|_{\tau_e}\big|^2 \frac{|e|}{|\tau_e|} \\
+	&\leq \frac{C}{h} ||\nabla v_h||^2_{H^1(\Omega)}
+\end{align*}
+From this we can conclude that $||v_h||_{H^1(\partial\Omega)} \leq \frac{C}{h} ||v_h||_{H^1(\Omega)}$.
+Therefore,
+\begin{equation}
+	|L(v_h) - L_h(v_h)| \leq C h^{1 + 1/2} ||g||_{W^{2,\infty}(\partial\Omega)} ||v_h||_{H^1(\Omega)}.
+\end{equation}
+Therefore,
+\begin{equation*}
+	||L - L_h||_{*,h} = \sup_{z_h \in V_h} \frac{|L(z_h) - L_h(z_h)|}{||z_h||_{H^1(\Omega)}} \leq Ch^{1+1/2} ||g||_{W^{2,\infty}(\partial\Omega)}.
+\end{equation*}
+Combining all of these results in Strang's lemma, we have,
+\begin{equation*}
+	||u - u_h||_{H^1(\Omega)} \leq Ch||u||_{H^1(\Omega)} + Ch^{1 + 1/2}||g||_{W^{2,\infty}(\partial\Omega)} \leq Ch(||u||_{H^1(\Omega)} + ||g||_{W^{2,\infty}(\partial\Omega)} ).
+\end{equation*}
+$\blacksquare$
+
+
+
+
+\newpage
+
+
+
+{\bf Problem 2.} Consider the following initial boundary value problem: find $u(x,t)$ such that 
+\begin{align*}
+\frac{\partial}{\partial t}(u - \Delta u) - \mu \Delta u &= f, \: x \in \Omega, T \geq t > 0, \\
+u(x,t) &= 0, \: x\in \partial\Omega, \: T \geq t > 0, \\
+u(x,0) &= u_0(x), \: x \in \Omega,
+\end{align*}
+where $\Omega$ is a polygonal domain in $\mathbb{R}^2$, $\mu > 0$ is a given constant, and $f(x,t)$ and $u_0(x)$ are given right hand side and initial data functions.
+
+\vskip 1cm
+
+
+{\bf a.} {\bf Derive} a weak formulation of this problem and derive an {\it a priori} estimate for the solution in the norm 
+\begin{equation*}
+||u(t)||_{H^1(\Omega)} = (||u(t)||^2_{L^2(\Omega)} + ||\nabla u(t)||^2_{L^2(\Omega)} )^{1/2}
+\end{equation*}
+in terms of the right-hand side and the initial data.
+
+\vskip 1cm
+
+{\bf Solution}: Multiplying the PDE by a test function $v(x)$, we have,
+\begin{equation*}
+    \int_\Omega (u_t - \Delta u_t) v - \mu \Delta u v \: dx 
+    = \int_\Omega u_t v + \nabla u_t \cdot \nabla v + \mu \nabla u \cdot \nabla v \: dx - \int_{\partial \Omega} (\frac{\partial u_t}{\partial n} + \mu \frac{\partial u}{\partial n} ) v \: ds.
+\end{equation*} 
+Since we have no information about $\partial u/\partial n$ on the boundary, we must take $v \in H^1_0(\Omega)$.
+Thus, our weak formulation becomes: find $u \in L^2(0,T;H^1_0(\Omega))$ such that 
+\begin{equation*}
+    (u_t, v) + a(u_t, v) + \mu a(u,v) = (f,v),
+\end{equation*}
+for all $v \in H^1_0(\Omega)$, where $(\cdot, \cdot)$ is the usual $L^2$ inner product and $a(u,v) := \int_\Omega \nabla u \cdot \nabla v \: dx$.
+Note that $a(\cdot, \cdot)$ is coercive, since our variational space is $H^1_0(\Omega)$ wich will imply that a Poincar\`{e} inequality exists.
+One can then prove that there exists $\alpha > 0$ such that $a(u,u) \geq \alpha ||u||^2_{H^1(\Omega)}$ (coercivity).
+
+Now, to find the a priori error estimate, set $v = u$ in the weak formulation.
+This gives us,
+\begin{align*}
+    (u_t, u) + a(u_t , u) + \mu a(u,u) &= \int_\Omega \frac{1}{2} \frac{d}{dt} |u|^2 + \frac{1}{2} \frac{d}{dt} |\nabla u|^2 \: dx + \mu a(u,u) \\
+    &= \frac{1}{2} \frac{d}{dt} ||u(t)||^2_{H^1(\Omega)} + \mu a(u,u)
+\end{align*}
+Applying the usual inequalities, we can write 
+\begin{equation*}
+    \frac{1}{2} \frac{d}{dt} ||u(t)||^2_{H^1(\Omega)} + \alpha\mu ||u(t)||^2_{H^1(\Omega)} \leq (f,u) \leq ||f||_{L^2(\Omega)} ||u||_{L^2(\Omega)} \leq ||f||_{L^2(\Omega)} ||u||_{H^1(\Omega)}.
+\end{equation*}
+This can be rewritten as,
+\begin{equation*}
+    \frac{d}{dt} ||u(t)||_{H^1(\Omega)} + \alpha\mu ||u(t)||_{H^1(\Omega)} \leq ||f||_{L^2(\Omega)}.
+\end{equation*}
+Multiplying both sides of the inequality by $e^{\alpha\mu t}$ and using the product rule (integrating factors), we have,
+\begin{equation*}
+    \frac{d}{dt} \big( e^{\alpha\mu t}||u(t)||_{H^1(\Omega)} \big) \leq e^{\alpha\mu t} ||f||_{L^2(\Omega)}.
+\end{equation*}
+Now replace $t$ by $s$ as the dummy variable and integrate from $0$ to $t$.
+This gives us,
+\begin{equation*}
+    e^{\alpha\mu t}||u(t)||_{H^1(\Omega)} - ||u(0)||_{H^1(\Omega)} \leq \int_0^t e^{\alpha\mu s} ||f(s)||_{L^2(\Omega)} \: ds.
+\end{equation*}
+Solving for $||u(t)||_{H^1(\Omega)}$ gives us the a priori estimate,
+\begin{equation*}
+    ||u(t)||_{H^1(\Omega)} \leq e^{-\alpha\mu t} ||u_0||_{H^1(\Omega)} + \int_0^t e^{-\alpha\mu (t - s)} ||f(s)||_{L^2(\Omega)} \: ds.
+\end{equation*}
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+{\bf b.} {\bf Write down} the fully discrete scheme based on implicit (backward) Euler approximation in time and the finite element method in space with continuous piece-wise linear functions. \textbf{Prove} unconditional stability in the $H^1$-norm for the resulting approximation.
+
+
+\vskip 1cm
+
+
+
+
+\textbf{Solution}: Let $V_h$ be the space of continuous piece-wise linear functions and let the basis (tent) functions be denoted as $V_h = \text{span}\{\phi_i\}_{i=1}^N$.
+Additionally, let $t_n = nk$ for $0 \leq n \leq N$ an integer and $k > 0$ such that $T = kN$, then define $u_h^n := u_h(x, t_n)$ and $f^n := f(x, t_n)$.
+Then our fully discrete problem becomes: given $u^n_h \in V_h$, find $u^{n+1}_h \in V_h$ such that,
+\begin{equation*}
+    \big( \frac{u^{n+1}_h - u^n_h}{k}, v_h \big) + a\big( \frac{u^{n+1}_h - u^n_h}{k}, v_h \big) + \mu a(u^{n+1}_h, v_h) = (f^{n+1},v_h),
+\end{equation*}
+for all $v_h \in V_h$ and $u^0_h = \Pi_h u_0$, that is, the projection of $u_0$ onto the space $V_h$.
+
+Now to prove stability for this approximation, set $v_h = u^{n+1}_h$, and rewrite the terms; we then have,
+\begin{equation*}
+\begin{split}
+    ||u^{n+1}_h||^2_{L^2(\Omega)} - (u^n_h, u^{n+1}_h) + ||\nabla u^{n+1}_h||^2_{L^2(\Omega)} - a( u^n_h, &u^{n+1}_h) + k\mu a(u^{n+1}_h, u^{n+1}_h) \\
+    &\leq k||f^{n+1}||_{L^2(\Omega)} ||u^{n+1}_h||_{L^2(\Omega)}.
+\end{split}
+\end{equation*}
+Rearranging the terms and dropping $k\mu a(u^{n+1}_h, u^{n+1}_h)$, we get,
+\begin{equation*}
+    ||u^{n+1}_h||^2_{H^1(\Omega)} \leq k||f^{n+1}||_{L^2(\Omega)} ||u^{n+1}_h||_{L^2(\Omega)} + ||u^n_h||_{L^2(\Omega)} ||u^{n+1}_h||_{L^2(\Omega)} + |u^n_h|_{H^1(\Omega)} |u^{n+1}_h|_{H^1(\Omega)}
+\end{equation*}
+Next, using the inequality, $ab + cd \leq \sqrt{a^2 + c^2}\sqrt{b^2 + d^2}$, we have,
+\begin{equation*}
+    ||u^{n+1}_h||^2_{H^1(\Omega)} \leq k||f^{n+1}||_{L^2(\Omega)} ||u^{n+1}_h||_{H^1(\Omega)} + ||u^n_h||_{H^1(\Omega)} ||u^{n+1}_h||_{H^1(\Omega)}.
+\end{equation*}
+We divide by $||u^{n+1}_h||_{H^1(\Omega)}$ which gives us,
+\begin{equation*}
+    ||u^{n+1}_h||_{H^1(\Omega)} \leq k||f^{n+1}||_{L^2(\Omega)} + ||u^n_h||_{H^1(\Omega)} \leq \cdots \leq k \sum_{j = 1}^{n+1} ||f^j||_{L^2(\Omega)} + ||u^0_h||_{H^1(\Omega)} < \infty.
+\end{equation*}
+We assume that $f \in L^1(0,T; L^2(\Omega))$, which allows us to guarentee the right hand side is finite.
+Thus we have unconditional stability in the $H^1$-norm.
+(Unconditional in the sense that, the stability is not dependent on the spacial or temporal mesh sizes.)
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+{\bf c.} Consider now the forward Euler approximation for the derivative in $t$. {\bf Find} the Courant condition for stability of the resulting method in a norm of your choice.
+
+\vskip 1cm
+
+\textbf{Solution:} \textcolor{red}{Couldn't figure this one out.}
+
+
+\newpage
+
+
+
+\textbf{Problem 3.}  Let $\mathcal{T}_h$ be a partition of $(0, 1)$ into finite elements of equal size $h = 1/N$,
+$N > 1$ an integer, and $x_i = ih$, $i = 0, 1, \ldots , N$.
+Consider the finite dimensional space $V_h$ of continuous piece-wise quadratic functions on $\mathcal{T}_h$. 
+The degrees of freedom on finite element ($x_{i-1}, x_i)$ are 
+\begin{equation} \label{degree_of_freedom}
+    \Big\{ v(x_{i-1}), v(x_i), \frac{1}{h} \int_{x_{i-1}}^{x_i} v \: dx \Big\}.
+\end{equation}
+
+\vskip 1cm
+
+
+\textbf{a.} \textbf{Explicitly find the nodal basis} of $V_h$ over the finite element $(x_{i-1}, x_i)$, corresponding to these degrees of freedom.
+
+\vskip 1cm 
+
+
+\textbf{Solution:} Let $\phi_1$, $\phi_2$, and $\phi_3$ be the nodal basis functions for $V_h$ over $(x_{i-1}, x_i)$. 
+So to find $\phi_1$, it must satisfy the following: $\phi_1(x_{i-1}) = 1$, $\phi_1(x_i) = 0$ and $\frac{1}{h}\int_{x_{i-1}}^{x_i} \phi_1 \: dx = 0$.
+To make things simpler, we first transfer to the reference element to determine $\phi_1$ and then transfer back.
+So using the map $T_i : [0,1] \to [x_{i-1}, x_i]$ defined by $x = T_i(\Hat{x}) = h\Hat{x} + x_{i-1}$.
+We define $\Hat{\phi}_{1,i} := \phi_1 \circ T_i$, and we will drop the $i$ subscript to alleviate the notation.
+Then we have,
+\begin{equation*}
+    \Hat{\phi}_1(0) = 1, \quad \Hat{\phi}_1(1) = 0, \quad \text{ and } \quad \int_0^1 \Hat{\phi}_1(\Hat{x}) \: d\Hat{x} = 0.
+\end{equation*}
+Thus for $\Hat{\phi}_1 = a\Hat{x}^2 + b\Hat{x} + c$, we have,
+\begin{align*}
+    \Hat{\phi}_1(0) &= c = 1 \\
+    \Hat{\phi}_1(1) &= a + b + c = 0 \\
+    \int_0^1 \Hat{\phi}_1(\Hat{x}) \: d\Hat{x} &= \frac{1}{3}a + \frac{1}{2} b + c = 0.
+\end{align*}
+Solving this system of equations tells us that,
+\begin{equation*}
+    \Hat{\phi}_1(x) = 3\Hat{x}^2 - 4\Hat{x} + 1.
+\end{equation*}
+We transfer back to the global element and repeat this for the other functions $\phi_2$ and $\phi_3$.
+We conclude that,
+\begin{align*}
+    \phi_1(x) &= 3 \big(\frac{x - x_{i-1}}{h} \big)^2 - 4\big(\frac{x - x_{i-1}}{h} \big) + 1 \\
+    \phi_2(x) &= 3 \big(\frac{x - x_{i-1}}{h} \big)^2 - 2\big(\frac{x - x_{i-1}}{h} \big) \\
+    \phi_3(x) &= -6 \big(\frac{x - x_{i-1}}{h} \big)^2 + 6\big(\frac{x - x_{i-1}}{h} \big).
+\end{align*}
+$\blacksquare$
+
+\vskip 2cm
+
+
+
+
+\textbf{b.} \textbf{Prove} that
+sup 
+\begin{equation}
+    \sup_{\phi \in H^1_0(\Omega)} \frac{\displaystyle{\int_0^1 ( u - \Pi_h u ) \phi \: dx}}{||\phi||_{H^1_0(\Omega)}} \leq Ch ||u - \Pi_h u ||_{L^2(0,1)},
+\end{equation}
+$\forall u \in H^1(0,1)$.
+Here $\Pi_h u$ is the finite element interpolant of $u$ with respect to the nodal basis of $V_h$ defined by \eqref{degree_of_freedom}.
+
+\vskip 1cm
+
+
+\textbf{Proof:} First, we will show that $\int_0^1 u - \Pi_h u \: dx = 0$.
+So consider,
+\begin{align*}
+    \int_0^1 u - \Pi_h u \: dx &= \sum_{i=1}^N \int_{x_{i-1}}^{x_i} u - \Pi_h u \: dx \\
+    &= \sum_{i=1}^N \int_{x_{i-1}}^{x_i} u(x) - u(x_{i-1})\phi_{1,i}(x) - u(x_i)\phi_{2,i}(x) - \big( \frac{1}{h} \int_{x_{i-1}}^{x_i} u(s) \: ds \Big)  \phi_{3,i}(x) \: dx \\
+    &= \sum_{i=1}^N \Big\{ \int_{x_{i-1}}^{x_i} u(x) \: dx - \Big( \int_{x_{i-1}}^{x_i} u(s) \: ds \Big) \Big( \frac{1}{h} \int_{x_{i-1}}^{x_i} \phi_{3,i}(x) \: dx \Big) \Big\} \\
+    &= 0,
+\end{align*}
+where we have used the fact that the nodal basis functions satisfy $\sigma_{k,i}(\phi_{j,i}) = \delta_{kj}$ for the linear functionals $\sigma_{k,i}$ defined in part a. (the sigma notation is not used in part a.).
+Thus, we can say that $\int_0^1 c (u - \Pi_h u) \: dx = 0$ for any constant $c$.
+In particular, $\int_{x_{i-1}}^{x_i} c(u - \Pi_h u) \: dx = 0$ for any constant $c$.
+Now define $\Bar{\phi}(x)$ to be a piecewise constant function, such that  $\Bar{\phi}(x) = \Bar{\phi}_i := \frac{1}{h} \int_{x_{i-1}}^{x_i} \phi(x) \: dx$ for $x \in (x_{i-1}, x_i)$, $i = 1, \ldots, N$.
+Then we can write,
+\begin{align*}
+    \int_0^1 (u - \Pi_h u) \phi \: dx &= \sum_{i=1}^N \int_{x_{i-1}}^{x_i} (u - \Pi_h u) \phi \: dx \\
+    &= \sum_{i=1}^N \int_{x_{i-1}}^{x_i} (u - \Pi_h u) (\phi - \Bar{\phi}_i) \: dx \\
+    &\leq \sum_{i=1}^N ||u - \Pi_h u||_{L^2(x_{i-1}, x_i)} ||\phi - \Bar{\phi}_i ||_{L^2(x_{i-1}, x_i)}.
+\end{align*}
+Transfering to the reference element with the mapping $T_i$ as in part a., we can write,
+\begin{align*}
+    ||\phi - \Bar{\phi}_i||^2_{L^2(x_{i-1}, x_i)} &= \int_{x_{i-1}}^{x_i} (\phi(x) - \frac{1}{h}\int_{x_{i-1}}^{x_i} \phi(s) \: ds )^2 \: dx \\ 
+    &= \int_0^1 (\Hat{\phi} - \frac{1}{h}\int_{x_{i-1}}^{x_i} \phi(s) \: ds )^2 h \: d\Hat{x} \\
+    &= h \int_0^1 ( \Hat{\phi} - \int_0^1 \Hat{\phi} \: d\Hat{s} )^2 \: d\Hat{x} \\
+    &= h ||\Hat{\phi} - \Bar{\Hat{\phi}}_i||^2_{L^2(0,1)}
+\end{align*}
+So note that $L(\Hat{\phi}) := ||\Hat{\phi} - \Bar{\Hat{\phi}}_i||_{L^2(0,1)}$ is a sublinear functional on $H^1(0,1)$ which is zero for constants.
+By the Bramble-Hilbert lemma, we have that $||\Hat{\phi} - \Bar{\phi}||_{L^2(0,1)} \leq C|\Hat{\phi}|_{H^1(0,1)}$.
+Applying these results and transferring back to the element $[x_{i-1},x_i]$, we have,
+\begin{align*}
+    \int_0^1 (u - \Pi_h u) \phi \: dx &\leq C h^{1/2} \sum_{i=1}^N ||u - \Pi_h u||_{L^2(x_{i-1}, x_i)} |\Hat{\phi}|_{H^1(0,1)} \\
+    &\leq C h^{1/2} \sum_{i=1}^N ||u - \Pi_h u||_{L^2(x_{i-1}, x_i)} \cdot C h^{1/2} |\phi|_{H^1(x_{i-1}, x_i)} \\
+    &\leq Ch ||u - \Pi_h u||_{L^2(0,1)} ||\phi||_{H^1(0,1)}.
+\end{align*}
+Therefore,
+\begin{equation*}
+    \sup_{\phi \in H^1_0(\Omega)} \frac{\int_0^1 (u - \Pi_h u) \phi \: dx}{||\phi||_{H^1(0,1)}}  \leq Ch ||u - \Pi_h u||_{L^2(0,1)}.
+\end{equation*}
+$\blacksquare$
+
+
+
+\end{document}

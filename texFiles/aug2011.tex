@@ -1,0 +1,519 @@
+\documentclass[11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[ampersand]{easylist}
+\usepackage{authblk}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\newcommand{\bs}{\boldsymbol}
+\newcommand{\phid}{\varphi^\delta}
+
+\geometry{letterpaper}
+	\setlength{\oddsidemargin}{0cm}
+	\setlength{\evensidemargin}{0cm}
+	\setlength{\headheight}{0.5cm}
+	\setlength{\headsep}{0cm}
+	\setlength{\textwidth}{16cm}
+	\setlength{\textheight}{21.0cm}
+	\baselineskip=24pt
+
+\title{Applied/Numerical Qualifier Solution: August 2011}
+
+\author{Bennett Clayton}
+\affil{Texas A\&M University}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+{\bf Problem 1.} Let $\mathbb{P}_2$ be the space of polynomials in two variables spanned by 
+\begin{equation}
+    \{1, x_1, x_2, x_1^2, x_1x_2, x_2^2\},
+\end{equation}
+let $\Hat{T}$ be the reference unit triangle, $\Hat{\gamma}$ one side of $\Hat{T}$, and $\Hat{\pi}$ the standard Lagrange interpolant in $\Hat{T}$ with values in $\mathbb{P}_2$. 
+
+Recall that there exists a constant $C$ only depending on the geometry of $\hat{T}$ such that $\forall v \in H^3(\hat{T})$, 
+\begin{equation}
+    \inf_{p\in\mathbb{P}_2} ||v + p ||_{H^3(\hat{T})} \leq C |v|_{H^3(\hat{T})}
+\end{equation}
+
+\vskip 1cm
+
+{\bf a.} State the trace theorem relating $L^2(\hat{\gamma})$ and $H^1(\hat{T})$.
+\\[8pt]
+
+{\bf Solution}: The trace theorem in general says: For $\Omega$ a bounded domain and $\partial\Omega$ a Lipschitz boundary, there exists a bounded linear map $B : W^{1,p}(\Omega) \to L^p(\partial\Omega)$ such that 
+\begin{itemize}
+\item $Bu = u|_{\partial\Omega}, \quad \forall u \in W^{1,p}(\Omega)$ \\
+\item $||Bu||_{L^2(\partial\Omega)} \leq C_{p,\Omega} ||u||_{W^{1,p}(\Omega)} $
+\end{itemize}
+for some constant $C_{p,\Omega}$ depending on $p$ and $\Omega$. 
+\\[16pt]
+
+
+
+{\bf b.} Prove that there exists a constant $\hat{C}$ only depending on the geometry of $\hat{T}$ and $\hat{\gamma}$ such that $\forall \hat{u}\in H^3(\hat{T}),$
+\begin{equation}
+   ||\Hat{u} + \Hat{\pi}(\Hat{u})||_{L^2(\Hat{\gamma})} \leq \hat{C}|\hat{u}|_{H^3(\hat{T})}
+\end{equation}
+
+\vskip 1cm
+
+{\bf Proof}: Note since $\hat{u}$ and $\hat{\pi}(\hat{u})$ are in $H^3(\widehat{T})\subset H^1(\widehat{T})$ we can apply the trace inequality
+\begin{align*}
+	||\hat{u} - \hat{\pi}(\hat{u})||_{L^2(\hat{\gamma})} &\leq ||\hat{u} - \hat{\pi}(\hat{u})||_{L^2(\partial\widehat{T})} \\
+	&\leq C_{2,\hat{T}}||\hat{u} - \hat{\pi}(\hat{u})||_{H^1(\widehat{T})}
+\end{align*}
+Next, note that for all $p \in \mathbb{P}_2$ we have $\hat{\pi}(p) = p$.
+In addition, notice that $||(\text{Id} - \Hat{\pi})(\Hat{u})||_{H^1(\widehat{T})}$ is a bounded sublinear functional on $H^3(\widehat{T})$ that is zero for all polynomials in $\mathbb{P}^2$.
+So by the Bramble-Hilbert lemma, we have,
+\begin{equation}
+    C_{2,\Hat{T}}||(\text{Id} - \Hat{\pi})(\Hat{u})||_{H^1(\Hat{T})} \leq \Hat{C} |\Hat{u}|_{H^3(\Hat{T})}
+\end{equation}
+Thus, the result follows.
+
+
+\vskip 2cm
+
+
+
+
+{\bf c.} Let
+\begin{equation}
+    X_h = \{v_h \in C^0(\overline{\Omega}) \: : \: \forall T \in \mathcal{T}_h, \: v_h|_T \in \mathbb{P}_2 \}.
+\end{equation}
+Let $T$ be a triangle of $\mathcal{T}_h$ with diameter $h_T$ and diameter of inscribed disc $\varrho_T$, and let $\gamma$ be one side of $T$.
+Let $F_T$ be the affine mapping from $\Hat{T}$ onto $T$ and let $\pi_{2,h}$ denote the standard Lagrange interpolant on $X_h$.  
+Prove that there exists a constant $C$ only depending on the geometry of $\Hat{T}$ and $\gamma$ such that $\forall u \in H^3(T)$,
+\begin{equation}
+    ||u - \pi_{2,h}(u)||_{L^2(\gamma)} \leq C \sigma_T h_T^{2 + 1/2} |u|_{H^3(T)},
+\end{equation}
+where $\sigma = h_T/\varrho_T$.
+
+\vskip 1cm
+
+{\bf Proof}: Consider,
+\begin{align*}
+    ||u - \pi_{2,h}(u)||_{L^2(\gamma)}^2 &= \int_\gamma |u - \pi_{2,h}(u)|^2 \: ds \\
+    &= \int_{\Hat{\gamma}} |\Hat{u} - \Hat{\pi}_{2,h}(\Hat{u})|^2 \frac{|\gamma|}{|\Hat{\gamma}|} \: d\Hat{s} \\
+    &\leq h_T \int_{\Hat{\gamma}} |\Hat{u} - \Hat{\pi}_{2,h}(\Hat{u})|^2 \: d\Hat{s} \\
+    &= h_T ||\Hat{u} - \Hat{\pi}_{2,h}(\Hat{u})||^2_{L^2(\Hat{\gamma})} \\
+    &\leq Ch_T | \Hat{u}|^2_{H^3(\Hat{T})}.
+\end{align*}
+Now to change to the element $T$, let the affine geometric map $F_T$ be defined as $F_T(\Hat{\bs{x}}) = \mathsf{B}\Hat{\bs{x}} + \bs{b}$. 
+Then note that there exists a constant $c$ independent of $h_T$ such that $||\mathsf{B}|| \leq ch_T$, with $||\cdot||$ be some arbitrary matrix norm.
+We make a change of variables through the geometric mapping, that is, we define $u := \hat{u}\circ F_T^{-1}$.
+Recall the $H^3$ semi-norm is given by,
+\begin{equation}
+	|u|^2_{H^3(T)} = \int_T \sum_{|\alpha|=3} \Big| (D^\alpha u)(\bs{x})  \Big|^2 \: d\bs{x},
+\end{equation}
+where $\alpha = (\alpha_1, \alpha_2)$ is the multi-index, $|\alpha| = \alpha_1 + \alpha_2$, and $D^\alpha = \frac{\partial^{|\alpha|}}{\partial_x^{\alpha_1} \partial_y^{\alpha_2}}$.
+From calculus and based on our definition of the affine geometric mapping $F_T$, we claim there exists a constant, $c_{\mathsf{B}}$ such that $|(\widehat{D}^\alpha \hat{u})(\hat{\bs{x}})| \leq ch_T^3 |(D^\alpha u)(\bs{x})|$ for $|\alpha| = 3$.
+This result could be (tediously) proven by explicitly writing the transformation, $F_T$, applying the chain rule to each derivative, pulling out the factor $h_T$, and then recombining everything back.
+To summarize, we have the following,
+\begin{align*}
+	|\hat{u}|^2_{H^3(\widehat{T})} &= \int_{\widehat{T}}\sum_{|\alpha| = 3} |(\Hat{D}^\alpha \Hat{u})(\Hat{\bs{x}})|^2 \: d\hat{\bs{x}} \\
+	&\leq \int_T ch_T^6\sum_{|\beta| = 3} |(D^\beta u)(\bs{x})|^2 |\det(F'_T)| \: d\bs{x} \\
+	&= \int_T ch_T^6\sum_{|\beta| = 3} |(D^\beta u)(\bs{x})|^2 \frac{|\widehat{T}|}{|T|} \: d\bs{x} \\
+	&= ch_T^6 \frac{|\widehat{T}|}{|T|} |u|^2_{H^3(T)}.
+\end{align*}
+We know that $|T| \leq \frac{1}{2}h_T^2$, however, we need an approximation of the area with respect to the inscribed circle.
+We can prove that
+\begin{equation}
+    |T| = \frac{1}{2}(a + b + c) \frac{\varrho_T}{2},
+\end{equation}
+where $a$, $b$, and $c$ are the side lengths of our triangle $T$, by subdividing the $T$ into three small triangles formed from the center of the inscribed circle.
+Then we have the following inequalities,
+\begin{equation*}
+    \frac{1}{2}h_T \varrho_T = \frac{1}{2}(2 h_T) \frac{\varrho_T}{2} \leq |T| \leq \frac{1}{2}(3 h_T) \frac{\varrho_T}{2} = \frac{3}{4} h_T \varrho_T,
+\end{equation*}
+where we have used the fact that the sum of any two sides of the triangle is greater than $h_T$.
+In particular, we can say that $|T|^{-1} \leq 2h_T^{-1} \varrho^{-1}_T$.
+Using this fact, we finish the proof as follows,
+\begin{align*}
+	||u - \pi_{2,h}(u)||^2_{L^2(\gamma)} &\leq Ch_T \int_{\Hat{T}} \sum_{|\alpha| = 3} |(\Hat{D}^\alpha \Hat{u})(\Hat{\bs{x}})|^2 \: d\Hat{\bs{x}} \\
+	&= C h_T |\hat{u}|^2_{H^3(\widehat{T})} \\
+	&\leq C h_T h_T^6 \frac{|\widehat{T}|}{|T|} |u|^2_{H^3(T)} \\
+    	&= C \frac{h_T}{\varrho_T} h_T^5 |u|^2_{H^3(T)}.
+\end{align*}
+Taking the square root we have,
+\begin{equation*}
+    ||u - \pi_{2,h}(u)||_{L^2(\gamma)} \leq C \sigma_T^{1/2} h_T^{2 + 1/2} |u|_{H^3(T)}. 
+\end{equation*}
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+\textbf{Problem 2.} Let $\delta > 0$ be a given constant parameter and $u\in H^1_0(\Omega)$ a given function.
+Consider the problem: Find $\varphi^\delta\in H^1_0(\Omega)$ such that
+\begin{equation} 
+\begin{split} \label{eq:delta_pde}
+    -\delta^2 \Delta \varphi^\delta(x) + \varphi^\delta(x) &= u(x) \text{ a.e. in } \Omega, \\
+    \varphi^\delta(x) &= 0 \text{ a.e. on } \partial \Omega.
+\end{split}
+\end{equation}
+
+
+\vskip 1cm
+
+\textbf{a.} Define the bilinear form 
+\begin{equation} 
+    a_\delta(w, v) = \delta^2 \int_\Omega \nabla w(x) \cdot \nabla v(x) \: dx + \int_\Omega w(x) v(x) \: dx.
+\end{equation}
+Write the variational formulation of Problem \eqref{eq:delta_pde} and prove that it has one and only one solution $\varphi^\delta \in H^1_0(\Omega)$.
+
+
+\vskip 1cm 
+
+
+\textbf{Proof:} Define $f_u(v) := \int_\Omega u(x) v(x) \: dx$.
+Then the variational problem is: Find $\varphi^\delta \in H^1_0(\Omega)$  such that 
+\begin{equation*}
+    a_\delta(\varphi^\delta, v) = f_u(v)
+\end{equation*}
+for all $v \in H^1_0(\Omega)$.
+To show that there is one and only one solution, we can use Lax-Milgram theorem.
+We first need to show that $a_\delta$ and $f_u$ are both continuous and $a_\delta$ is coercive.
+So consider,
+\begin{align*}
+    a_\delta(w,v) &= \delta^2 \int_\Omega \nabla w(x) \cdot \nabla v(x) \: dx + \int_\Omega w(x) v(x) \: dx \\ 
+    &\leq \delta^2 |w|_{H^1(\Omega)} |v|_{H^1(\Omega)} + ||w||_{L^2(\Omega)} ||v||_{L^2(\Omega)} \\
+    &\leq \max\{ \delta^2, 1 \} \big( |w|_{H^1(\Omega)} |v|_{H^1(\Omega)} + ||w ||_{L^2(\Omega)} ||v||_{L^2(\Omega)}  \big)  \\
+    &\leq \max\{ \delta^2, 1\} ||w||_{H^1(\Omega)} ||v||_{H^1(\Omega)}.
+\end{align*}
+Thus $a_\delta$ is continuous.
+Cauchy-Schwarz shows that $f_u$ is continuous, so we only need to check that $a_\delta$ is coercive.
+Consider,
+\begin{align*}
+    a_\delta(v,v) &= \delta^2 \int_\Omega |\nabla v|^2 \: dx + \int_\Omega v^2 \: dx \\ 
+    &\geq \min\{\delta^2, 1\} ||v||^2_{H^1(\Omega)}.
+\end{align*}
+Thus by Lax-Milgram, there exists a unique solution to the variational formulation.
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+\textbf{b.} Prove that 
+\begin{equation}
+    ||\varphi^\delta||_{L^2(\Omega)} \leq ||u||_{L^2(\Omega)}.
+\end{equation}
+
+
+\vskip 1cm
+
+
+\textbf{Proof:} From the variational equation, we have \begin{equation*}
+	a(\varphi^\delta, \varphi^\delta) = f_u(\varphi^\delta).
+\end{equation*}
+Hence we can write,
+\begin{equation*}
+    ||\varphi^\delta||^2_{L^2(\Omega)} \leq \int_\Omega \delta^2 |\nabla \varphi^\delta|^2 + (\varphi^\delta)^2 \: dx = \int_\Omega u \varphi^\delta \: dx \leq ||u||_{L^2(\Omega)} ||\varphi^\delta||_{L^2(\Omega)}.
+\end{equation*}
+Dividing by $||\varphi^\delta||_{L^2(\Omega)}$ we have the result. $\blacksquare$
+
+
+
+\vskip 2cm
+
+
+\textbf{c.} Prove that
+\begin{equation}
+    ||\nabla \varphi^\delta||_{L^2(\Omega)} \leq ||\nabla u ||_{L^2(\Omega)}.
+\end{equation}
+Hint: observe that $\Delta \varphi^\delta$ belongs to $L^2(\Omega)$, take the scalar product of \eqref{eq:delta_pde} with $-\Delta \varphi^\delta$ and apply Green's formula.
+
+\vskip 1cm
+
+
+\textbf{Proof:} To see that $\Delta \varphi^\delta$ is in $L^2(\Omega)$, consider,
+\begin{equation*}
+    ||\delta^2\Delta \varphi^\delta||_{L^2(\Omega)} = ||u - \varphi^\delta||_{L^2(\Omega)} \leq ||u||_{L^2(\Omega)} + ||\varphi^\delta||_{L^2(\Omega)} < \infty.
+\end{equation*}
+So, following the hint, we have,
+\begin{align*}
+    \int_\Omega \delta^2 (\Delta \varphi^\delta)^2 - \varphi^\delta \Delta\varphi^\delta \: dx &= \delta^2 \int_\Omega (\Delta \varphi^\delta )^2 \: dx + \int_\Omega |\nabla \varphi^\delta|^2 \: dx - \int_{\partial\Omega} \varphi^\delta \frac{\partial \varphi^\delta}{\partial n} \: ds \\
+    &= \delta^2 \int_\Omega (\Delta \varphi^\delta )^2 \: dx + \int_\Omega |\nabla \varphi^\delta|^2 \: dx \\
+    &= \delta^2 ||\Delta \varphi^\delta||^2_{L^2(\Omega)} + ||\nabla \varphi^\delta||^2_{L^2(\Omega)}
+\end{align*}
+For the right hand side, we have,
+\begin{equation*}
+    -\int_\Omega u \Delta \varphi^\delta \: dx = \int_\Omega \nabla u \cdot \nabla \varphi^\delta \: dx - \int_{\partial \Omega} u \frac{\partial \varphi^\delta}{\partial n} \: ds = \int_\Omega \nabla u \cdot \nabla \varphi^\delta \: dx
+\end{equation*}
+Hence we have $\delta^2 ||\Delta \varphi^\delta||^2_{L^2(\Omega)} + ||\nabla \varphi^\delta||^2_{L^2(\Omega)} = \int_\Omega \nabla u \cdot \nabla \varphi^\delta \: dx$.
+Using the usual inequality tricks, we have,
+\begin{equation*}
+    ||\nabla \varphi^\delta||^2_{L^2(\Omega)} \leq ||\nabla u||_{L^2(\Omega)} ||\nabla \varphi^\delta||_{L^2(\Omega)}.
+\end{equation*}
+Dividing by $||\nabla \varphi^\delta||_{L^2(\Omega)}$ we thus have the result.
+
+
+\vskip 2cm 
+
+
+\textbf{d.} Now let 
+\begin{equation}
+    X_{0,h} = \{ v_h \in C^0(\Omega) \: : \: \forall T \in \mathcal{T}_h, \: v_h|_T \in \mathbb{P}_1, \: v_h|_{\partial \Omega} = 0 \}.
+\end{equation}
+Given $u_h \in X_{0,h}$, consider the discrete problem: Find $\varphi^\delta_h \in X_{0,h}$, satisfying $\forall v_h \in X_{0,h}$,
+\begin{equation} \label{eq:pb2-d}
+    a_\delta(\varphi^\delta_h, v_h) = \int_\Omega u_h(x) v_h(x) \: dx.
+\end{equation}
+
+\hspace{1cm} (i) Prove that problem \eqref{eq:pb2-d} has one and only one solution $\varphi^\delta_h \in X_{0,h}$.
+    
+\hspace{1cm} (ii) Prove that 
+\begin{equation}
+    ||\varphi^\delta_h||_{L^2(\Omega)} \leq ||u_h||_{L^2(\Omega)}.
+\end{equation}
+
+
+
+\vskip 1cm
+
+
+\textbf{Proof:} For part (i) note that $X_{0,h}$ is a subspace of $H^1_0(\Omega)$, then Lax-Milgram applies in this case.
+For part (ii) the same method we used in part b. can be applied again here, while taking care with the gradient since $X_{0,h}$ consists of piecewise linear functions. $\blacksquare$
+
+
+\vskip 2cm
+
+
+
+\textbf{e.} Assume that $\varphi^\delta$ belongs to $H^2(\Omega)$. 
+Let $\pi_{1,h}$ denote the standard Lagrange interpolant on $X_{0,h}$.
+
+\hspace{1cm} (i) Prove that
+\begin{equation*}
+    a_\delta(\varphi^\delta - \varphi^\delta_h, \varphi^\delta - \varphi^\delta_h) = a_\delta(\varphi^\delta - \varphi^\delta_h, \varphi^\delta - \pi_{1,h}(\varphi^\delta)) - \int_\Omega (u - u_h)(\varphi^\delta_h - \varphi^\delta + \varphi^\delta - \pi_{1,h}(\varphi^\delta)) \: dx.
+\end{equation*}
+
+\hspace{1cm} (ii) Assuming that $u$ is smooth enough, $u_h = \pi_{1,h}(u)$, and $\delta = h$, derive an estimate for  $||\varphi^\delta - \varphi^\delta_h||_{L^2(\Omega)}$. 
+
+
+\vskip 1cm 
+
+
+\textbf{Proof:} For part (i) consider,
+\begin{align*}
+    a_\delta(\varphi^\delta - \varphi^\delta_h, \varphi^\delta - \varphi^\delta_h) &= a_\delta(\varphi^\delta - \varphi^\delta_h, \varphi^\delta - \pi_{1,h}(\varphi^\delta) + \pi_{1,h}(\varphi^\delta) - \varphi^\delta_h) \\
+    &= a_\delta(\varphi^\delta - \varphi^\delta_h, \varphi^\delta - \pi_{1,h}(\varphi^\delta)) + a_\delta(\varphi^\delta, \pi_{1,h}(\varphi^\delta) - \varphi^\delta_h) - a_\delta(\varphi^\delta_h, \pi_{1,h}(\varphi^\delta) - \varphi^\delta_h) \\
+    &= a_\delta(\varphi^\delta - \varphi^\delta_h, \varphi^\delta - \pi_{1,h}(\varphi^\delta)) + \int_\Omega u(\pi_{1,h}(\varphi^\delta) - \varphi^\delta_h) \: dx \\
+    &\hspace{5.5cm} - \int_\Omega u_h (\pi_{1,h}(\varphi^\delta) -  \varphi^\delta_h) \: dx \\
+    &= a_\delta(\varphi^\delta - \varphi^\delta_h, \varphi^\delta - \pi_{1,h}(\varphi^\delta)) + \int_\Omega (u - u_h) (\varphi^\delta_h - \pi_{1,h}(\varphi^\delta)) \: dx \\
+    &= a_\delta(\varphi^\delta - \varphi^\delta_h, \varphi^\delta - \pi_{1,h}(\varphi^\delta)) + \int_\Omega (u - u_h) (\varphi^\delta_h - \varphi^\delta + \varphi^\delta - \pi_{1,h}(\varphi^\delta)) \: dx.
+\end{align*}
+Note we have used the fact that $\pi_{1,h}(\varphi^\delta) - \varphi^\delta_h \in X_{0,h}$, so $\varphi^\delta$ and $\varphi^\delta_h$ will solve their respective variational equations. 
+
+Now for part (ii).
+To simplify notation, set $||\phid - \phid_h||_h^2 := h^2 |\phid - \phid_h|^2_{H^1(\Omega)} + ||\phid - \phid_h||^2_{L^2(\Omega)}$.
+Using the identity we proved in part (i) and continuity and coercivity of $a$, we have,
+\begin{align*}
+	||\phid - \phid_h||^2_h &= h^2 |\varphi^\delta - \varphi^\delta_h|^2_{H^1(\Omega)} + ||\varphi^\delta - \varphi^\delta_h ||^2_{L^2(\Omega)} \\
+	&= a_{\delta}(\phid - \phid_h, \phid - \phid_h) \\
+    	&= a_\delta(\phid - \phid_h, \phid - \pi_{1,h}(\phid)) + \int_\Omega (u - u_h) (\phid_h - \phid + \phid - \pi_{1,h}(\phid)) \: dx \\
+    	&\leq ||\phid - \phid_h||_{L^2(\Omega)} ||\phid - \pi_{1,h}(\phid)||_{L^2(\Omega)} + h^2 |\phid - \phid_h|_{H^1(\Omega)} |\phid - \pi_{1,h}(\phid)|_{H^1(\Omega)}  \\
+    	&\qquad + ||u - u_h||_{L^2(\Omega)} ( ||\phid_h - \phid||_{L^2(\Omega)} + ||\phid - \pi_{1,h}(\phid)||_{L^2(\Omega)}), \\
+    	&\leq \frac{1}{2}||\phid - \phid_h||_{L^2(\Omega)}^2 + \frac{h^2}{2}|\phid - \phid_h|^2_{H^1(\Omega)} \\
+    	&\qquad + \frac{1}{2}||\phid - \pi_{1,h}(\phid)||^2_{L^2(\Omega)} + \frac{h^2}{2} |\phid - \pi_{1,h}(\phid)|^2_{H^1(\Omega)} \\
+	&\qquad + ||u - u_h||_{L^2(\Omega)}(||\phid_h - \phid||_{L^2(\Omega)} + ||\phid - \pi_{1,h}(\phid)||_{L^2(\Omega)}).
+\end{align*}
+Subtracting $\frac{1}{2}||\phid - \phid_h||_{L^2(\Omega)}^2 + \frac{h^2}{2}|\phid - \phid_h|^2_{H^1(\Omega)}$ from both sides of the inequality, we find,
+\begin{equation}
+\begin{split}
+	\frac12 ||\phid - \phid_h||^2_h &\leq \frac{1}{2}||\phid - \pi_{1,h}(\phid)||^2_{L^2(\Omega)} + \frac{h^2}{2} |\phid - \pi_{1,h}(\phid)|^2_{H^1(\Omega)} \\
+	&\qquad + ||u - u_h||_{L^2(\Omega)} (||\phid_h - \phid||_{L^2(\Omega)} + ||\phid - \pi_{1,h}(\phid)||_{L^2(\Omega)}).
+\end{split}
+\end{equation}
+The goal now is to apply the Bramble-Hilbert lemma to the norms with the projection operators. 
+See the older exams for more fleshed out proofs on how to apply the Bramble-Hilbert lemma.
+It is also worth mentioning that we cannot use Ce\`{a}'s lemma since this applies to the space $(H^1_0(\Omega), ||\cdot||_{H^1(\Omega)})$ and would therefore give us the wrong error estimate.
+
+Continuing on, we have,
+\begin{align*}
+    	\frac12 ||\phid - \phid_h||^2_h &\leq Ch^4|\phid|^2_{H^2(\Omega)} + Ch^2|u|_{H^2(\Omega)} \big(||\varphi_h^\delta - \phid||_{L^2(\Omega)} + Ch^2 |\phid|_{H^2(\Omega)}\big). \\
+	&\leq Ch^4|\phid|^2_{H^2(\Omega)} + Ch^4|u|^2_{H^2(\Omega)} + \frac{1}{4}||\varphi_h^\delta - \phid||^2_{L^2(\Omega)} + Ch^4|u|_{H^2(\Omega)} |\phid|_{H^2(\Omega)}.
+\end{align*}
+In the last inequality, we used the inequality $ab \leq \frac{1}{2}(a^2 + b^2)$, but in the form,
+\begin{equation*}
+    	Ch^2|u|_{H^2(\Omega)}||\phid_h - \phid||_{L^2(\Omega)} = \big( \sqrt{2}Ch^2 |u|_{H^2(\Omega)} \big) \big(\frac{1}{\sqrt{2}}||\phid_h - \phid)||_{L^2(\Omega)}\big).
+\end{equation*}
+Finally, we can drop the $H^1$-seminorm on the left hand side, to find that,
+\begin{equation*}
+    	\frac{1}{4}||\varphi^\delta - \varphi^\delta_h||^2_{L^2(\Omega)} \leq Ch^4(|\varphi^\delta|^2_{H^2(\Omega)} + |u|^2_{H^2(\Omega)} + |u|_{H^2(\Omega)}|\varphi^\delta|_{H^2(\Omega)}),
+\end{equation*}
+which reduces to,
+\begin{equation*}
+	||\varphi^\delta - \varphi^\delta_h||_{L^2(\Omega)} \leq Ch^2 (|\varphi^\delta|_{H^2(\Omega)} + |u|_{H^2(\Omega)}).
+\end{equation*}
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+\textbf{Problem 3.} Let $T > 0$ be a given final time, let $\Vec{b}$ be a given vector valued function with components in $L^2(0,T; H^1(\Omega))\cap C^0(\Omega \times [0, T])$ and let $u_0$ be a given real valued function in $C^0(\Omega)$. 
+We suppose that 
+\begin{equation}
+    \text{div }\Vec{b} = 0 \: \text{ a.e. in } \: \Omega, \: \Vec{b} = \Vec{0} \:  \text{ on } \: \Gamma.   
+\end{equation}
+Consider the time-dependent problem: Find $u$ such that 
+\begin{equation} \label{pb3:pde}
+\begin{split}
+	\frac{\partial u}{\partial t}(\bs{x},t) + \Vec{b}(\bs{x},t) \cdot \nabla u(\bs{x}, t) &= 0 \: \text{ a.e. in } \: \Omega \times (0,T), \\
+    u(\bs{x},0) &= u_0(\bs{x}) \: \text{ a.e. in } \: \Omega,
+\end{split}
+\end{equation}
+where
+\begin{equation}
+    \Vec{b}\cdot \nabla u = b_1 \frac{\partial u}{\partial x_1} + b_2 \frac{\partial u}{\partial x_2} 
+\end{equation}
+Accept as a fact that \eqref{pb3:pde} has one and only one solution $u$ that is sufficiently smooth.  
+It is discretized as follows in space and time. 
+Let 
+\begin{equation}
+    X_h = \{ v_h \in C^0(\Omega) \: : \: \forall T \in \mathcal{T}_h, \: v_h|_T \in \mathbb{P}_1 \}.
+\end{equation}
+Choose an integer $K \geq 2$, set $k=T/K$, $t_n = nk$ and $u^0_h = \pi_{1,h}(u_0)$.
+For $1 \leq n \leq K$, define $u^n_h \in X_h$ from $u^{n-1}_h$ recursively by,
+\begin{equation} \label{pb3:var_form}
+    \frac{1}{k} \int_\Omega (u^n_h - u^{n-1}_h)(\bs{x}) v_h(\bs{x}) \: d\bs{x} + \int_\Omega (\Vec{b}(\bs{x}, t_n) \cdot \nabla u^n_h(\bs{x})) v_h(\bs{x}) \: d\bs{x} = 0,
+\end{equation}
+for all $v_h \in X_h$.
+
+\vskip 1cm
+
+
+\textbf{a.} ) Prove that
+\begin{equation}
+    \int_\Omega (\Vec{b}(\bs{x}, t_n) \cdot \nabla v_h(\bs{x})) v_h(\bs{x}) \: d\bs{x} = 0,
+\end{equation}
+for all $v_h \in X_h$.
+
+\vskip 1cm
+
+
+\textbf{Proof}: To prove this, we will use integration by parts.
+So consider,
+\begin{align*}
+    \int_\Omega (\Vec{b}(\bs{x}, t_n) \cdot \nabla v_h(\bs{x})) v_h(\bs{x}) \: d\bs{x} &= \int_\Omega (v_h(\bs{x}) \Vec{b}(\bs{x}, t_n)) \cdot \nabla v_h(\bs{x}) \: d\bs{x} \\
+    &= \int_{\partial \Omega} v_h^2(\bs{x}) \Vec{b}(\bs{x},t_n) \cdot \mathbf{n} \: ds - \int_\Omega \nabla \cdot (v_h(\bs{x}) \Vec{b}(\bs{x},t_n)) v_h(\bs{x}) \: d\bs{x} \\
+    &= -\int_\Omega \big( \frac{\partial}{\partial \bs{x}_1}(v_h(\bs{x}) b_1(\bs{x},t_n)) + \frac{\partial}{\partial \bs{x}_2}(v_h(\bs{x})b_2(\bs{x},t_n)) \big) v_h(\bs{x}) \: d\bs{x} \\
+	&= - \int_\Omega \big( \nabla v_h(\bs{x}) \cdot \Vec{b}(\bs{x},t_n) + v_h(\bs{x}) \nabla \cdot \Vec{b}(\bs{x},t) \big) v_h(\bs{x}) \: d\bs{x} \\
+    &= -\int_\Omega (\Vec{b}(\bs{x}, t_n) \cdot \nabla v_h(\bs{x})) v_h(\bs{x}) \: d\bs{x}.
+\end{align*}
+Thus, adding the right hand side to the left side, we have the result.
+$\blacksquare$
+
+\vskip 2cm
+
+
+\textbf{b.}  Show that, given $u^{n-1}_h \in X_h$, \eqref{pb3:var_form} has one and only one solution $u^n_h \in X_h$.
+
+
+\vskip 1cm
+
+
+\textbf{Proof}: Let $\{\phi_i\}_{i=1}^N$ be the nodal basis for $X_h$.
+Then we write $u^n_h(\bs{x}) = \sum_{i=1}^N u_i^n \phi_i(\bs{x})$.
+Using this expansion for $u^n_h$, we test \eqref{pb3:var_form} with $v_h = \phi_j$ for $j = 1,\ldots, N$.
+Doing this, we have,
+\begin{equation}
+	\frac1k \sum_{i=1}^N (u^n_i - u^{n-1}_i) \int_\Omega \phi_i(\bs{x}) \phi_j(\bs{x}) \: d\bs{x} + \sum_{i=1}^N u^n_i \int_\Omega \vec{b}(\bs{x}, t_n) \cdot \nabla \phi_i(\bs{x}) \phi_j(\bs{x}) \: d\bs{x} = 0
+\end{equation}
+This $N$ equations can be viewed as a matrix equation,
+\begin{equation}
+	\frac1k \mathsf{M} (\mathbf{U}^n - \mathbf{U}^{n-1}) + \mathsf{B} \mathbf{U}^n = \mathbf{0},
+\end{equation}
+where $\mathsf{M}$ is the matrix with entries, $\int_\Omega \phi_i \phi_j \: d\bs{x}$, $\mathsf{B}$ is the matrix with entries, $\int_\Omega (\vec{b} \cdot \nabla \phi_i) \phi_j \: d\bs{x}$, and $\mathbf{U}^n = (u_1^n, \ldots, u_N^n)^T$.
+This equation can be written in the standard matrix equation form,
+\begin{equation}
+	(\mathsf{M} + k\mathsf{B}) \mathbf{U}^n = \mathsf{M}\mathbf{U}^{n-1}.
+\end{equation}
+The question of existence and uniqueness is now framed in terms of a matrix equation.
+That is, we know a solution exists and is unique if and only if, $\text{nullity}(\mathsf{M} + k\mathsf{B}) = 0$ and $\text{rank}(\mathsf{M} + k\mathsf{B}) = N$.
+
+Assume that $\mathbf{U}^{n-1} = \bs{0}$, we wish to prove that $\mathbf{U}^n = \bs{0}$ is the only solution.
+This is equivalent to proving that the only solution to $\frac1k (u^n_h,v_h) + \int_\Omega (\vec{b} \cdot \nabla u^n_h) v_h \: d\bs{x} = 0$ is $u^n_h \equiv 0$. 
+Test this equation with $v_h = u^n_h$ and we find $\frac1k ||u^n_h||^2_{L^2(\Omega)} + \int_\Omega (\vec{b} \cdot \nabla u^n_h) u^n_h \: d\bs{x} = \frac1k ||u^n_h||^2_{L^2(\Omega)}  = 0$.
+Therefore the only solution is $u^n_h = 0$; i.e. $\text{nullity}(\mathsf{M} + k\mathsf{B}) = 0$. 
+Additionally, the matrix is square, so by the rank-nullity theorem, $\text{rank}(\mathsf{M} + k\mathsf{B}) = N$.
+This completes the proof.
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+\textbf{c.} Prove for $1 \leq n \leq K$
+\begin{equation}
+    ||u^n_h||_{L^2(\Omega)} \leq ||u^0_h||_{L^2(\Omega)}.
+\end{equation}
+
+\vskip 1cm
+
+
+\textbf{Proof}: From equation \eqref{pb3:var_form}, take $v_h = u^n_h$.
+Then by part a. we have,
+\begin{equation*}
+    \frac{1}{k} (u^n_h - u^{n-1}_h, u^n_h) = 0.
+\end{equation*}
+Using Cauchy-Schwarz inequality, we have
+\begin{equation*}
+    ||u^n_h||^2_{L^2(\Omega)} \leq ||u^n_h||_{L^2(\Omega)} ||u^{n-1}_h||_{L^2(\Omega)}.
+\end{equation*}
+Dividing by $||u^n_h||_{L^2(\Omega)}$ we then have,
+\begin{equation*}
+    ||u^n_h||_{L^2(\Omega)} \leq ||u^{n-1}_h||_{L^2(\Omega)} \leq \cdots \leq ||u^0_h||_{L^2(\Omega)}.
+\end{equation*}
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+\textbf{d.}  Is the matrix of the system \eqref{pb3:var_form} symmetric ? Justify your answer.
+
+\vskip 1cm
+
+
+\textbf{Proof}: No the matrix will not be symmetric.
+This is due to the term,
+\begin{equation*}
+    a(u_h, v_h) := \int_\Omega (\Vec{b}(\bs{x},t_n) \cdot \nabla u_h) v_h(\bs{x}) \: d\bs{x},
+\end{equation*}
+which is not a symmetric bilinear form.
+To see this, we can apply integration by parts (as we did in part a.) to get
+\begin{align*}
+	a(u_h, v_h) &= -\int_\Omega \nabla \cdot (v_h(\bs{x}) \Vec{b}(\bs{x},t_n) ) u_h \: d\bs{x} \\
+	&= -\int_\Omega \Vec{b}(\bs{x},t_n) \cdot \nabla v_h(\bs{x}) u_h(\bs{x}) \: d\bs{x} \\
+	&= -\int_\Omega \nabla \cdot (\Vec{b}(\bs{x},t_n) v_h(\bs{x})) u_h(\bs{x}) \: d\bs{x} \\
+	&= -a(v_h, u_h),
+\end{align*}
+where we have used the fact that $\nabla \cdot \Vec{b} = 0$.
+Since the other integral term is symmetric, the end result, we will be a matrix which is not symmetric.
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+\end{document}

@@ -1,0 +1,411 @@
+\documentclass[11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[ampersand]{easylist}
+\usepackage{authblk}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\newcommand{\bs}{\boldsymbol}
+
+
+\geometry{letterpaper}
+	\setlength{\oddsidemargin}{0cm}
+	\setlength{\evensidemargin}{0cm}
+	\setlength{\headheight}{0.5cm}
+	\setlength{\headsep}{0cm}
+	\setlength{\textwidth}{16cm}
+	\setlength{\textheight}{21.0cm}
+	\baselineskip=24pt
+
+\title{Applied/Numerical Qualifier Solution: January 2012}
+
+\author{Bennett Clayton}
+\affil{Texas A\&M University}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\textbf{Problem 1.} Let $\Omega = (0,1) \times (0,1)$, $f \in C^0(\Omega)$ and $q \in \mathbb{R}$ with $q \geq 0$.
+Consider the boundary value problem
+\begin{align}
+    -\Delta u + qu &= f \text{ in } \Omega; \label{eq:pb1-diffeq} \\
+    u &= 0 \text{ on } \partial \Omega.
+\end{align}
+We are interested in approximating the quantity $\alpha := \int_{\partial \Omega} \mathbf{n} \cdot \nabla u$ where $\mathbf{n}$ is the outward unit normal of $\Omega$.
+
+\vskip 1cm
+
+\textbf{a.} The boundary problem has a weak formulation: Find $u \in V$ such that
+$\forall v \in V$ 
+\begin{equation}
+    a(u,v) = L(v).
+\end{equation}
+Identify $V$, $a(u, v)$ and $L(v)$. 
+Show that there exists a unique solution $u \in V$ satisfying the
+above weak formulation.
+
+\vskip 1cm
+
+\textbf{Solution:} We multiply equation \eqref{eq:pb1-diffeq} by some $v \in V$ and integrate over $\Omega$.
+So we have,
+\begin{equation*}
+    \int_{\Omega} -\Delta u v + quv \: dx = \int_\Omega \nabla u \cdot \nabla v + quv \: dx - \int_{\partial \Omega} (\mathbf{n}\cdot \nabla u) v \: ds. 
+\end{equation*}
+Since we don't know anything about the normal derivative on the boundary, we require $v|_{\partial \Omega} = 0$.
+Then our space is $V = H^1_0(\Omega)$ with the usual $H^1$-norm and
+\begin{align*}
+    a(u,v) &= \int_\Omega \nabla u \cdot \nabla v + quv \: dx \\
+    L(v) &= \int_\Omega f v \: dx
+\end{align*}
+It is easy to check that $a$ and $L$ are both continuous.
+To prove coercivity, we invoke a Poincar\`{e} inequality: $||u||_{L^2(\Omega)} \leq C |u|_{H^1(\Omega)}$, without proof as we have that $u|_{\partial\Omega} \equiv 0$.
+Coercivity follows,
+\begin{align*}
+	a(u,u) &= \int_{\Omega} |\nabla u |^2 + qu^2 \: dx \\
+		&\geq \tfrac12 |u|^2_{H^1(\Omega)} + \tfrac12 |u|^2_{H^1(\Omega)} \\
+		&\leq \tfrac12 \min\{1, \tfrac{1}{C}\} ||u||^2_{H^1(\Omega)}
+\end{align*}
+So by the Lax-Milgram lemma, there exists a unique solution $u\in V$ to our variational equation.
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+{\bf b.} Let $\{\mathcal{T}_h\}_{0<h<1}$ be a sequence of conforming shape-regular subdivisions of $\Omega$ such that $\text{diam}(T) \leq h$, for all $T \in \mathcal{T}_h$ and define 
+\begin{equation}
+    V_h := \{ v \in C^0(\Omega) \cap V \: | \: \forall T \in \mathcal{T}_h, \: v|_{T} \text{ is linear } \}
+\end{equation}
+Write the weak formulation satisfied by the finite element approximation $u_h \in V_h$ of $u$.
+Prove that the function $u_h$ exists and is unique.
+
+\vskip 1cm
+
+{\bf Solution}: The weak formulation is, find $u_h \in V_h$ such that $a(u_h, v_h) = L(v_h)$ for all $v_h \in V_h\cap H^1_0(\Omega)$.
+Since $V_h$ is a subspace of $V$, Lax-Milgram applies again.
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+{\bf c.}  Assume from now that $u \in H^2(\Omega)$. 
+Derive the error estimate
+\begin{equation}
+    ||u - u_h||_{H^1(\Omega)} \leq c_1 h ||u||_{H^2(\Omega)},
+\end{equation}
+where $c_1$ is a constant independent of $h$ and $u$.
+Hint: you can use without proof the fact that there exists a constant $C$ independent of $h$ such that for any $v \in H^2(\Omega)$
+\begin{equation}
+    \inf_{v_h\in V_h} ||v - v_h||_V \leq Ch ||v||_{H^2(\Omega)}.
+\end{equation}
+
+\vskip 1cm
+
+{\bf Solutions}: By Cea's lemma, we have
+\begin{equation}
+    ||u - u_h||_{H^1(\Omega)} \leq \inf_{v_h \in V_h} || u - v_h||_{H^1(\Omega)} \leq Ch ||u||_{H^2(\Omega)}.
+\end{equation}
+\textcolor{blue}{You will need to actually prove Cea's lemma.}
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+\textbf{d.} Show that for the constant function $w(x) = 1$ we have
+\begin{equation}
+    \alpha = a(u,w) - L(w).
+\end{equation}
+Now let $\alpha_h := a(u_h, w) - L(w)$.
+Using the previous parts, show that when $q > 0$ there holds
+\begin{equation}
+    |\alpha - \alpha_h| \leq c_2 h^2 ||u||_{H^2(\Omega)},
+\end{equation}
+where $c_2$ is a constant independent of $h$ and $u$. 
+What can you say about $|\alpha - \alpha_h|$ when $q = 0$?
+
+\vskip 1cm
+
+
+\textbf{Solution:} Note that $w \not \in H^1_0(\Omega)$. 
+Additionally, since $u \in H^2(\Omega)$, $u$ will also be a strong solution, i.e., $-\Delta u + qu = f$ in $\Omega$.
+So to start, consider,
+\begin{align*}
+    a(u,1) - L(1) &= \int_{\Omega} \nabla u \cdot \nabla 1 + qu \: dx - \int_\Omega f  \: dx \\
+    &= \int_\Omega qu - f \: dx \\
+    &= \int_\Omega \Delta u \: dx  \\
+    &= \int_{\partial \Omega} \mathbf{n} \cdot \nabla u \: ds.
+\end{align*}
+Note that a straightforward method will not get the correct degree of $h$, consider,
+\begin{align*}
+    |\alpha - \alpha_h| &= |a(u,w) - L(w) - a(u_h, w) + L(w)| \\
+    &= |a(u-u_h, w)| \\
+    &\leq ||u - u_h||_{H^1(\Omega)} ||w||_{H^1(\Omega)} \\
+    &\leq C h ||u||_{H^2(\Omega)}.
+\end{align*}
+So we need to look closer at the expressions of $\alpha$ and $\alpha_h$.
+So consider,
+\begin{align*}
+    |\alpha - \alpha_h| &= \Big| \int_{\partial \Omega} \mathbf{n} \cdot \nabla u \: ds - \int_\Omega \nabla u_h \cdot \nabla 1 + q u_h \: dx + \int_\Omega f \: dx \Big| \\
+    &= \Big| \int_\Omega \Delta u \: dx - \int_\Omega  q u_h  \: dx + \int_\Omega f  \: dx \Big| \\
+    &= \Big|\int_\Omega qu \: dx - \int_\Omega q u_h \: dx \Big| \\
+    &\leq 
+    q \int_\Omega |u - u_h| \: dx \\
+    &\leq q ||u - u_h||_{L^2(\Omega)}.
+\end{align*}
+Now we need to prove an $L^2$ error estimate which we will do so using the Aubin-Nitsche trick. 
+Consider the dual problem, find $z \in H^1_0(\Omega)$ such that 
+\begin{equation*}
+    a(v,z) = (u - u_h, v),
+\end{equation*}
+for all $v \in H^1_0(\Omega)$.
+We assume full regularity, that is, $||u||_{H^2(\Omega)} \leq C ||f||_{L^2(\Omega)}$.
+So in our dual problem, we have $||z||_{H^2(\Omega)} \leq C ||u - u_h||_{L^2(\Omega)}$.
+Now, in our dual problem, take $v = u - u_h$ and apply Galerkin orthogonality to write,
+\begin{equation*}
+    ||u - u_h||^2_{L^2(\Omega)} = (u- u_h, u - u_h) = a(u - u_h, z) = a(u - u_h, z - v_h)
+\end{equation*}
+for all $v_h \in V_h$.
+So in particular, we can take $v_h := \Pi_h z$ (the projection of $z$ onto the space $V_h$).
+Then applying the continuity of $a$ the result from part c. and the regularity assumption, we have,
+\begin{align*}
+    ||u - u_h||^2_{L^2(\Omega)} &\leq ||u - u_h||_{H^1(\Omega)} ||z - \Pi_h z||_{H^1(\Omega)} \\
+    &\leq Ch ||u||_{H^2(\Omega)} \cdot h ||z||_{H^2(\Omega)} \\
+    &\leq Ch^2 ||u||_{H^2(\Omega)} ||u - u_h||_{L^2(\Omega)},
+\end{align*}
+where we have used the inequality, $||z - \Pi_h z||_{H^1(\Omega)} \leq Ch||z||_{H^2(\Omega)}$. \textcolor{blue}{You might want to prove this projection inequality just to be on the safe side. But I don't want to repeat this proof which I've done in the other exams.}
+Dividing both sides by $||u - u_h||_{L^2(\Omega)}$, and combining all of our results, we have,
+\begin{equation*}
+    ||u - u_h||_{L^2(\Omega)} \leq Ch^2||u||_{H^2(\Omega)}.
+\end{equation*}
+Hence
+\begin{equation*}
+    |\alpha - \alpha_h| \leq Ch^2 ||u||_{H^2(\Omega)}.
+\end{equation*}
+
+Now if $q = 0$, then our bilinear form becomes, $a(u,v) = \int_\Omega \nabla u \cdot \nabla v \: dx$.
+Computing $|\alpha - \alpha_h|$, we have,
+\begin{equation*}
+    |\alpha - \alpha_h| = |a(u,1) - L(1) - a(u_h,1) + L(1)| = 0,
+\end{equation*}
+since $\nabla 1 = 0$. 
+Thus $\alpha = \alpha_h$ for $q = 0$.
+$\blacksquare$
+
+
+
+
+\vskip 2cm
+
+
+
+{\bf Problem 2.} Let $K$ be a polyhedron in $\mathbb{R}^d$, $d\geq 1$. Let $h = \text{diam}(K)$ and define
+\begin{equation}
+\hat{K} = \{\hat{{\bf x}} = {\bf x}/\text{diam}(K), {\bf x}\in K \}. 
+\end{equation}
+Show that there exists a constant $c$ solely depending on $\hat{K}$ such that for any $v\in H^1(K)$,
+\begin{equation}
+    ||v||_{L^2(\partial K)} \leq c\left( h^{-1/2}||v||_{L^2(K)} + h^{1/2}||\nabla v||_{L^2(K)} \right). 
+\end{equation}
+
+\vskip 1cm
+
+{\bf Proof}: We start by defining the map $T_K : \widehat{K} \to K$ defined by $\bs{x} = T_K(\hat{\bs{x}}) = h \hat{\bs{x}}$.
+Let $T_{e_K} : \hat{e} \to e_K$, with $\hat{e}$ and $e_K$ being $d-1$ dimensional face of the elements $\widehat{K}$ and $K$, respectively.
+Specifically, $T_{e_K}$ is defined by $T_K|_{\hat{e}}$.
+Let $\widehat{\mathcal{F}}$ and $\mathcal{F}_K$ denotes the faces of $\widehat{K}$ and $K$, respectively.
+Then we separate the boundary of $K$ into its $d-1$ dimensional sides, and perform a change of variable, 
+\begin{align*}
+    ||v||^2_{L^2(\partial K)} &= \int_{\partial K} |v(s)|^2 \: ds \\
+	&= \sum_{e \in \mathcal{F}_K} \int_e |v(s)|^2 \: ds \\
+	&= \sum_{\hat{e}\in \widehat{\mathcal{F}}} \int_{\hat{e}} |(v\circ T_{e_K})(\hat{s})|^2 \frac{|e|}{|\hat{e}|} \: d\hat{s}.
+\end{align*}
+Note that $|K| \leq Ch^d$ and $|e| \leq Ch^{d-1}$.
+Hence $|\partial K| = \sum_{e\in \mathcal{F}_K} |e| \leq Ch^{d-1}$.
+Now let $\hat{v} := v \circ T_K$, and since $v \in H^1(K)$, we can apply the trace inequality, ($||v||_{L^2(\partial \widehat{K})} \leq C||v||_{H^1(\widehat{K})}$), therefore, 
+\begin{align*}
+	||v||_{L^2(\partial K)}^2 &\leq Ch^{d-1} \sum_{\hat{e}\in \widehat{\mathcal{F}}} ||\hat{v}||^2_{L^2(\hat{e})} \\ 
+&= Ch^{d-1} ||\hat{v}||^2_{L^2(\partial \widehat{K})} \\
+&\leq Ch^{d-1}||\Hat{v}||^2_{H^1(\widehat{K})} \\
+	&= Ch^{d-1}(\int_{\widehat{K}} |\hat{v}|^2 \: d\hat{\bs{x}} + \int_{\widehat{K}} |\widehat{\nabla} \hat{v}|^2 \: d\hat{\bs{x}} ) \\
+	&\leq Ch^{d-1} \frac{|\widehat{K}|}{|K|} \Big( \int_{K} |v|^2 \: d\bs{x} + \int_K h^2 |\nabla v|^2 \: d\bs{x} \Big) \\
+	&\leq Ch^{-1}( \int_{K} |v|^2 \: d\bs{x} + \int_K h^2|\nabla v|^2 \: d\bs{x} ) \\
+&= C(h^{-1} ||v||^2_{L^2(K)} + h|v|^2_{H^1(K)} ).
+\end{align*}
+Note the change of variables for the gradient uses the fact that $\frac{\partial}{\partial\hat{x}_i} = \frac{\partial x_i}{\partial \hat{x}_i} \frac{\partial}{\partial x_i} = ch \frac{\partial}{\partial x_i}$ for $i = 1, \ldots, d$ and some constant $c$.
+Taking the square root of both sides, and using the inequality, $\sqrt{a+b} \leq \sqrt{a} + \sqrt{b}$, we have the final result. 
+Note that we have simply used $C$ to represent every constant rather than keeping track of each unique constant.
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+
+{\bf Problem 3}: Let $u_0 : (0,1) \to \mathbb{R}$ be a given smooth initial condition and $T > 0$ be a given final time. Let $u : [0, T] \times \Omega \to \mathbb{R}$ be a smooth function satisfying $u(t,0)  = u(t,1) = 0$ for any $t \in [0,T]$ and $\forall v \in C^{\infty}_c ([0, T) \times (0,1) )$ :
+\begin{equation}
+\begin{split} \label{pb3-long-eq}
+-\int_0^T \int_0^1 u(t,x) &v_t(t,x) \: dx dt - \int_0^1 u_0(x) v(0,x) \: dx \\
+&+ \int_0^T \int_0^1 u_x(t,x) v_x(t,x) \: dx dt + \int_0^T \int_0^1 u(t,x) v(t,x) \: dx dt = 0
+\end{split}
+\end{equation}
+Here $C^\infty_c ([0,T) \times (0,1) )$ is the space of functions belonging to $C^\infty ([0,T] \times [0,1])$ and compactly supported in $[0,T) \times (0,1)$.
+
+
+\vskip 1cm
+
+
+
+
+{\bf a.} Derive the corresponding strong formulation.
+
+\vskip 1cm
+
+{\bf Solution}: We integrate the two integrals in \eqref{pb3-long-eq} which contain derivatives in them, by parts.
+This gives us
+\begin{equation*}
+\begin{split}
+    \int_0^T \int_0^1 (u_t(t,x)  - u_{xx}(t,x)  + u(t,x)) v(t,x) \: dx \: dt = 0.
+\end{split}
+\end{equation*}
+By the fundamental theorem of variational calculus, our strong formulation becomes,
+\begin{equation}
+\begin{cases}
+    u_t - u_{xx} + u = 0, \: \text{ for } (t,x) \in (0,T]\times (0,1) \\
+    u(0,x) = u_0(x) \\
+    u(t,0) = u(t,1) = 0.
+\end{cases}
+\end{equation}
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+{\bf b.}  Let $N > 0$ be an integer, $h = 1/N$ and $x_n = n h$, $n = 0, ..., N$. 
+Derive the semi-discrete
+approximation of \eqref{pb3-long-eq} using continuous piecewise linear finite elements.
+
+\vskip 1cm
+
+{\bf Solution}: Define our discrete space by,
+\begin{equation*}
+    V_h := \{ v_h \in C^0(0,1) \: : \: v_h|_{[x_{i-1}, x_i]} \in \mathbb{P}_1, \: i = 1, 2, \ldots, N, \: v_h(0) = v_h(1) = 0 \},
+\end{equation*}
+and equip it with the $H^1$-norm.
+Note that $V_h = \text{span}\{\varphi_i\}_{i=1}^N$, where $\varphi_i$ are the usual Lagrange shape functions.
+Define,
+\begin{equation*}
+    a(u,v) := \int_0^T \int_0^1 u_x(t,x) v_x(t,x) + u(t,x) v(t,x) \: dx \: dt
+\end{equation*}
+and if we integrate the first integral in \eqref{pb3-long-eq}, we can formulate problem in a nicer way.
+Thus \eqref{pb3-long-eq} becomes, $((u_h)_t, v_h) + a(u_h, v_h) = 0$.
+
+Now for $t > 0$, we can write our semi-discrete solution as
+\begin{equation}
+    u_h(t) = \sum_{i=1}^N U_i(t) \varphi_i(x),
+\end{equation}
+where the $U_i(t)$ are the unknown time dependent coefficients.
+Thus our semi-discrete problem becomes: for $t > 0$, find $u_h(t) \in V_h$ such that 
+\begin{equation}
+    ((u_h)_t, v_h) + a(u_h, v_h) = 0
+\end{equation}
+for all $v_h \in V_h$.
+
+find $u_h \in L^2(0,T; V_h)$ such that 
+\begin{equation}
+    ((u_h)_t, v_h) + a(u_h, v_h) = 0
+\end{equation}
+for all $v_h \in L^2(0,T;V_h)$.
+
+\textcolor{red}{Note quite sure how to formulate the problem statement.}
+
+\vskip 2cm
+
+
+
+
+
+{\bf c.} In addition, let $M > 0$ be an integer, $\tau = T/M$ and $t_m = m\tau$ for $m = 0, \ldots, M$. Write the fully discrete schemes corresponding to backward Euler and forward Euler methods, respectively. 
+
+\vskip 1cm
+
+{\bf Solution}: We define $u^m_h := u_h(t_m, x)$ where $u_h(t,x)$ is the semi-discrete representation of as in part b. So for the backward Euler, we have 
+\[ \begin{cases} &\text{Find } u^{m+1}_h \in V_h \text{ such that } \\
+&(\frac{u_h^{m+1} - u_h^m}{\tau}, v_h) + a(u^{m+1}_h, v_h) = 0 \quad \forall v_h\in V_h \\
+&\text{where } u^0_h = u_{h,0} 
+\end{cases} \]
+The forward Euler, is defined similarly,
+\[ \begin{cases} &\text{Find } u^{m+1}\in V_h \text{ such that } \\
+&(\frac{u_h^{m+1} - u_h^m}{\tau}, v_h) + a(u^m_h, v_h) = 0 \quad \forall v_h\in V_h \\
+&\text{where } u^0_h = u_{h,0} 
+\end{cases} \]
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+
+{\bf d.} Prove that the backward (implicit) Euler scheme is unconditionally stable while the forward (explicit) Euler method is stable provided $\tau \leq ch^2$, where $c$ is a constant independent of $h$ and $\tau$.
+
+
+\vskip 1cm
+
+{\bf Solution}: To show unconditional stability of the backward Euler scheme, we test the scheme with $v_h = u_h^{m+1} - u_h^m$. So consider, 
+\begin{align*}
+(\frac{u_h^{m+1} - u_h^m}{\tau},  u_h^{m+1} - u_h^m) + a(u^{m+1}_h,  u_h^{m+1} - u_h^m) &= 0 \\ 
+||u_h^{m+1} - u_h^m ||^2_{L^2} + \tau a(u^{m+1}_h, u^{m+1}_h - u^m_h) &=  0
+\end{align*}
+Then, since $||u_h^{m+1} - u_h^m ||^2_{L^2} \geq 0$, we can drop that term and we are thus left with 
+\[ \tau a(u^{m+1}_h, u^{m+1}_h - u^m_h) \leq  0 \quad \Leftrightarrow \quad a(u^{m+1}_h, u^{m+1}_h) \leq a(u^{m+1}_h, u^m_h ) \]
+Using continuity of $a(\cdot, \cdot)$ and the definition of $a(\cdot, \cdot)$ we have the following
+\begin{equation*}
+||u^{m+1}_h ||^2_{H^1} \leq ||u^{m+1}_h ||_{H^1} ||u^m_h ||_{H^1}
+\end{equation*}
+Therefore we can conclude that $||u^{m+1}_h||_{H^1} \leq ||u^m_h||_{H^1} \leq \cdots \leq ||u_{0,h} ||_{H^1}$. I.e. the backward Euler is unconditionally stable. 
+
+For the forward Euler, we will test with $v_h = u_h^{m+1}$, so we have,
+\begin{equation*}
+    \big(\frac{u^{m+1}_h - u^m_n}{\tau}, u^{m+1}_h \big) + a(u^m_h, u^{m+1}_h) = 0.
+\end{equation*}
+Rearranging this, we then apply Cauchy-Schwarz and the inverse inequality to get,
+\begin{align*}
+    ||u^{m+1}_h||^2_{L^2(0,1)} &= (u^m_h, u^{m+1}_h) - \tau a(u^m_h, u^{m+1}_h) \\
+    &= (1 - \tau) (u^m_h, u^{m+1}_h) - \tau ( (u^m_h)_x, (u^{m+1}_h)_x ) \\
+    &\leq |1 - \tau| ||u^m_h||_{L^2(0,1)} ||u^{m+1}_h||_{L^2(0,1)} + \tau |u^m_h|_{H^1(0,1)} |u^{m+1}_h|_{H^1(0,1)} \\
+    &\leq |1 - \tau| ||u^m_h||_{L^2(0,1)} ||u^{m+1}_h||_{L^2(0,1)} + \frac{C}{h^2} \tau ||u^m_h||_{L^2(0,1)} ||u^{m+1}_h||_{L^2(0,1)}.
+\end{align*}
+Thus we have,
+\begin{equation*}
+    ||u^{m+1}_h||_{L^2(0,1)} \leq (|1 - \tau| + \frac{C}{h^2} \tau ) ||u^m_h||_{L^2(0,1)}.
+\end{equation*}
+Therefore, we will have stability if $|1-\tau| + C\tau/h^2 \leq 1$, hence if $0 \leq |1 - \tau| \leq 1 - C\tau/h^2$.
+Which confirms the CFL condition that,
+\begin{equation*}
+    \tau \leq Ch^2.
+\end{equation*}
+$\blacksquare$
+
+
+
+
+
+\end{document}

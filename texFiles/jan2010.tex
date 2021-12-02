@@ -1,0 +1,472 @@
+\documentclass[11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[ampersand]{easylist}
+\usepackage{authblk}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{mathtools}
+
+\newcommand{\bs}{\boldsymbol}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\geometry{letterpaper}
+	\setlength{\oddsidemargin}{0cm}
+	\setlength{\evensidemargin}{0cm}
+	\setlength{\headheight}{0.5cm}
+	\setlength{\headsep}{0cm}
+	\setlength{\textwidth}{16cm}
+	\setlength{\textheight}{21.0cm}
+	\baselineskip=24pt
+
+\title{Applied/Numerical Qualifier Solution: January 2010}
+
+\author{Bennett Clayton}
+\affil{Texas A\&M University}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+
+
+
+\textbf{Problem 4.}
+Let $\mathcal{H}$ be a complex (separable) Hilbert space, with $\langle \cdot, \cdot \rangle$ and $||\cdot ||$ being the inner product and norm.
+
+\vskip 1cm
+
+
+\textbf{a.}
+
+\vskip 1cm
+
+
+\textbf{Solution:}
+
+
+\vskip 2cm
+
+
+
+\textbf{b.} Briefly explain why the operator $Ku(x) := \int_0^1 (3 + 4xy^2) u(y) \: dy$ is compact on $\mathcal{H} = L^2[0,1]$. 
+Determine the values of $\lambda \in \mathbb{C}$ for which $u = f + \lambda Ku$ has a solution for all $f \in L^2[0,1]$. 
+State the theorem that you are using to answer the question. 
+
+\vskip 1cm
+
+\textbf{Solution:} Note that $K$ is a Hilbert-Schmidt operator and hence is compact.
+First define $L := I - \lambda K$, then we want to determine $N(L^*) = N(I - \bar{\lambda}K^*)$. 
+Then since $K$ is Hilbert-Schmidt, $K^*$ will be 
+\[ (K^*u)(x) = \int_0^1 (3 + 4yx^2)u(y) \: dy \]
+Lets now set $L^*u = 0$, and take some observations
+\begin{align*}
+L^*u &= u(x) - \bar{\lambda}\int_0^1 (3 + 4yx^2)u(y) \: dy = 0 \\
+&= u(x) - 3\bar{\lambda}\int_0^1 u(y) \: dy - 4\bar{\lambda}x^2 \int_0^1 y u(y) \: dy = 0
+\end{align*}
+We now consider two different equations. 
+First we integrate the equation with respect to $x$ and integrate the equation against $x$, again with respect to $x$. 
+Lets start with finding the first relation
+\begin{align*}
+\int_0^1 u(x) \: dx  - 3\bar{\lambda}\int_0^1 u(y) \: dy &- \int_0^1 4\bar{\lambda}x^2 \int_0^1 y u(y) \: dy \: dx = 0 \\
+(1 - 3\bar{\lambda})\int_0^1 u(y) \: dy &- \frac{4}{3} \bar{\lambda} \int_0^1 y u(y) \: dy = 0
+\end{align*}
+Setting $I_1 = \int_0^1 u(y) \: dy$ and $I_2 = \int_0^1 y u(y) \: dy$ we have the following relation
+\[ (1 - 3\bar{\lambda}) I_1 - \frac{4}{3}\bar{\lambda} I_2 = 0  \]
+Now for the next relation, multiply by $x$ and integrate the original equation, i.e. we have 
+\begin{align*}
+\int_0^1 x u(x) \: dx  - \int_0^1 x 3\bar{\lambda}\int_0^1 u(y) \: dy \: dx &- \int_0^1 4\bar{\lambda}x^3 \int_0^1 y u(y) \: dy \: dx = 0 \\
+(1 - \bar{\lambda}) \int_0^1 xu(x) \: dx &- \frac{3}{2}\bar{\lambda}\int_0^1 u(y) \: dy = 0
+\end{align*}
+Thus our second equation is 
+\[ -\frac{3}{2}\bar{\lambda} I_1 + (1 - \bar{\lambda}) I_2 = 0 \]
+
+
+
+\vskip 2cm
+
+
+
+
+{\bf Proof}: 
+
+
+\vskip 2cm
+
+
+\textbf{Problem 1.} Consider the system
+\begin{equation}
+\begin{split} \label{pb1:system}
+    -\Delta u - \phi &= f \\
+    u - \Delta \phi &= g
+\end{split}
+\end{equation}
+in the bounded smooth domain $\Omega$, with boundary conditions $u = \phi = 0$ on $\partial \Omega$.
+
+\vskip 1cm
+
+\textbf{a.} Derive a weak formulation of the system \eqref{pb1:system}, using suitable test functions for each equation.
+Define a bilinear form $a((u,\phi),(v,\psi))$ such that this weak formulation amounts to,
+\begin{equation}
+    a((u,\phi),(v,\psi)) = (f,v) + (g,\psi).
+\end{equation}
+
+\vskip 1cm
+
+\textbf{Proof:} Multiplying the first equation by a test function $v$ and the second equation by a test function $\psi$, we then integrate.
+Doing so gives us,
+\begin{align*}
+	\int_\Omega -\Delta u v - \phi v \: d\bs{x} &= -\int_{\partial \Omega} \frac{\partial u}{\partial n} v \: ds + \int_\Omega \nabla u \cdot \nabla v - \phi v \: d\bs{x} \\
+	\int_\Omega u \psi - \Delta \phi \psi \: d\bs{x} &= - \int_{\partial \Omega} \frac{\partial \phi}{\partial n} \psi \: ds + \int_\Omega u\psi + \nabla \phi \cdot \nabla \psi \: d\bs{x}.
+\end{align*}
+Adding the two equations together and taking the essential boundary condition that $(v,\psi) \in H^1_0(\Omega)\times H^1_0(\Omega)$, we have,
+\begin{equation}
+	a((u,\phi),(v,\psi)) := \int_\Omega \nabla u \cdot \nabla v + \nabla \phi \cdot \nabla \psi + u\psi - \phi v \: d\bs{x} = (f,v) + (g,\psi).
+\end{equation}
+
+
+
+\vskip 2cm
+
+
+\textbf{b.} Choose appropriate function spaces for $u$ and $\phi$ in a.
+
+\vskip 1cm
+
+\textbf{Proof:} We simply take $(u, \phi) \in V := H^1_0(\Omega)\times H^1_0(\Omega)$.
+So our ansatz and test function spaces coincide. 
+
+
+\vskip 2cm
+
+
+\textbf{c.} Show that the weak formulation in a. has a unique solution. Hint: Lax-Milgram.
+
+\vskip 1cm 
+
+
+\textbf{Proof:} We want to apply Lax-Milgram to guarantee a unique solution, but we first need to prove continuity and coercivity of our bilinear forms.
+We will use the norm,
+\begin{equation}
+    |||(u,\phi)||| = \sqrt{||u||^2_{H^1(\Omega)} + ||\phi||^2_{H^1(\Omega)} }
+\end{equation}
+to prove the results. Similarly, since $u$ and $\phi$ are both in $H^1_0(\Omega)$ we will have a Poincar\`{e} inequality, therefore, we have,
+\begin{align*}
+    a((u,\phi),(u,\phi)) &= \int_\Omega |\nabla u|^2 + |\nabla \phi|^2 + u\phi - \phi u \: dx \\
+    &= \int_\Omega |\nabla u|^2 + |\nabla \phi|^2 \: dx \\
+    &= |u|^2_{H^1(\Omega)} + |\phi|^2_{H^1(\Omega)} \\
+    &= \frac{1}{2}|u|^2_{H^1(\Omega)} + \frac{1}{2}|\phi|^2_{H^1(\Omega)} + \frac{1}{2}|u|^2_{H^1(\Omega)} + \frac{1}{2}|\phi|^2_{H^1(\Omega)} \\
+    &\geq \frac{1}{2}|u|^2_{H^1(\Omega)} + \frac{1}{2}|\phi|^2_{H^1(\Omega)} + \frac{C}{2} ||u||^2_{L^2(\Omega)} + \frac{C}{2} ||\phi||^2_{L^2(\Omega)} \\
+    &\geq \frac{1}{2} \min \{ 1, C \} \big( ||u||^2_{H^1} + ||\phi||^2_{H^1} \big) \\
+    &= \alpha |||(u,\phi)|||^2.
+\end{align*}
+Thus $a$ is coercive. 
+Next we will show $a$ is continuous,
+\begin{align*}
+    a((u,\phi),(v,\psi)) &= \int_\Omega \nabla u \cdot \nabla v + \nabla \phi \cdot \nabla \psi + u\psi - \phi v \: dx \\
+    &\leq |u|_{H^1(\Omega)} |v|_{H^1(\Omega)} + |\phi|_{H^1(\Omega)} |\psi|_{H^1(\Omega)} + ||u||_{L^2(\Omega)} ||\psi||_{L^2(\Omega)} + ||\phi||_{L^2(\Omega)} ||v||_{L^2(\Omega)} \\
+    &\leq ||u||_{H^1(\Omega)} ( |v|_{H^1(\Omega)} + ||\psi||_{L^2(\Omega)}) + ||\phi||_{H^1(\Omega)}(|\psi|_{H^1(\Omega)} + ||v||_{L^2(\Omega)}) \\
+    &\leq (||u||_{H^1(\Omega)} + ||\phi||_{H^1(\Omega)})( ||v||_{H^1(\Omega)} + ||\psi||_{H^1(\Omega)}) \\
+    &\leq \sqrt{2} |||(u,\phi)||| \cdot \sqrt{2} |||(v,\psi)||| \\
+    &= 2 |||(u,\phi)||| \cdot |||(v,\psi)|||.
+\end{align*}
+It is also easy to check that the right hand side $(f,v) + (g,\psi)$ is continuous.
+Therefore by Lax-Milgram, there exists a unique solution.
+
+
+\vskip 2cm
+
+
+\textbf{d.} For a domain $\Omega_d = (-d, d)^2$, show that 
+\begin{equation}
+    ||u||^2 \leq c d^2 ||\nabla u||^2 
+\end{equation}
+holds for any function $u \in H^1_0(\Omega_d)$.
+
+\vskip 1cm
+
+
+\textbf{Proof:} Consider,
+\begin{align*}
+    ||u||^2 &= \int_{-d}^d \int_{-d}^d u(x,y)^2 \: dx \: dy \\
+    &= \int_{-d}^d \int_{-d}^d \frac{1}{2} u(x,y)^2 + \frac{1}{2} u(x,y)^2 \: dx \: dy \\
+    &= \int_{[-d,d]^2} \frac{1}{2} \Big( \int_{-d}^x \frac{\partial }{\partial \xi} u(\xi, y) \: d\xi \Big)^2 + \frac{1}{2} \Big( \int_{-d}^y \frac{\partial }{\partial \eta} u(x, \eta) \: d\eta \Big)^2 \: dx \: dy \\
+    &\leq \frac{1}{2} \int_{[-d,d]^2} \Big[ (x + d) \int_{-d}^x \Big(\frac{\partial }{\partial \xi} u(\xi, y)\Big)^2 \: d\xi + (y + d) \int_{-d}^y \Big(\frac{\partial }{\partial \eta} u(x, \eta)\Big)^2 \: d\eta \Big]\: dx \: dy \\
+    &\leq d \int_{[-d,d]} \int_{-d}^d \Big(\frac{\partial }{\partial \xi} u(\xi, y)\Big)^2 \: d\xi + \int_{-d}^d \Big(\frac{\partial }{\partial \eta} u(x, \eta)\Big)^2 \: d\eta \: dx \: dy \\
+    &= 2d^2 \int_{\Omega_d} |\nabla u |^2 \: dx \: dy \\
+    &= 2d^2 ||\nabla u ||^2.
+\end{align*}
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+\textbf{e.} Now change the second “$-$” in the first equation of \eqref{pb1:system} to a “$+$”. Use d. to show stability for the modified equation on $\Omega_d$, provided that $d$ is sufficiently small.
+
+\vskip 1cm
+
+
+\textbf{Proof:} If we repeat the same process for this new set of equations, we will end up with the bilinear form,
+\begin{equation*}
+    a((u,\phi),(v,\psi)) = \int_{\Omega_d} \nabla u \cdot \nabla v + \nabla \phi \cdot \nabla \psi + u\psi + \phi v \: dx 
+\end{equation*}
+Now take $d$ small enough such that $1/(2cd^2) \geq 1$.
+Then, we have,
+\begin{align*}
+    a((u,\phi),(u,\phi)) &= \int_{\Omega_d} |\nabla u|^2 + |\nabla \phi|^2 + 2 u \phi \: dx \: dy \\
+    &= \int_{\Omega_d} \frac{1}{2} |\nabla u|^2 + \frac{1}{2} |\nabla \phi|^2 + \frac{1}{2} |\nabla u|^2 + \frac{1}{2} |\nabla \phi|^2 + 2u\phi \: dx \: dy \\
+    &\geq \int_{\Omega_d} \frac{1}{2} |\nabla u|^2 + \frac{1}{2} |\nabla \phi|^2 + \frac{1}{4d^2}(|u|^2 + |\phi|^2) + 2 u \phi \: dx \: dy.
+\end{align*}
+Take $d$ small enough so that $\tfrac{1}{4d^2} \geq 1$.
+Using this inequality, we have,
+\begin{align*}
+    a((u,\phi),(u,\phi)) & \geq \int_{\Omega_d} \frac{1}{2} |\nabla u|^2 + \frac{1}{2} |\nabla \phi|^2 + u^2 + \phi^2 + 2u\phi \: dx \: dy \\
+    &= \int_{\Omega_d} \frac{1}{2} |\nabla u|^2 + \frac{1}{2} |\nabla \phi|^2 + (u + \phi)^2 \: dx \: dy \\
+    &\geq \frac{1}{2} (|u|^2_{H^1(\Omega_d)} + |\phi|^2_{H^1(\Omega_d)} ) \\
+    &\geq \frac{1}{4} \big( |u|^2_{H^1(\Omega_d)} + |\phi|^2_{H^1(\Omega_d)} + \frac{1}{2d^2} (||u||^2_{L^2(\Omega_d)} + ||\phi||^2_{L^2(\Omega_d)} ) \big) \\
+    &\geq \frac{1}{2} (||u||^2_{H^1(\Omega_d)} + ||\phi||^2_{H^1(\Omega_d)}) \\
+    &= \frac{1}{2} |||(u,\phi)|||^2.
+\end{align*}
+Thus $a$ is coercive. \textcolor{red}{How does this relate to stability?} 
+
+\vskip 2cm
+
+\textbf{Problem 2.} Consider the two finite elements $(\tau, Q_1, \Sigma)$ and $(\tau, \Tilde{Q}_1, \Sigma)$ where $\tau = [-1,1]^2$ is the reference square and 
+\begin{align}
+    Q_1 &= \text{span}\{1, x, y, xy \} \\ 
+    \Tilde{Q}_1 &= \text{span} \{1, x, y, x^2 - y^2 \}.
+\end{align}
+$\Sigma = \{ w(1,0), w(-1,0), w(0,1), w(0,-1) \}$ is the set of values of a function $w(x,y)$ at the midpoints of the edges $\tau$.
+
+\vskip 1cm
+
+
+\textbf{a.} Which of the two elements is unisolvent? Prove it!
+
+\vskip 1cm 
+
+
+\textbf{Proof:} To show unisolvence, we need to show that if the linear functionals all evaluate to zero for an arbitrary function in $Q_1$ or $\Tilde{Q}_1$ then our function must be identically zero.
+So let $w(x,y) = a + bx + cy + dxy \in Q_1$.
+Then we have 
+\begin{align*}
+    w(1,0) &= a + b = 0 \\ 
+    w(-1,0) &= a - b = 0 \\
+    w(0,1) &= a + c = 0 \\
+    w(0,-1) &= a - c = 0.
+\end{align*}
+solving these systems of equations, we can conclude that $a = b = c =0$.
+However, $d$ can be any value, say $d\neq 0$, then $w$ is not identically zero, hence $(\tau, Q_1, \Sigma)$ is not unisolvent.
+
+For the other finite element, we take $w(x,y) = a + bx + cy + d(x^2 - y^2) \in \Tilde{Q}_1$. 
+Performing the same process, we have,
+\begin{align*}
+    w(1,0) &= a + b + d = 0 \\
+    w(-1,0) &= a - b + d = 0 \\
+    w(0,1) &= a + c - d = 0 \\
+    w(0,-1) &= a - c - d = 0.
+\end{align*}
+So if we solve this linear system, we find that $a = b = c = d = 0$.
+Thus $w(x,y) \equiv 0$ and therefore $(\tau, \Tilde{Q}_1, \Sigma)$ is unisolvent.
+
+
+
+\vskip 2cm
+
+
+\textbf{b.} Show that the unisolvent element leads to a finite element space, which is not $H^1$-conforming.
+
+\vskip 1cm
+
+
+\textbf{Proof:} To show this, we only need to show a specific example. 
+So let $K_1$ be the square $[-1,1]\times [-1,1]$ and $K_2$ be the square formed by the vertices $\{ (1,-1), (3,-1), (3,1), (1,1) \}$. 
+We define $\Omega := K_1 \cup K_2$.
+Then the unisolvent element leads to the following finite element space,
+\begin{equation}
+    V_h := \{ v : \Omega \to \mathbb{R} : v \circ T_{K_i} \in \Tilde{Q}_1, \text{ for } i = 1, 2, \text{ and } v|_{K_1}(1,0) = v|_{K_2}(1,0) \},
+\end{equation}
+where $T_{K_i} : \tau \to K_i$.
+We claim that $V_h \not\subset H^1(\Omega)$.
+So let $w \in V_h$ and define $w_1 := w|_{K_1}$ and $w_2 := w|_{K_2}$, where 
+\begin{align*}
+    w_1(x,y) &:= x^2 - y^2, \\
+    w_2(x,y) &:= x.
+\end{align*}
+Then notice that $w_1(1,0) = w_2(1,0) = 1$, but $w_1(1,y) = 1 - y^2 \neq 1 = w_2(1,y)$ for $y\neq 0$.
+Therefore $w \not\in H^1(\Omega)$. 
+(Note, the discontinuity is not removable.)
+Hence the finite element space is not be $H^1$-conforming.
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+\textbf{Problem 3.}  Consider the following initial boundary value problem: find $u(x,t)$ such that 
+\begin{align}
+    u_t - u_{xx} + u &= 0, \qquad 0 < x < 1, \quad t > 0 \\
+    u_x(0,t) = u_x(1,t) &= 0, \qquad t > 0 \\
+    u(x,0) &= g(x), \quad 0 < x < 1.
+\end{align}
+
+\vskip 1cm
+
+
+\textbf{a.} Derive the semi-discrete approximation of this problem using linear finite elements over a uniform partition of $(0,1)$.  
+Write it as a system of linear ordinary differential equations for the coefficient vector.
+
+
+\vskip 1cm
+
+
+\textbf{Proof:} First, we mulitply the PDE by a test function $v(x)$ in some space $V$ and integrate over $(0,1)$, doing so gives us,
+\begin{align*}
+    0 &= \int_0^1 u_t(x,t) v(x) - u_{xx}(x,t) v(x) + u(x,t) v(x) \: dx \\
+    &= (u_t, v) + \int_0^1 u_x(x,t) v_x(x)  + u(x,t) v(x) \: dx - u_x(x,t) v(x) \Big|_0^1 \\
+    &= (u_t,v) + a(u,v),
+\end{align*}
+where 
+\begin{align*}
+    (u,v) &= \int_0^1 u v \: dx \\
+    a(u,v) &= \int_0^1 u_x v_x + uv \: dx.
+\end{align*}
+In this case our function space will be $H^1(0,1)$.
+Let $K_i := [x_{i-1}, x_i]$ and $\mathcal{T}_h := \{ K_i \}_{i=1}^N$.
+Let $\widehat{K} := [0,1]$ be the reference shape and define the affine geometric mappings, $T_{K_i} : \widehat{K} \to K_i$, by $T_{K_i}(\hat{x}) = h\hat{x} + x_{i-1}$.
+Then our finite element space is defined as,
+\begin{equation*}
+	V_h := \{ v \in C^0(0,1) : v \circ T_K \in \mathbb{P}_1, \forall K \in \mathcal{T}_h \}.
+\end{equation*}
+Our weak formulation in the finite element discretization is, find $u_h(t) \in V_h$ such that $\frac{d}{dt}(u_h(t), v_h) + a(u_h(t), v_h) = 0$ for all $v_h \in V_h$ with $u_h(0) = u^0_h(x)$ being an approximation of $g(x)$.
+
+The basis for $V_h$ consists of the usual nodal Lagrange shape functions (tent functions); that is, $V_h = \text{span}\{\phi_i\}_{i=0}^N$.
+Set the test function, $v = \phi_j(x)$, and express $u_h(t)$ in terms of the basis functions,
+\begin{equation*}
+    u_h(x,t) = \sum_{i=0}^N u_i(t) \phi_i(x).
+\end{equation*}
+Here, the $u_i(t)$ are the unknown coefficients.
+Additionally, our initial data is expressed as, $u^0_h(x) = \sum_{i=0}^N g_i \phi_i(x)$ (where $g_i$ are known coefficients).
+Plugging this all into our variational equation, we find,
+\begin{equation*}
+    \int_0^1 \sum_{i=0}^N u_i'(t) \phi_i(x) \phi_j(x) \: dx + \int_0^1 \sum_{i=0}^N u_i(t) \phi_i'(x) \phi_j'(x) + \sum_{i=0}^N u_i(t) \phi_i(x) \phi_j(x) \: dx,
+\end{equation*}
+for $j = 0, \ldots, N$.
+Let $U(t) := (u_0(t), \ldots, u_N(t))^T$, $M$ and $A$ matrices with entries $m_{ij} = (\phi_i, \phi_j)$ and $a_{ij} = a(\phi_i, \phi_j)$, respectively.
+Then our system of equations is written in the following matrix form,
+\begin{equation*}
+\begin{cases}
+    MU'(t) + AU(t) = 0, \\
+    U(0) = G,
+\end{cases}
+\end{equation*}
+where $G = (g_0, \ldots, g_N)^T$.
+This is the system of linear ordinary differential equations.
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+\textbf{b.} Further, derive discretizations in time using backward Euler and Crank-Nicolson methods, respectively.
+
+\vskip 1cm
+
+
+\textbf{Proof:} For the backward Euler we have,
+\begin{equation}
+	(\frac{u^{n+1}_h - u^n_h}{\Delta t}, v_h) + a(u^{n+1}_h, v_h) = 0
+\end{equation}
+where $u^n_h = u_h(x,t^n)$. 
+For the Crank-Nicolson method,
+\begin{equation}
+	(\frac{u^{n+1}_h - u^n_h}{\Delta t}, v_h) + a(\frac{u^{n+1}_h + u^n_h}{2}, v_h) = 0
+\end{equation}
+
+These methods can also be written in matrix form.
+For the backward Euler we have,
+\begin{equation}
+    M \frac{U^{n+1} - U^n}{\Delta t} + A U^{n+1} = 0,
+\end{equation}
+where $U^n = U(n\Delta t)$.
+We can solve for $U^{n+1}$ which gives,
+\begin{equation*}
+    U^{n+1} =  (M+\Delta t A)^{-1} M U^n.
+\end{equation*}
+For the Crank-Nicolson method, we have,
+\begin{equation*}
+    M\frac{U^{n+1} - U^n}{\Delta t} + A \frac{U^{n+1} + U^n}{2} = 0.
+\end{equation*}
+Solving for $U^{n+1}$, we have,
+\begin{equation*}
+    U^{n+1} = (M + \frac{\Delta t}{2} A)^{-1} (M - \frac{\Delta t}{2} A) U^n.
+\end{equation*}
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+\textbf{c.} Show that both fully discrete schemes are unconditionally stable with respect to the initial data in the spatial $L^2(0,1)$-norm.
+
+\vskip 1cm
+
+
+\textbf{Proof:} To prove the stability, we use the variational form, so consider,
+\begin{equation*}
+    (\frac{u^{n+1} - u^n}{\Delta t}, v) + a(u^{n+1},v) = 0,
+\end{equation*}
+where $u^n = u(x, n\Delta t)$.
+Then if we take $v = u^{n+1}$, we have,
+\begin{equation*}
+    (\frac{u^{n+1} - u^n}{\Delta t}, u^{n+1}) + a(u^{n+1}, u^{n+1}) = 0.
+\end{equation*}
+Note that $a(u^{n+1}, u^{n+1}) \geq 0$, so dropping that term, and rearranging, we end up with the inequality,
+\begin{equation*}
+    ||u^{n+1}||^2_{L^2(0,1)} = (u^{n+1}, u^{n+1}) \leq (u^n, u^{n+1}) \leq ||u^n||_{L^2(0,1)} ||u^{n+1}||_{L^2(0,1)}.
+\end{equation*}
+Hence we have 
+\begin{equation*}
+    ||u^{n+1}||_{L^2(0,1)} \leq ||u^n||_{L^2(0,1)} \leq \cdots \leq ||u^0||_{L^2(0,1)} = ||g||_{L^2(0,1)}.
+\end{equation*}
+Thus the backward Euler is unconditionally stable.
+
+Now for the Crank-Nicolson method,
+\begin{equation*}
+    (\frac{u^{n+1} - u^n}{\Delta t}, v) + a(\frac{u^{n+1} + u^n}{2}, v) = 0.
+\end{equation*}
+We repeat the same tricks as we did for the backward Euler, except this time we set $v = \frac{u^{n+1} + u^n}{2}$.
+This gives us,
+\begin{equation*}
+    (\frac{u^{n+1} - u^n}{\Delta t}, \frac{u^{n+1} + u^n}{2}) \leq 0.
+\end{equation*}
+If we expand the inner product and rearrange terms, we end up with the inequality,
+\begin{equation*}
+    ||u^{n+1}||^2_{L^2(0,1)} \leq ||u^{n}||^2_{L^2(0,1)}.
+\end{equation*}
+Hence by the same arguments as before, we have,
+\begin{equation*}
+    ||u^{n+1}||_{L^2(0,1)} \leq ||g||_{L^2(0,1)}.
+\end{equation*}
+Thus the Crank-Nicolson method is unconditionally stable.
+$\blacksquare$
+
+
+
+
+
+
+\end{document}

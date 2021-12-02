@@ -1,0 +1,421 @@
+\documentclass[11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[ampersand]{easylist}
+\usepackage{authblk}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\geometry{letterpaper}
+	\setlength{\oddsidemargin}{0cm}
+	\setlength{\evensidemargin}{0cm}
+	\setlength{\headheight}{0.5cm}
+	\setlength{\headsep}{0cm}
+	\setlength{\textwidth}{16cm}
+	\setlength{\textheight}{21.0cm}
+	\baselineskip=24pt
+
+\title{Applied/Numerical Qualifier Solution: January 2013}
+
+\author{Bennett Clayton}
+\affil{Texas A\&M University}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+{\bf Problem 1.} 
+\\[4pt]
+
+{\bf a.} You may assume the inequality
+\[ ||u||^2_{H^1(\hat{\tau})} \leq C\left( \int_{\hat{\tau}} |\nabla u|^2 \: d\hat{x} + \bar{u}^2 \right), \quad \text{for all } u \in H^1(\hat{\tau}). \]
+Here $\hat{\tau}$ is the reference triangle in $\mathbb{R}^2$, $\bar{u}$ denotes the mean value of $u$ on $\hat{\tau}$ and $\mathbb{P}^k$ denotes the polynomials of $(x,y)$ of degree at most $k$. Let $\tau$ denote a general triangle in $\mathbb{R}^2$. Show that 
+\[ ||u||^2_{H^1(\tau)} \leq C_\theta \left\{ \int_\tau |\nabla u|^2 \: dx + h^2\bar{u}^2 \right\}, \quad \text{for all } u \in \mathbb{P}^1 \]
+Here $\theta$ denotes the minimum angle of $\tau$ and $h$ its diameter.  Now $\bar{u}$ denotes the mean value of $u$ on $\tau$. (You may assume, without proof, standard properties involving the dependence on $\theta$ of the affine map of $\hat{\tau}$ onto $\tau$.)
+\\[8pt]
+
+{\bf Solution}: Doing the standard transformation onto the reference element, we have the following
+\begin{align*}
+||u||_{H^1(\tau)}^2 &= \int_\tau |u|^2 \: dx + \int_\tau |\nabla u|^2 \: dx \\
+&\leq C_\theta \big( \int_{\hat{\tau}} |\hat{u}|^2 \: h^2 d\hat{x} + \int_{\hat{\tau}} \frac{1}{h^2}| \hat{\nabla} \hat{u}|^2 \: h^2d\hat{x} \big) \\
+&= C_\theta ( h^2||\hat{u}||^2_{L^2(\hat{\tau})} + |\hat{u}|^2_{H^1(\hat{\tau})} ) \\
+\end{align*}
+Now using an add and subtract trick and using our hypothesis, we now have 
+\begin{align*}
+||u||^2_{H^1(\tau)} &\leq C_\theta( h^2||\hat{u}||^2_{L^2(\hat{\tau})} + h^2|\hat{u}|^2_{H^1(\hat{\tau})} - h^2|\hat{u}|^2_{H^1(\hat{\tau})} + |\hat{u}|^2_{H^1(\hat{\tau})} ) \\
+&= C_\theta( h^2 ||\hat{u}||^2_{H^1(\hat{\tau})} + (1-h^2)|\hat{u}|^2_{H^1(\hat{\tau})} ) \\
+&\leq C_\theta ( h^2 \int_{\hat{\tau}} |\hat{\nabla} \hat{u}|^2 \: d\hat{x} + h^2 \hat{\bar{u}}^2) + C_\theta (1-h^2)|\hat{u}|^2_{H^1(\hat{\tau})} \\
+&\leq C_\theta (h^2 |u|^2_{H^1(\tau)} + h^2\bar{u}^2) + C_\theta (1-h^2)|u|^2_{H^1(\tau)} \\
+&= C_\theta (|u|^2_{H^1(\tau)} + h^2\bar{u}^2) 
+\end{align*}
+This completes the proof. $\blacksquare$
+
+
+\vskip 2cm
+
+
+
+{\bf b.} Let $V_h$ be the space of continuous piecewise linear functions with respect to a quasi-uniform mesh $\Omega = \bigcup_{i=1}^N \tau_i$. Consider the one point quadrature approximation
+\[ \mathcal{Q}_{\tau_i}(g) := |\tau_i| g(b_i)\approx \int_{\tau_i} g, \]
+where $|\tau_i|$ is the area of $\tau_i$ and $b_i$ is its barycenter.
+
+Consider the finite element problem: Find $u_h \in V_h$ satisfying
+\[ A_h(u_h, \phi) = F_h(\phi), \quad \text{for all } \phi \in V_h. \]
+Here for $u_h, v_h \in V_h$, $A_h$ and $F_h$ are given by 
+\[ A(u_h,v_h) := \sum_{i=1}^N (\mathcal{Q}_{\tau_i}(\nabla u_h \cdot \nabla v_h) + \mathcal{Q}_{\tau_i}(u_hv_h)) \: \text{ and } \: F_h(v_h) := \sum_{i=1}^N \mathcal{Q}_{\tau_i} (fv_h) \]
+respectively. Show that 
+\[ \mathcal{Q}_{\tau_i}(|\nabla u|^2) = \int_{\tau_i} |\nabla u|^2 \: \text{ and } \: \mathcal{Q}_{\tau_i}(|u|^2) = |\tau_i|\bar{u}^2, \quad \text{ for all } u \in \mathbb{P}^1. \]
+
+
+\vskip 1cm
+
+\textbf{Solution}: Since $u$ is a linear polynomial, $\nabla u$ is a constant function. 
+Hence $\mathcal{Q}_{\tau_i}(|\nabla u|^2) = |\tau_i||\nabla u|^2(b_i) = \int_{\tau_i} |\nabla u|^2$. 
+For $|u|^2$, since $u$ is linear, express $u$ in terms of the barycentric coordinates. 
+I.e. say $u = a\lambda_1 + b\lambda_2 + c\lambda_3$.
+Note that the center of a triangle in barycentric coordinates is $(1/3, 1/3, 1/3)$.
+Then we have
+\begin{equation*}
+\mathcal{Q}_{\tau_i}(|u|^2) = |\tau_i||u(b_i)|^2 = |\tau_i| \Big| \frac{a}{3} + \frac{b}{3} + \frac{c}{3} \Big|^2 = |\tau_i| \left|\frac{a+b+c}{3}\right|^2 
+\end{equation*}
+Then note the identity, $\int_{\tau_i} \lambda_j \: dx = |\tau_i|/3$ for $j = 1,2,3$. So now look at the average $\bar{u}^2$,
+\begin{equation*} 
+|\tau_i|\bar{u}^2 = |\tau_i| \left(\frac{1}{|\tau_i|} \int_{\tau_i} a\lambda_1 + b\lambda_2 + c\lambda_3 \: dx \right)^2 = |\tau_i| \left(\frac{1}{|\tau_i|} \cdot \frac{a+b+c}{3}|\tau_i| \right)^2
+\end{equation*}
+This gives us the result.$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+
+{\bf c.} Use parts (a) and (b) above to show that the form $A_h(\cdot, \cdot)$ is $V_h$-elliptic, i.e., 
+\begin{equation}
+    A_h(v_h, v_h) \geq c||v_h||^2_{H^1(\Omega)}, \quad \text{for all } v_h \in V_h
+\end{equation}
+holds with $c$ independent of $h$.
+
+\vskip 1cm
+
+\textbf{Solution}: From part b. we can write,
+\begin{align*}
+    A_h(v_h, v_h) &= \sum_{i=1}^N \big( \mathcal{Q}_{\tau_i}(|\nabla v_h|^2) + \mathcal{Q}_{\tau_i}(|v_h|^2) \big) \\
+    &= \sum_{i=1}^N \big( \int_{\tau_i} |\nabla v_h|^2 \: dx + |\tau_i| |\Bar{u}|^2 \big) \\
+    &\geq C\sum_{i=1}^N \big( \int_{\tau_i} |\nabla v_h|^2 \: dx + h^2 |\Bar{u}|^2 \big).
+\end{align*}
+Thus from part a. we have 
+\begin{equation*}
+    A_h(v_h, v_h) \geq C \sum_{i=1}^N ||v_h||^2_{H^1(\tau_i)} = C||v_h||^2_{H^1(\Omega)}.
+\end{equation*}
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+\textbf{Problem 2.} Let $\Omega$ be a convex polygonal domain of $\mathbb{R}^2$. 
+Given $f\in L^2(\Omega)$, we denote by $u \in H^1_0(\Omega)$ the solution of the Poisson problem: 
+\begin{equation}
+    -\Delta u = f \: \text{ in } \: \Omega, \quad u = 0 \: \text{ on } \: \partial\Omega.
+\end{equation}
+We note that $u$ satisfies full elliptic regularity, i.e., $u\in H^2(\Omega)$.
+
+We consider a {\it non conforming} finite element method to approximate $u$. Let $\{ \mathcal{T}_h \}_{0 < h < 1}$ be a sequence of conforming shape regular subdivisions of $\Omega$ such that $\text{diam}(T) \leq h$. Denote by $X_h$ the spaces of continuous, piecewise linear polynomials subordinate to the subdivisions $\mathcal{T}_h$, $0 < h < 1$.
+
+The numerical method consists of finding $u_h \in X_h$ such that for all $v_h \in X_h$: 
+\[ a_h(u_h, v_h) := \int_\Omega \nabla u_h \cdot \nabla v_h - \int_{\partial\Omega} \partial_\nu u_h v_h + \frac{\alpha}{h}\int_{\partial\Omega} u_hv_h = \int_{\Omega} fv_h. \]
+Here $\nu$ denotes the outward pointing unit normal (defined almost everywhere), $\partial_\nu u := \nabla u \cdot \nu$ and $\alpha > 0$ is a constant yet to be determined. Note that $X_h \not\subset H^1_0(\Omega)$ but $X_h \subset H^1(\Omega)$
+\\[4pt]
+
+
+{\bf a.} Explain why $a_h(u,v_h)$ makes sense for any $v_h \in X_h$ and show Galerkin orthogonality, i.e.,
+\begin{equation}
+    a_h(u - u_h, v_h) = 0, \quad \text{for all } v_h \in X_h.
+\end{equation}
+
+
+
+\vskip 1cm
+
+\textbf{Proof}: Since $u\in H^2(\Omega)$, $\nabla u$ on $\Omega$ is well defined, $u$ is also in $H^1_0(\Omega)$ so the integral term of $u$ on $\partial \Omega$ will vanish, which is fine. 
+Lastly, we might have an issue with $\partial_\nu u$ on $\partial\Omega$, but since $u \in H^2$, we know the trace exists for the $\nabla u$.
+I.e. $||\nabla u||_{L^2(\partial\Omega)} \leq C ||\nabla u||_{H^1(\Omega)} \leq C ||u||_{H^2(\Omega)}$.
+Thus $a_h(u,v_h)$ makes sense for every $v_h \in X_h$. 
+
+Now onto Galerkin orthogonality. It is enough to show that $u$ is also a solution to the finite element problem $a_h(\cdot, v_h) = f(v_h)$. So consider 
+\begin{align*}
+a_h(u, v_h) &= \int_\Omega \nabla u \cdot \nabla v_h - \int_{\partial\Omega} \partial_\nu u v_h + \frac{\alpha}{h}\int_{\partial\Omega} uv_h \\
+&= -\int_\Omega \Delta u v_h + \int_{\partial\Omega} \partial_\nu u v_h - \int_{\partial\Omega} \partial_\nu u v_h + 0 \\
+&= -\int_\Omega \Delta u v_h \\
+&= \int_\Omega f v_h
+\end{align*}
+Thus we have Galerkin orthogonality. $\blacksquare$
+
+
+\vskip 2cm
+
+
+
+\textbf{b.} For any $v_h \in X_h$, define the mesh dependent norm
+\begin{equation}
+    ||v_h||_h := \left( ||\nabla v_h||^2_{L^2(\Omega)} + \frac{\alpha}{h}||v_h||^2_{L^2(\partial\Omega)} \right)^{1/2}.
+\end{equation}
+Show that there exists a constant $c_0$ independent of $h$ such that for all $v_h \in X_h$
+\begin{equation}
+    \int_{\partial\Omega} |\nabla v_h|^2 \leq \frac{c_0}{h} \int_\Omega |\nabla v_h|^2.
+\end{equation}
+Using this fact, deduce that for all $v_h \in X_h$,
+\begin{equation}
+    a_h(v_h, v_h) \geq \frac{1}{2}||v_h||^2_h,
+\end{equation}
+provided $\alpha \geq c_0$.
+
+
+\vskip 1cm
+
+\textbf{Solution}: Let $e$ be an edge on $\partial\Omega$, which corresponds to an edge of a triangle in $\mathcal{T}_h$.
+Then consider the following
+\begin{align*}
+\int_{\partial\Omega} |\nabla v_h|^2 &= \sum_{e\subset\partial\Omega} \int_e |\nabla v_h|^2 \\
+&\leq c\sum_{e\subset \partial\Omega} \int_0^1 |\frac{1}{h}\hat{\nabla}\hat{v_h}|^2 \: h d\hat{x} \\
+&\leq \frac{c}{h} \sum_{e\subset\partial\Omega} ||\hat{\nabla}\hat{v}_h||^2_{L^2(0,1)} \\
+&\leq \frac{c}{h} \sum_{e\subset \partial \Omega} ||\Hat{\nabla} \Hat{v}_h||^2_{L^2(\partial \Hat{T})}.
+\end{align*}
+Now, notice that $\Hat{\nabla} \Hat{v}_h$ is constant on $\Hat{T}$ so, we can apply the trace inequality.
+This gives us,
+\begin{align*}
+    \int_{\partial \Omega} |\nabla v_h|^2 \: dx &\leq \frac{c}{h} \sum_{e \subset \partial \Omega} || \Hat{\nabla} \Hat{v}_h ||^2_{H^1(\Hat{T})} \\
+    &= \frac{c}{h} \sum_{e \subset \partial \Omega} ||\Hat{\nabla} \Hat{v}_h||^2_{L^2(\Hat{T})} \\
+    &\leq \frac{c}{h} \sum_{T \in \mathcal{T}_h} ||\nabla v_h||^2_{L^2(T)} \\
+    &= \frac{c}{h} \int_{\Omega} |\nabla v_h|^2 \: dx
+\end{align*}
+
+For the coercivity, we start by applying Cauchy-Schwartz in the reverse direction, we have 
+\begin{align*}
+a_h(v_h, v_h) &= ||\nabla v_h||^2_{L^2(\Omega)} - \int_{\partial\Omega} \partial_\nu v_h v_h + \frac{\alpha}{h}|| v_h||^2_{L^2(\partial\Omega)} \\
+&\geq ||\nabla v_h||^2_{L^2(\Omega)} - ||\nabla v_h||_{L^2(\partial\Omega)}||v_h||_{L^2(\partial\Omega)} + \frac{\alpha}{h}||v_h||^2_{L^2(\partial\Omega)} \\
+&\geq ||\nabla v_h||^2_{L^2(\Omega)} - \sqrt{\frac{c_0}{h}} ||\nabla v_h||_{L^2(\Omega)} ||v_h||_{L^2(\partial \Omega)} + \frac{\alpha}{h} ||v_h||^2_{L^2(\partial \Omega)} \\
+&\geq ||\nabla v_h||^2_{L^2(\Omega)} - \frac{1}{2} ||\nabla v_h||^2_{L^2(\Omega)} - \frac{\alpha}{2h} ||v_h||^2_{L^2(\partial \Omega)} + \frac{\alpha}{h} ||v_h||^2_{L^2(\partial \Omega)} \\
+&= \frac{1}{2} (||\nabla v_h||^2_{L^2(\Omega)} + \frac{\alpha}{h}||v_h||^2_{L^2(\partial \Omega)} ) \\
+&= \frac{1}{2} ||v_h||^2_h.
+\end{align*}
+This completes the proof.
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+\textbf{c.} Let $I_h$ denote the Lagrange finite element interpolation operator associated with $X_h$. 
+You may use the following estimate without proof: For $i = 1,2$,
+\begin{equation}
+    \Big| \Big| \frac{\partial (u - I_h u)}{\partial x_i} \Big| \Big|_{L^2(e)} \leq Ch^{1/2} ||u||_{H^2(\tau)}.
+\end{equation}
+Take $\alpha = c_0$ and derive an optimal error estimate for $||u - u_h||_h$.
+
+
+\vskip 1cm
+
+
+\textbf{Solution}: We will first start by showing that $a_h$ is continuous with respect to the norm $||\cdot ||_h$.
+So consider,
+\begin{align*}
+    a_h(v_h, z_h) &= \int_\Omega \nabla v_h \cdot \nabla z_h - \int_{\partial \Omega} \frac{\partial v_h}{\partial n} z_h \: ds + \frac{\alpha}{h} \int_{\partial \Omega} v_h z_h \: ds \\
+    &\leq |v_h|_{H^1(\Omega)} |z_h|_{H^1(\Omega)} + ||\nabla v_h||_{L^2(\partial \Omega)} ||z_h||_{L^2(\partial \Omega)} + \frac{\alpha}{h} ||v_h||_{L^2(\partial \Omega)} ||z_h||_{L^2(\partial \Omega)} \\
+    &\leq |v_h|_{H^1(\Omega)} |z_h|_{H^1(\Omega)} + \sqrt{\frac{c_0}{h}} ||\nabla v_h||_{L^2(\Omega)} ||z_h||_{L^2(\partial \Omega)} + \frac{\alpha}{h} ||v_h||_{L^2(\partial \Omega)} ||z_h||_{L^2(\partial \Omega)} \\ 
+    &\leq ||v_h||_h |z_h|_{H^1(\Omega)} + \big( ||\nabla v_h||_{L^2(\Omega)} + \sqrt{\frac{\alpha}{h}} ||v_h||_{L^2(\partial \Omega)} \big) \sqrt{\frac{\alpha}{h}} ||z_h||_{L^2(\partial\Omega)} \\
+    &\leq ||v_h||_h |z_h|_{H^1(\Omega)} + \sqrt{2} ||v_h||_h \sqrt{\frac{\alpha}{h}}||z_h||_{L^2(\Omega)} \\
+    &\leq 2 ||v_h||_h ||z_h||_h.
+\end{align*}
+Note, we have used the inequality $a + b \leq \sqrt{2}\sqrt{a^2 + b^2}$ in the above argument.
+Thus $a_h$ is continuous with respect to the norm $||\cdot ||_h$.
+
+Now we will derive Strang's first lemma for our problem.
+Using the fact that $a_h(u_h,v_h) = L(v_h)$ for all $v_h \in X_h$ where $L(v_h) := \int_\Omega f v_h$, we can write,
+\begin{equation*}
+    a_h(u_h - z_h, v_h) = a(u - z_h, v_h) + L(v_h) - a(u, v_h).
+\end{equation*}
+Then if we substitute $v_h = u_h - z_h$, we can apply coercivity and continuity to write,
+\begin{align*}
+    \frac{1}{2} ||u_h - z_h||^2_h &\leq a_h(u_h - z_h, u_h - z_h) \\
+    &\leq 2||u - z_h||_h ||u_h - z_h||_h + ||L(\cdot) - a(u, \cdot)||_{*,h} ||u_h - z_h||_h.
+\end{align*}
+We then divide by $||u_h - z_h||_h$ and rewrite the inequality as,
+\begin{equation*}
+    ||u_h - z_h||_h \leq 4 ||u - z_h||_h + 2||L(\cdot) - a(u, \cdot) ||_{*,h}.
+\end{equation*}
+But from part a. we know that $a(u,v_h) = L(v_h)$ for every $v_h \in X_h$, hence $||L(\cdot) - a(u, \cdot)||_{*,h} = 0$.
+Therefore, our inequality becomes,
+\begin{equation*}
+    ||u_h - z_h||_h \leq 4 ||u - z_h||_h.
+\end{equation*}
+Using this inequality, we can estimate our error as,
+\begin{equation*}
+    ||u - u_h||_h \leq ||u - z_h||_h + ||u_h - z_h||_h \leq 5 ||u - z_h||_h.
+\end{equation*}
+Since this holds for any $z_h \in X_h$, we can take the infimum, and our inequality becomes,
+\begin{equation*}
+    ||u - u_h||_h \leq 5 \inf_{z_h\in X_h} ||u - z_h||_h.
+\end{equation*}
+
+Now we can proceed using the standard methods of error estimation by using the interpolation of our solution $u$, i.e., we have,
+\begin{equation*}
+    ||u - u_h||_h \leq 5 \inf_{z_h \in X_h} ||u - z_h||_h \leq 5 ||u - I_h u||_h.
+\end{equation*}
+Now consider,
+\begin{align*}
+    ||u - I_h u||^2_h &= ||\nabla (u - I_h u)||^2_{L^2(\Omega)} + \frac{c_0}{h} ||u - I_h u||^2_{L^2(\partial \Omega)} \\
+    &= \sum_{\tau \in \mathcal{T}_h} ||\nabla (u - I_h u)||^2_{L^2(\tau)} + \frac{c_0}{h} \sum_{e\subset \partial \Omega} ||u - I_h u||^2_{L^2(e)}.
+\end{align*}
+For $||\nabla (u - I_h u)||^2_{L^2(\tau)}$ we use the normal methods of transfering to the reference element and applying Bramble-Hilbert to get that, $||\nabla (u - I_h u)||^2_{L^2(\tau)} \leq Ch^2|u|_{H^2(\tau)}^2$.
+So lets look at the boundary term,
+\begin{align*}
+    \frac{c_0}{h} \sum_{e \subset \partial \Omega} ||u - I_h u||^2_{L^2(e)} &\leq \frac{c_0}{h} \sum_{e \subset \partial \Omega} C h ||\Hat{u} - \Hat{I}_h \Hat{u}||^2_{L^2(\Hat{e})} \\
+    &\leq C \sum_{e \subset \partial \Omega} ||\Hat{u} - \Hat{I}_h \Hat{u}||^2_{L^2(\Hat{\tau})} \\
+    &\leq C \sum_{\tau \in \mathcal{T}_h} |\Hat{u}|^2_{H^2(\Hat{\tau})} \\
+    &\leq Ch^2 \sum_{\tau \in \mathcal{T}_h} |u|^2_{H^2(\tau)} \\
+    &= Ch^2 |u|^2_{H^2(\Omega)}.
+\end{align*}
+Therefore, 
+\begin{equation*}
+    ||u - I_h u||_h \leq Ch|u|_{H^2(\Omega)}.
+\end{equation*}
+Thus,
+\begin{equation*}
+    ||u - u_h||_h \leq Ch|u|_{H^2(\Omega)}.
+\end{equation*}
+$\blacksquare$
+
+
+
+
+\vskip 2cm
+
+
+
+\textbf{Problem 3.} Given the boundary value problem: find $u(x,t)$ such that 
+\begin{align*}
+\frac{\partial u}{\partial t} &= \kappa \frac{\partial^2 u}{\partial x^2} - b(x)\frac{\partial u}{\partial x} + f(x), \: 0 < x < 1, \: 0 < t \leq T, \\
+&u(0,t) = 0, \: u(1,t) = 0, \: 0 < t \leq T \\
+&u(x,0) = v(x), \: 0 \leq x \leq 1,
+\end{align*}
+where $\kappa = const > 0$, $b(x) \in C^0[0,1]$, $v(x)$, and $f(x)$ are given smooth functions Let $x_i = ih$ with $h = 1/N$ and $t_n = n\tau$, with $n = 0,1, \ldots, J$ and (time step size) $\tau = T/J$.
+\\[4pt]
+
+{\bf a.} Write down a forward (explicit) Euler fully discrete scheme for the above problem based on a finite difference discretization in space which upwinds the $b(x)$ term.
+\\[8pt]
+
+{\bf Solution}: Let $U^n_j = u(x_j, t_n)$. Then our finite difference discretization is 
+\begin{equation}
+\frac{U^{n+1}_j - U^n_j}{\tau} = \kappa\frac{U^n_{j+1} - 2U^n_j + U^n_{j-1}}{h^2} - \left( b^+(x)\frac{U^n_j - U^n_{j-1}}{h} + b^-(x)\frac{U^n_{j+1} - U^n_j}{h} \right) + f(x)
+\end{equation}
+where we have 
+\begin{equation*}
+b^+(x) = 
+\begin{cases}
+b(x) \quad &\text{if } b(x) \geq 0 \\
+0 \quad &\text{otherwise}
+\end{cases},
+\quad b^-(x) = 
+\begin{cases}
+b(x) \quad &\text{if } b(x) \leq 0 \\
+0 \quad &\text{otherwise}
+\end{cases}
+\end{equation*}
+$\blacksquare$
+\\[16pt]
+
+
+{\bf b.} Find a Courant (CFL) condition and show that if this condition is satisfied, 
+\[ ||U^{n+1}||_\infty \leq ||U^n||_\infty + \tau||f(t_n)||_\infty. \]
+Here $U^n$ is the approximation at $t_n$ of part a. 
+
+
+\vskip 1cm
+
+
+
+\textbf{Solution}: Let's rewrite our discretization in a. as follows,
+\begin{equation*}
+    U^{n+1}_j = \big( \frac{\tau \kappa}{h^2} - \frac{\tau b^-(x_j)}{h} \big) U^n_{j+1} + \big( 1 - \frac{2\tau \kappa}{h^2} - \frac{\tau b^+(x_j)}{h} + \frac{\tau b^-(x_j)}{h} \big) U^n_j + \big( \frac{\tau \kappa}{h^2} + \frac{\tau b^+(x_j)}{h} \big) U^n_{j-1} + \tau f(x_j).
+\end{equation*}
+Notice the coefficients of $U^n_{j+1}$ and $U^n_{j-1}$ are both positive. 
+So if we have,
+\begin{equation*}
+    \tau (\frac{2\kappa}{h^2} + \frac{b^+(x_j)}{h} - \frac{b^-(x_j)}{h} ) \leq 1,
+\end{equation*}
+then,
+\begin{equation*}
+\begin{split}
+    |U^{n+1}_j| \leq \big( \frac{\tau \kappa}{h^2} - \frac{\tau b^-(x_j)}{h} \big) ||U^n||_{\infty} + \big( 1 - \frac{2\tau \kappa}{h^2} - \frac{\tau b^+(x_j)}{h} &+ \frac{\tau b^-(x_j)}{h} \big) ||U^n||_{\infty} \\
+    &+ \big( \frac{\tau \kappa}{h^2} + \frac{\tau b^+(x_j)}{h} \big) ||U^n||_{\infty} +\tau ||f||_\infty,
+\end{split}
+\end{equation*}
+which simplifies to 
+\begin{equation*}
+    ||U^{n+1}||_\infty \leq ||U^n||_\infty + \tau ||f||_\infty.
+\end{equation*}
+Now note that $b^+(x_j) - b^-(x_j) = |b(x_j)|$.
+So we can derive our CFL condition, so we can write,
+\begin{equation*}
+    \tau \big( \frac{2\kappa}{h^2} + \frac{|b(x_j)|}{h} \big) \leq 1.
+\end{equation*}
+This can be rewritten as,
+\begin{equation*}
+    \tau \leq \frac{h^2}{2\kappa + h|b(x_j)|}.
+\end{equation*}
+Since this needs to hold for every $x_j$, our CFL condition must be,
+\begin{equation*}
+    \tau \leq \frac{h^2}{2\kappa + h||b||_\infty}.
+\end{equation*}
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+\textbf{c.} Define the fully discrete method but with backward (implicit) Euler time stepping and show that this scheme is unconditionally stable, i.e., prove that for any positive $\tau$,
+\begin{equation}
+    ||U^{n+1}||_\infty \leq ||U^n||_\infty + \tau ||f(t_{n+1})||_\infty.
+\end{equation}
+
+
+\vskip 1cm
+
+
+\textbf{Solution}: The backward Euler is given by,
+\begin{equation*}
+    \frac{U^{n+1}_j - U^n_j}{\tau} = \kappa \frac{U^{n+1}_{j+1} - 2U^{n+1}_j + U^{n+1}_{j-1}}{h^2} - b^+(x_j) \frac{U^{n+1}_j - U^{n+1}_{j-1}}{h} - b^-(x_j) \frac{U^{n+1}_{j+1} - U^{n+1}_j}{h} + \tau f(x_j).
+\end{equation*}
+This can be rewritten as,
+\begin{equation*}
+    \big(1 + \frac{2\kappa \tau}{h^2} + \frac{\tau |b_j|}{h} \big) U^{n+1}_j - U^n_j = \big( \frac{\kappa \tau}{h^2} - \frac{\tau b^-_j}{h} \big) U^{n+1}_{j+1} + \big( \frac{\kappa \tau}{h^2} + \frac{\tau b^+_j}{h} \big) U^{n+1}_{j-1} + \tau f(x_j).
+\end{equation*}
+Now applying triangle inequality, we have,
+\begin{align*}
+    \big(1 + \frac{2\kappa \tau}{h^2} + \frac{\tau |b_j|}{h} \big) |U^{n+1}_j| &\leq |U^n_j| + \big( \frac{\kappa \tau}{h^2} - \frac{\tau b^-_j}{h} \big) |U^{n+1}_{j+1}| + \big( \frac{\kappa \tau}{h^2} + \frac{\tau b^+_j}{h} \big) |U^{n+1}_{j-1}| + \tau |f_j| \\
+    &\leq ||U^n||_\infty + \big( \frac{\kappa \tau}{h^2} - \frac{\tau b^-_j}{h} \big) ||U^{n+1}||_\infty + \big( \frac{\kappa \tau}{h^2} + \frac{\tau b^+_j}{h} \big) ||U^{n+1}||_\infty + \tau ||f||_\infty \\
+    &= ||U^n||_\infty + \big( \frac{2\kappa \tau}{h^2} + \frac{\tau |b_j|}{h} \big) ||U^{n+1}||_\infty + \tau ||f||_\infty 
+\end{align*}
+Since this must hold for every $j$, we thus have,
+\begin{equation*}
+    ||U^{n+1}||_\infty \leq ||U^n||_\infty + \tau ||f||_\infty
+\end{equation*}
+$\blacksquare$
+
+
+\end{document}
+

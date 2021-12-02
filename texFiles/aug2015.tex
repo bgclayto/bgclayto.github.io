@@ -1,0 +1,530 @@
+\documentclass[11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[ampersand]{easylist}
+\usepackage{authblk}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\geometry{letterpaper}
+	\setlength{\oddsidemargin}{0cm}
+	\setlength{\evensidemargin}{0cm}
+	\setlength{\headheight}{0.5cm}
+	\setlength{\headsep}{0cm}
+	\setlength{\textwidth}{16cm}
+	\setlength{\textheight}{21.0cm}
+	\baselineskip=24pt
+
+\title{Applied/Numerical Qualifier Solution: August 2015}
+
+\author{Bennett Clayton}
+\affil{Texas A\&M University}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+{\bf Problem 1.} This problem is aimed at proving the Riemann-Lebesgue Lemma: {\it If $f\in L^1[0,1]$, then $\lim_{\lambda \to \infty} \int_0^1 f(x)e^{i\lambda x} dx = 0$}
+\\[4pt]
+
+{\bf a.} Show that if $p(x) = \sum_{k=0}^n a_kx^k$, then $\lim_{\lambda \to \infty} \int_0^1 p(x)e^{i\lambda x} dx = 0$.
+\\[8pt]
+
+{\bf Solution}: We will use induction, so for $n = 0$ we have 
+\[ \left|\int_0^1 a_k e^{i\lambda x} dx\right| = \left|\left[\frac{a_k}{i\lambda}e^{i\lambda x} \right]_0^1\right| \leq  \frac{2|a_k|}{\lambda}  \]
+Thus as $\lambda \to \infty$ this we have the result for $n=0$. 
+
+Now, assuming we have convergence to zero for $n = m-1$, we will prove for $n = m$. So consider 
+\begin{align*}
+\left| \int_0^1 \sum_{k=0}^m a_kx^ke^{i\lambda x} dx \right| &= \left| a_0\int_0^1e^{i\lambda x} dx + \sum_{k=1}^m a_k\int_0^1 x^ke^{i\lambda x} dx \right| \\
+&\leq \left|a_0\int_0^1 e^{i\lambda x} dx\right| + \sum_{k=1}^m \left( k|a_k| \left|\int_0^1 x^{k-1}e^{i\lambda x} dx\right| + \left|\left[ \frac{x^k}{i\lambda}e^{i\lambda x} \right]_0^1\right| \right) \\
+&\leq \frac{2|a_0|}{\lambda} + \sum_{k=1}^m k|a_k| \left|\int_0^1 x^{k-1}e^{i\lambda x} dx\right| + \frac{1}{\lambda}
+\end{align*}
+Thus by the induction hypothesis, the middle term must converge to zero and since the left and right terms, of course, will also converge to zero, we have that $\lim_{\lambda \to \infty} \int_0^1 p(x)e^{i\lambda x} dx = 0$. $\blacksquare$
+\\[16pt]
+
+
+
+{\bf b.} State the Weierstrass Approximation Theorem. Use it and part (a) to show that for $g\in C[0,1]$, $\lim_{\lambda\to\infty} \int_0^1 g(x) e^{i\lambda x} dx = 0$.
+\\[8pt]
+
+{\bf Proof}: 
+\\[16pt]
+
+
+
+
+{\bf c.} Use (a), (b) and the density of $C[0,1]$ in $L^1$ to complete the proof.
+\\[8pt]
+
+{\bf Proof}: 
+\\[16pt]
+
+
+
+{\bf Problem 2.} Let $\mathcal{D}$ be the set of compactly supported $C^\infty$ functions defined on $\mathbb{R}$ and let $\mathcal{D}'$ be the corresponding set of distributions. 
+\\[4pt]
+
+
+{\bf a.} Define convergence in $\mathcal{D}$ and $\mathcal{D}'$. 
+\\[8pt]
+
+
+{\bf Proof}: A sequence $\phi_n \in \mathcal{D}$ is said to converge to some function $\phi \in \mathcal{D}$ (written $\phi_n \to \phi$) if and only if $||\phi^{(m)}_n - \phi^{(m)}||_u \to 0$, where $m\in\mathbb{N}$ and $||\cdot ||_u$ is the supremum norm, and $\bigcup_{n\in\mathbb{N}} \text{supp} (\phi_n) \subset K$ where $K$ is a compact subset of $\mathbb{R}$.
+
+For convergence in $\mathcal{D}'$. A sequence $T_n \in \mathcal{D}'$ is said to converge to some $T\in\mathcal{D}$ if and only if $T_n$ converges to $T$ weakly, that is, $\lim_{n\to\infty} \langle T_n,\phi\rangle = \langle T, \phi \rangle$ for all $\phi \in \mathcal{D}$. $\blacksquare$ 
+\\[16pt]
+
+
+
+{\bf b.} Let $\phi\in\mathcal{D}$ and define $\phi_h(x) := (\phi(x+h) - 2\phi(x) + \phi(x-h))/h^2$. Show that, in the sense of $\mathcal{D}$, $\lim_{h\to 0} \phi_h = \phi''$. 
+\\[8pt]
+
+
+{\bf Proof}: We start by with a fixed $x\in\mathbb{R}$ and then consider the Taylor expansion of $\phi(x)$ around some neighborhood of $x$. I.e. 
+\[ \phi(y) = \phi(x) + \frac{\phi'(x)}{1!}(y-x) + \frac{\phi''(x)}{2!}(y-x)^2 + \text{higher order terms} \]
+Then observe that $\phi$ evaluated at $x+h$ and $x-h$ is
+\begin{align*}
+\phi(x+h) &= \phi(x) + \frac{\phi'(x)}{1!}h + \frac{\phi''(x)}{2!}h^2 + \mathcal{O}(h^3) \\
+\phi(x-h) &= \phi(x) - \frac{\phi'(x)}{1!}h + \frac{\phi''(x)}{2!}h^2 - \mathcal{O}(h^3)
+\end{align*}
+Adding the two together gives us
+\[ \phi(x+h) + \phi(x-h) = 2\phi(x) + \phi''(x)h^2 + \mathcal{O}(h^4) \]
+Now this looks a bit familiar, so consider the difference in the supremum norm.
+\begin{align*}
+||\frac{\phi(x+h) -2\phi(x) + \phi(x-h)}{h^2} - \phi''(x)||_u &= ||\frac{\phi''(x)h^2}{h^2} + \mathcal{O}(h^2) - \phi''(x)||_u \\
+&= ||\mathcal{O}(h^2)||_u
+\end{align*}
+Then since $h\to 0$, we get convergence in of the function. To show that every derivative converges we apply the same arguments but just for higher order derivatives. (The result is the same.) Lastly we need to show that support of all the $\phi_h$ is contained in $\text{supp}(\phi)$. So since $\text{supp}(\phi)\subset [-M,M]$ for some $M\in \mathbb{R}$, note that $\phi(x+h)$ and $\phi(x-h)$ are just translations of $\phi$ to the left and right by $h$ units respectively. Thus we can say that $\text{supp}\phi_h \subset [-M-h, M + h]$. And since $h\to 0$, we can just take the compact set $[-M - h_1, M + h_1]$ where $h_1$ is the starting index of our sequence. Thus we have convergence. $\blacksquare$
+\\[16pt]
+
+
+{\bf c.} 
+\\[8pt]
+
+
+{\bf Proof}: 
+\\[16pt]
+
+
+{\bf Problem 3.} Let $K\in\mathcal{C}(\mathcal{H})$ and $L\in \mathcal{B}(\mathcal{H})$ be self adjoint.
+\\[4pt]
+
+
+{\bf a.} Show that $||L|| = \sup_{||u|| = 1} |\langle Lu,u \rangle|$. (Hint: look at $\langle L(u+v), u+v \rangle - \langle L(u-v), u-v \rangle$. )
+\\[8pt]
+
+{\bf Proof}: The first inequality is fairly simple, note that 
+\[ \sup_{||u|| = 1} |\langle Lu, u\rangle| \leq \sup_{||u|| = 1} ||Lu||||u|| \leq \sup_{||u|| = 1} ||L||||u||^2 = ||L|| \]
+The reverse inequality is not so simple. So, we first do some algebra and use the fact that $L$ is self adjoint to show that 
+\[ \langle L(u+v), u+v \rangle - \langle L(u-v), u-v \rangle = 2\langle Lv,u \rangle + 2\langle Lu, v\rangle = 4\text{Re}(\langle Lv, u\rangle) \]
+Next, using the definition of a complex number, we may write the following 
+\[ \langle Lv, u \rangle = |\langle Lv, u\rangle|e^{i\theta} \]
+for $\theta\in (0,2\pi]$. Then we can see that $|\langle Lv, u\rangle| = \langle L(ve^{i\theta}),u \rangle \in \mathbb{R} $. So let $\tilde{v} = ve^{i\theta}$ and use the first equality for $\tilde{v}$ to get the following
+\[ \langle L(u+\tilde{v}), u+\tilde{v} \rangle - \langle L(u-\tilde{v}), u-\tilde{v} \rangle = 4\text{Re}(\langle L\tilde{v}, u \rangle) = 4|\langle Lv, u\rangle| \]
+Now we can follow through with some inequalities. 
+\begin{align*}
+4|\langle Lv, u \rangle| &\leq |\langle L(u+\tilde{v}), u+\tilde{v} \rangle| + |\langle L(u-\tilde{v}), u-\tilde{v} \rangle| \\
+&= \frac{||u + \tilde{v}||^2}{||u+\tilde{v}||^2}|\langle L(u+\tilde{v}), u+\tilde{v} \rangle| + \frac{||u - \tilde{v}||^2}{||u - \tilde{v}||^2}|\langle L(u-\tilde{v}), u-\tilde{v} \rangle|
+\end{align*}
+Then let $x = (u + \tilde{v})/||u + \tilde{v}||$ and $y = (u - \tilde{v})/||u - \tilde{v}||$. We can continue the inequalities to have 
+\begin{align*}
+|\langle Lv, u \rangle| &\leq \frac{1}{4}(||u+\tilde{v}||^2 \langle Lx,x \rangle + ||u - \tilde{v}||^2 \langle Ly, y \rangle) \\
+&\leq \frac{1}{4}\sup_{||x|| = 1} \langle Lx, x \rangle (||u + \tilde{v}||^2 + ||u - \tilde{v}||^2 ) \\
+&= \frac{1}{4}\sup_{||x|| = 1} \langle Lx, x \rangle(2||u||^2 + 2||\tilde{v}||^2)
+\end{align*}
+Then note that $||L|| = \sup_{||u|| = ||v|| = 1} |\langle Lu, v \rangle|$, so then taking this supremum we have 
+\[ ||L|| \leq \frac{1}{4} \sup_{||u|| = ||v|| = 1} \{ \sup_{||x|| = 1} \langle Lx, x \rangle(2||u||^2 + 2||v||^2) \} = \sup_{||x|| = 1} \langle Lx, x \rangle \]
+Thus $||L|| = \sup_{||x|| = 1} \langle Lx, x \rangle$. $\blacksquare$
+\\[16pt]
+
+
+{\bf b.} 
+
+
+\vskip 1cm
+
+{\bf Proof}: 
+
+\vskip 2cm
+
+
+
+\textbf{Problem 1.} Let $T \subset \mathbb{R}^2$ be a triangle with vertices $v_1$, $v_2$, and $v_3$. 
+Let $p_1 = (v_1+v_2+v_3)/3$, $p_2 = (2v_1+v_2)/3$, $p_3 = (2v_1+v_3)/3$, $p_4=v_2$, $p_5 = (v_2+v_3)/2$, and $p_6 = v_3$.
+Given $q \in \mathbb{P}^2$, let $\sigma_i(q) = q(p_i)$.
+
+
+\vskip 1cm
+
+\textbf{a.}  Show that the triple $(T,\mathbb{P}^2, \Sigma)$ constitutes a finite element, where $\Sigma = \{\sigma_i\}^6_{i=1}$.
+
+\vskip 1cm
+
+\textbf{Solution:} In order to show that the triple is a finite element, we need to show that the linear functionals $\Sigma$ is unisolvent on $\mathbb{P}^2$.
+So, let $q\in \mathbb{P}^2$ and assume that $\sigma_i(q) = 0$ for $i = 1, \ldots, 6$.
+Now, note that our points $p_i$ can be represented in barycentric coordinates.
+So we have,
+\begin{align*}
+    p_1 &= (1/3,1/3,1/3) &&\quad p_4 = (0,1,0) \\
+    p_2 &= (2/3, 1/3, 0) &&\quad p_5 = (0, 1/2, 1/2) \\
+    p_3 &= (2/3, 0, 1/3) &&\quad p_6 = (0,0,1).
+\end{align*}
+Now notice that on the edge connecting the vertices $v_2$ and $v_3$ defines the line,
+\begin{equation*}
+    L_1 := \{ (\lambda_1, \lambda_2, \lambda_3) \in T \: : \: \lambda_1 \equiv 0 \}.
+\end{equation*}
+And since $q$ is a (1-dimensional) quadratic function which is zero at three points, then $q$ must be identically equal to zero on this line.
+This implies that $\lambda_1$ is a factor, i.e.,
+\begin{equation*}
+    q(\lambda_1, \lambda_2, \lambda_3) = \lambda_1 \gamma(\lambda_1, \lambda_2, \lambda_3),
+\end{equation*}
+where $\gamma$ is a linear function.
+Now, if we look at the line passing through the points $p_2$ and $p_3$; this is a line where $\lambda_1 = 2/3$.
+Since $q$ is zero at $p_2$ and $p_3$, this implies that $\gamma(p_2) = \gamma(p_3) = 0$.
+Then, since $\gamma$ is a 1-dimensional linear function which is zero at two points, we have that $\gamma$ is identically zero on that line.
+Therefore, $\lambda_1 = 2/3$ is a factor, so
+\begin{equation*}
+    q(\lambda_1, \lambda_2, \lambda_3) = c\lambda_1(\lambda_1 - 2/3).
+\end{equation*}
+for some constant $c$.
+Lastly, since $q(p_1) = 0$, we have that $q(1/3, 1/3, 1/3) = 0$, hence $c = 0$.
+Thus $q$ is identically zero, hence the triple is a finite element.
+$\blacksquare$
+
+\vskip 2cm
+
+
+\textbf{b.} Write down the nodal basis function $\phi_1$ corresponding to this finite element.
+That is, $\phi_1 \in \mathbb{P}^2$ should satisfy $\phi_1(p_1) = 1$ and $\phi_1(p_j) = 0$, $j \neq 1$.
+
+\textit{Hint:} You should use barycentric (area) coordinates to derive your solution.
+
+
+\vskip 1cm
+
+
+\textbf{Solution:} From the reasoning in part a. we already know that if $\phi_1(p_j) = 0$ for $j\neq 1$, then $\phi_1 = c\lambda_1(\lambda_1 - 2/3)$.
+So to find $c$, we have $\phi_1(1/3, 1/3, 1/3) = c \frac{1}{3}(-\frac{1}{3}) = -c/9 = 1$.
+Therefore $c = -9$ and our nodal basis function is $\phi_1 = -9\lambda_1(\lambda_1 - 2/3)$
+
+\vskip 2cm
+
+
+\textbf{Problem 2.} For $f\in L^2(0,1)$, consider the following  weak formulation: Seek  $(u,v)\in V := H^1_0(0,1)\times H^1_0(0,1)$ satisfying for all $(\phi,\psi)\in V$
+\begin{equation}
+    a((u,v); (\phi, \psi)) := \int_0^1 u' \phi' + \int_0^1 v' \psi' - \int_0^1 v \phi = \int_0^1 f\psi =: L(\psi).
+\end{equation}
+
+\vskip 1cm
+
+
+\textbf{a.}  What is the corresponding strong form satisfied by $u$ (eliminate $v$)?
+
+\vskip 1cm
+
+
+\textbf{Solution:} Applying integration by parts and using the fact that $\phi$ and $\psi$ are zero on the boundary, we have,
+\begin{equation*}
+    \int_0^1 (- u''\phi - v''\psi - v\phi) - \int_0^1 f \psi = 0. 
+\end{equation*}
+Since this holds for any $(\phi, \psi) \in H^1_0(0,1) \times H^1_0(0,1)$ we can specifically take $(0, \psi) \in H^1_0(0,1) \times H^1_0(0,1)$.
+Doing so, gives us,
+\begin{equation*}
+    \int_0^1 (-v'' - f) \psi = 0
+\end{equation*}
+So by the fundamental theorem of variational calculus, this implies that $-v'' = f$ on $(0,1)$.
+Therefore our integral form becomes,
+\begin{equation*}
+    \int_0^1 (-u'' - v)\phi = 0.
+\end{equation*}
+Again by the fundamental theorem of variational calculus, we have that $-u'' - v = 0$. 
+But this implies that $u^{(4)} = f$.
+So our strong form is,
+\begin{equation*}
+    \begin{cases}
+        u^{(4)} = f &\quad \text{ in } (0,1) \\
+        u'' = 0 &\quad \text{ at } x = 0,1 \\
+        u = 0 &\quad \text{ at } x = 0, 1.
+    \end{cases}
+\end{equation*}
+ 
+
+\vskip 2cm
+
+
+\textbf{b.} Show that for all $w \in H^1_0(0,1)$
+\begin{equation}
+    \Big( \int_0^1 w^2  \Big)^{1/2} \leq \Big( \int_0^1 |w'|^2 \Big)^{1/2}.
+\end{equation}
+
+
+\vskip 1cm
+
+
+\textbf{Solution:} Usual Poincar\`{e} inequality proof.
+See old exams.
+
+
+\vskip 2cm
+
+\textbf{c.} Using Part b. show that $a(\cdot;\cdot)$ coerces the natural norm on $V$:
+\begin{equation}
+    |||\phi, \psi||| := (||\phi||^2_{H^1(0,1)} + ||\psi||^2_{H^1(0,1)})^{1/2}
+\end{equation}
+and explicitly find the coercivity constant
+
+\vskip 1cm
+
+\textbf{Solution:} Consider,
+\begin{align*}
+    a((\phi, \psi), (\phi,\psi)) &= \int_0^1 (\phi')^2 + (\psi')^2 - \psi\phi \\
+    &\geq |\phi|_{H^1(0,1)}^2 + |\psi|^2_{H^1(0,1)} - ||\psi||_{L^2(0,1)} ||\phi||_{L^2(0,1)} \\
+    &\geq \frac{1}{4}( |\phi|_{H^1(0,1)}^2 + |\psi|^2_{H^1(0,1)} ) + \frac{1}{4}( ||\phi||_{L^2(0,1)}^2 + ||\psi||^2_{L^2(0,1)} ) \\
+    &= \frac{1}{4} |||\phi,\psi|||.
+\end{align*}
+where we have used the inequality, $-ab \geq -\frac{1}{2}(a^2 + b^2)$.
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+\textbf{d.}  Let $V_h$ be a finite dimensional subspace of $V$.
+Explain why there is a unique $(u_h,v_h) \in V_h$ satisfying for all $(\phi_h,\psi_h) \in V_h$ 
+\begin{equation}
+    a((u_h, v_h); (\phi_h, \psi_h)) = L(\psi_h).
+\end{equation}
+
+
+\vskip 1cm
+
+
+\textbf{Solution:} We first need to show that $a(\cdot, \cdot)$ is continuous and $L(\cdot)$ is continuous.
+So consider,
+\begin{align*}
+    a((u,v), (\phi, \psi)) &\leq |u|_{H^1(0,1)} |\phi|_{H^1(0,1)} + |v|_{H^1(0,1)} |\psi|_{H^1(0,1)}  + ||v||_{L^2(0,1)} ||\phi||_{L^2(0,1)} \\
+    &\leq (|u|_{H^1(0,1)} + ||v||_{L^2(0,1)}) ||\phi||_{H^1(0,1)} + (|v|_{H^1(0,1)} + ||u||_{L^2(0,1)})||\psi||_{H^1(0,1)} \\
+    &\leq (||u||_{H^1(0,1)} + ||v||_{H^1(0,1)})(||\phi||_{H^1(0,1)} + ||\psi||_{H^1(0,1)}) \\
+    &\leq 2 |||u,v||| |||\phi, \psi|||.
+\end{align*}
+Note we have used the inequality, $a+b \leq \sqrt{2} \sqrt{a^2 + b^2}$.
+Then since $a(\cdot, \cdot)$ is coercive on $V$, it is also coercive on $V_h$, since it is a subspace. 
+So by Lax-Milgram, there exists a unique solution to the discrete variational problem.
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+\textbf{e.} Show that
+\begin{equation}
+    |||u-u_h,v-v_h||| \leq C_1 \inf_{(\phi_h,\psi_h) \in V_h} |||u-\phi_h,v-\psi_h|||
+\end{equation}
+(find $C_1$ explicitly).
+
+\vskip 1cm
+
+
+\textbf{Solution:} From coercivity, we have,
+\begin{align*}
+    |||u - u_h, v - v_h|||^2 &\leq 4 a((u - u_h, v - v_h), (u - u_h, v - v_h)) \\
+    &= 4a((u - u_h, v - v_h), (u,v)) \\
+    &= 4a((u - u_h, v - v_h), (u - \phi_h, v - \psi_h)) \\
+    &\leq 8|||u - u_h, v - v_h||| |||u - \phi_h, v - \psi_h|||.
+\end{align*}
+So, dividing by $|||u - u_h, v - v_h|||$ and taking the infimum, we have,
+\begin{equation*}
+    |||u - u_h, v - v_h||| \leq \inf_{(\phi_h, \psi_h)\in V_h} |||u - \phi_h, v - \psi_h|||.
+\end{equation*}
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+
+\textbf{f.} You may assume that $u,v \in H^1_0(0,1) \cap H^2(0,1)$.
+Propose a discrete space $V_h$ such that
+\begin{equation}
+    |||u-u_h,v-v_h||| \leq C_2h(||u||_{H^2(0,1)} + ||v||_{H^2(0,1)})
+\end{equation}
+for a constant $C_2$ independent of $h$.
+Justify your suggestion.
+
+\vskip 1cm
+
+
+\textbf{Solution:} Let $W_h$ be the space of piecewise linear functions which are zero on the boundry.
+Then define $V_h := W_h\times W_h$.
+From part e. we can write
+\begin{equation*}
+    |||u - u_h, v - v_h||| \leq \inf_{(\phi_h, \psi_h) \in V_h} |||u - \phi_h, v - \psi_h||| \leq |||u - \Pi_h u, v - \Pi_h v |||,
+\end{equation*}
+where $\Pi_h$ is the usual projection onto $W_h$.
+From the definition of the norm $|||\cdot |||$, we can write,
+\begin{equation*}
+    |||u - \Pi_h u, v - \Pi_h v |||^2 = ||u - \Pi_h u||^2_{H^1(0,1)} + ||v - \Pi_h v||^2_{H^1(0,1)}.
+\end{equation*}
+Then using the usual error estimation procedure (you should work it out; see older exams), we can find that $||u - \Pi_h u ||_{H^1(0,1)} \leq Ch||u||_{H^1(0,1)}$ and $||v - \Pi_h v ||_{H^1(0,1)} \leq Ch||v||_{H^1(0,1)}$.
+This completes the proof.
+$\blacksquare$
+
+
+
+
+\vskip 2cm
+
+
+
+\textbf{Problem 3.} For $\Omega = (0,1)^2$ and $u_0 \in L^2(\Omega)$, consider the parabolic problem:
+\begin{equation} \label{pb3:pde}
+\begin{split}
+    u_t - \Delta u + (u_x + u_y)&= 0, \quad (x,t) \in \Omega \times (0,T], \\
+    u(x,t) &= 0, \quad x \in \partial\Omega, \quad t \in (0,T], \\
+    u(x,0) &= u_0(x), \quad x \in \Omega.
+\end{split}
+\end{equation}
+
+\vskip 1cm
+
+
+\textbf{a.} Using a finite element space $V_h \subset H^1_0(\Omega)$, derive a semi-discrete approximation to \eqref{pb3:pde} having solution $u_h(t) \in V_h$.
+This approximation satisfies $u_h(0) = \pi_h u_0$ with $\pi_h$ denoting the $L^2(\Omega)$-projection onto $V_h$.
+
+
+\vskip 1cm
+
+\textbf{Solution:} Let $V_h = \text{span}\{\phi_i\}_{i=1}^M$ for some basis functions $\phi_i$.
+Then our solution $u_h$ can be written as,
+\begin{equation*}
+    u_h(x,t) = \sum_{i=1}^M u_i(t) \phi_i(x).
+\end{equation*}
+Now multiply the PDE by a test function $v_h \in V_h$ and integrate.
+Applying integration by parts, we find,
+\begin{equation} \label{pb3:var_form}
+    ((u_h)_t, v_h) + (\nabla u_h, \nabla v_h) + ((u_h)_x + (u_h)_y, v_h) = 0
+\end{equation}
+So our semi-discrete problem becomes, find $u_h(t) \in V_h$ such that \eqref{pb3:var_form} holds for every $v_h \in V_h$ and $u_h(0) = \pi_h u_0$. 
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+\textbf{b.} Show that
+\begin{equation}
+    ||u_h(t)||_{L^2(\Omega)} \leq ||u_0||_{L^2(\Omega)}, \quad t \in [0,T].
+\end{equation}
+\textit{Hint}: Recall the  integration-by-parts  formula $\int_\Omega uv_{x_i} \: dx = \int_{\partial \Omega} uv\nu_i \: d\sigma - \int_{\Omega} u_{x_i} v \: dx$, $u,v \in H^1(\Omega)$, where $\nu_i$ is the $i$-th component of the outward unit normal on $\partial \Omega$.
+
+
+\vskip 1cm
+
+\textbf{Solution:} Using the semi-discrete scheme from part a. we test with $v_h = u_h(t)$.
+So, \eqref{pb3:var_form} becomes,
+\begin{equation*}
+    \int_\Omega (u_h)_t u_h \: dx + \int_\Omega |\nabla u_h|^2 \: dx + \int_\Omega ((u_h)_x + (u_h)_y) u_h \: dx = 0.
+\end{equation*}
+Using the hint and the fact that $u_h = 0$ on $\partial \Omega$, we can conclude that the last integral must be zero.
+In addition, note that $(u_h)_t u_h = \frac{1}{2}\frac{d}{dt}(u^2)$.
+Therefore, we have,
+\begin{equation*}
+    \int_\Omega \frac{1}{2} \frac{d}{dt}|u|^2 + |\nabla u_h|^2 \: dx = 0
+\end{equation*}
+Dropping $|\nabla u_h|^2$, we can write the inequality,
+\begin{equation*}
+    \frac{d}{dt}||u||^2_{L^2(\Omega)} \leq 0.
+\end{equation*}
+Thus integrating from 0 to $t$, we have the result,
+\begin{equation*}
+    ||u(t)||_{L^2(\Omega)} \leq ||u_0||_{L^2(\Omega)}.
+\end{equation*}
+
+
+\vskip 2cm
+
+
+
+\textbf{c.} Consider the initial value problem:
+\begin{equation}
+    w' + \lambda w = 0, \quad w(0) = w_0,
+\end{equation}
+and the time stepping method with step size $k$:
+\begin{equation}
+    \frac{w^{n+1} - w^n}{k} + \lambda(\theta w^{n+1} + (1-\theta) w^n) = 0.
+\end{equation}
+Here $\theta$ is a parameter in $[0,1]$ and $\lambda \in \mathbb{R}$ with $\lambda > 0$.
+Use this method to develop a fully discrete ($\theta$ dependent) approximation to \eqref{pb3:pde} (Note: $\theta = 1$ and $\theta = 0$ correspond to, respectively, backward and forward Euler time stepping).
+
+
+\vskip 1cm
+
+\textbf{Solution:} Using the method described for our semi-discrete approximation, we have,
+\begin{equation*}
+    \big( \frac{u^{n+1}_h - u^n_h}{k}, v_h \big) + (\nabla (\theta u^{n+1}_h + (1 - \theta)u^n_h), \nabla v_h ) + (\text{div}(\theta u^{n+1}_h + (1-\theta)u^n_h), v_h) = 0.
+\end{equation*}
+$\blacksquare$
+
+\vskip 2cm
+
+
+
+
+\textbf{d.} Let $U^n \in V_h$ be the resulting fully discrete approximation after $n$ steps using $U^0 = \pi_h u_0$.
+Show that for $\theta \in [1/2,1]$,
+\begin{equation}
+    ||U^n||_{L^2(\Omega)} \leq ||U^0||_{L^2(\Omega)}.
+\end{equation}
+\textit{Hint}: Test with a discrete function that depends on $\theta$.
+
+
+\vskip 1cm
+
+\textbf{Solution:} We test with $v_h = \theta u^{n+1}_h + (1-\theta)u^n_h$, 
+\begin{equation*}
+\begin{split}
+    \frac{1}{k} (U^{n+1} - U^n, \theta U^{n+1} + (1-\theta) U^n ) + |\theta &U^{n+1} + (1-\theta) U^n|^2_{H^1(\Omega)} \\
+    &+ (\text{div}(\theta U^{n+1} + (1-\theta) U^n), \theta U^{n+1} + (1-\theta) U^n) = 0.
+\end{split}
+\end{equation*}
+Now from the hint in part b. the divergence term will be zero.
+So we are left with,
+\begin{equation*}
+    \theta ||U^{n+1}||^2_{L^2(\Omega)}  - (1-\theta)||U^n||^2_{L^2(0,1)} + (1 - 2\theta)(U^n, U^{n+1}) + k|\theta U^{n+1} + (1 - \theta)U^n|^2_{H^1(\Omega)} = 0.
+\end{equation*}
+Applying the usual inequalities, we have,
+\begin{align*}
+    \theta ||U^{n+1}||^2_{L^2(\Omega)} &\leq (1 - \theta)||U^n||^2_{L^2(\Omega)} + (2\theta - 1) (U^n, U^{n+1}) \\
+    &\leq (1 - \theta)||U^n||^2_{L^2(\Omega)} + |2\theta - 1| ||U^n||_{L^2(\Omega)} ||U^{n+1}||_{L^2(\Omega)} \\
+    &\leq (1 - \theta)||U^n||^2_{L^2(\Omega)} + |2\theta - 1| \big( \frac{1}{2}||U^n||^2_{L^2(\Omega)}  + \frac{1}{2} ||U^{n+1}||^2_{L^2(\Omega)} \big).
+\end{align*}
+If $1/2 \leq \theta \leq 1$, then we can rewrite the above inequality,
+\begin{equation*}
+    \frac{1}{2}||U^{n+1}||^2_{L^2(\Omega)} \leq \frac{1}{2}||U^n||^2_{L^2(\Omega)}.
+\end{equation*}
+Therefore,
+\begin{equation*}
+    ||U^{n+1}||_{L^2(\Omega)} \leq ||U^n||_{L^2(\Omega)} \leq \cdots \leq ||U^0||_{L^2(\Omega)}.
+\end{equation*}
+$\blacksquare$
+
+\vskip 2cm
+
+
+
+
+\end{document}

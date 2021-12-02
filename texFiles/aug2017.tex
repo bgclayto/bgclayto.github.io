@@ -1,0 +1,428 @@
+\documentclass[11pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[ampersand]{easylist}
+\usepackage{authblk}
+\usepackage{MnSymbol}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{color}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\geometry{letterpaper}
+	\setlength{\oddsidemargin}{0cm}
+	\setlength{\evensidemargin}{0cm}
+	\setlength{\headheight}{0.5cm}
+	\setlength{\headsep}{0cm}
+	\setlength{\textwidth}{16cm}
+	\setlength{\textheight}{21.0cm}
+	\baselineskip=24pt
+
+\title{Applied/Numerical Qualifier Solution: August 2017}
+
+\author{Bennett Clayton}
+\affil{Texas A\&M University}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\textbf{Problem 1.} Let $K$ be a non-degenerate triangle in $R^2$.
+Let $a_1$, $a_2$, $a_3$ be the three vertices of $K$.
+Let $a_{ij} = a_{ji}$ denote the midpoint of the segment $(a_i,a_j)$, $i,j \in \{ 1, 2, 3\}$.
+Let $\mathbb{P}^1$ be the set of linear functions $p(x_1,x_2)$ over $K$ and $\Sigma = \{\sigma_1, \sigma_2, \sigma_3 \}$ be the linear forms (or degrees of freedom)  on $\mathbb{P}^1$ defined as $\sigma_{ij}(p) = p(a_{ij})$, $i,j= 1,2,3$, $i \neq j$. 
+
+\vskip 1cm
+
+
+\textbf{a.} Show that the degrees of freedom $\{\sigma_{12},\sigma_{23}, \sigma_{31} \}$ are unisolvent.
+
+
+\vskip 1cm
+
+
+\textbf{Solution:} To prove unisolvence, we need to show that if $\sigma_{ij}(p) = 0$ for all $i \neq j$ and $p \in \mathbb{P}^1$, then $p \equiv 0$.
+Consider $p$ in terms of the barycentric coordinates, that is, $p(x,y) = p(\lambda_1, \lambda_2, \lambda_3)$.
+Now specifically, look at $p$ restricted to the line passing through the points $a_{12}$ and $a_{23}$, call it $L_2$.
+Note that, in barycentric coordinates, $a_{12} = (1/2, 1/2, 0)$ and $a_{23} = (0, 1/2, 1/2)$.
+Specifically, the line is defined as,
+\begin{equation*}
+    L_2 = \{ (\lambda_1, \lambda_2, \lambda_3) \in K \: : \: \lambda_2 = 1/2 \}.
+\end{equation*}
+Note that $p|_{L_2}$ is a 1-dimensional linear function that is zero at two points, we must have that $p|_{L_2} \equiv 0$.
+Therefore, we can write $p$ as $p = a(\lambda_2 - 1/2)$.
+Lastly, by assumption $p(1/2, 0, 1/2) = 0$, hence $-\frac{1}{2}a = 0$.
+Therefore, $p \equiv 0$ and so $\Sigma$ is unisolvent.
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+\textbf{b.} Compute the “nodal” basis of $\mathbb{P}^1$ which corresponds to $\sigma = \{\sigma_{12},\sigma_{23}, \sigma_{31} \}$. 
+
+
+\vskip 1cm
+
+
+\textbf{Solution:} Using the same arguments as in part a. we can similarly construct the nodal basis of $\mathbb{P}^1$. 
+So consider $\phi_2$ which satisfies, $\phi_2(a_{13}) = 1$, and $\phi_2(a_{23}) = \phi_2(a_{12}) = 0$.
+Then $phi_2$ has the form, $\phi_2(\lambda_1, \lambda_2, \lambda_3) = a(\lambda_2 - \frac{1}{2})$.
+So, since $\phi_2(\frac{1}{2}, 0, \frac{1}{2}) = 1$, we have that $a = -2$.
+Hence $\phi_2 = -2(\lambda_2 - \frac{1}{2})$.
+Repeating a similar argument for the other basis functions, we have,
+\begin{align*}
+    \phi_1 &= -2(\lambda_1 - \frac{1}{2}) \\
+    \phi_2 &= -2(\lambda_2 - \frac{1}{2}) \\
+    \phi_3 &= -2(\lambda_3 - \frac{1}{2}).
+\end{align*}
+
+
+\vskip 2cm
+
+
+\textbf{c.} Let $\mathcal{T}_h$ be a triangulation of the domain $\Omega$ with polygonal boundary and let the finite dimensional space $V$ consist of functions whose restrictions to each $K$ are the functions from the FE $(K,\mathbb{P}^1,\Sigma)$.
+Show that in general these functions are NOT in $H^1(\Omega)$.
+
+
+\vskip 1cm
+
+
+\textbf{Solution:} Consider the unite square formed by the two triangles,
+\begin{align*}
+    K_1 &= \text{conv}\{(0,0), (1,0), (0,1)\} \\
+    K_2 &= \text{conv} \{ (1,0), (1,1), (0,1)\}.
+\end{align*}
+Then consider the functions $f_1(x,y) = x + y$ and $f_2(x,y) = 2x$ defined on $K_1$ and $K_2$ respectively.
+Then note that $f_1(\frac{1}{2}, \frac{1}{2}) = 1 = f_2(\frac{1}{2}, \frac{1}{2})$.
+But $f_1(1,0) = 1$ and $f_2(1,0) = 2$.
+Therefore, a globally defined function on the whole square would not be continuous, even though the functions restricted to the elements are the same at the degrees of freedom.
+Hence in general these functions are not in $H^1(\Omega)$.
+
+
+\vskip 2cm
+
+
+\textbf{d.}  If $M_K$ is the element “mass” matrix, evaluate its entries $m_{ij}$.
+
+
+\vskip 1cm
+
+
+\textbf{Solution:} By definition, the entries $m_{ij}$ are defined as,
+\begin{equation*}
+    m_{ij} = \int_{K} \phi_i \phi_j \: dA.
+\end{equation*}
+We can transform this integral to the reference triangle $\Hat{K}$ and then perform the integration, where $\lambda_1 = 1 - x - y$, $\lambda_2 = x$ and $\lambda_3 = y$. 
+So consider,
+\begin{align*}
+    m_{11} &= \int_{K} (\phi_1)^2 \: dA \\
+    &= \int_{\Hat{K}} (-2(\lambda_1 - \frac{1}{2}))^2 \frac{|K|}{|\Hat{K}|} \: dx \: dy \\
+    &= 2|K| \int_0^1 \int_0^{1-x} 4(1 - x - y - \frac{1}{2})^2 \: dy \: dx \\
+    &\quad \vdots \\
+    &= \frac{1}{3}|K|.
+\end{align*}
+By symmetry arguments, $m_{22}$ and $m_{33}$ will be the same.
+Similar computations will show that $m_{ij} = 0$ for $i\neq j$. 
+Thus our mass matrix is,
+\begin{equation*}
+    M_K = \frac{1}{3}|K| \begin{bmatrix} 
+        1 & 0 & 0 \\
+        0 & 1 & 0 \\
+        0 & 0 & 1
+    \end{bmatrix}
+\end{equation*}
+$\blacksquare$
+
+
+
+
+\vskip 2cm
+
+
+
+
+
+
+{\bf Problem 2.}  
+\vskip 1cm
+
+
+\textbf{a.} Let $\Omega = (0,1)$. Assume that $u\in H^1(\Omega)$ and let $x_0 \in \overline{\Omega}$. Prove that 
+\[ ||u||^2_{L^2(\Omega)} \leq C_1\left( u^2(x_0) + ||u'||^2_{L^2(\Omega)} \right) \]
+with a constant $C_1$ independent of $x_0$. 
+
+
+\vskip 1cm
+
+
+\textbf{Proof:} We first prove the result for $\phi \in C^\infty(\overline{\Omega})$. 
+Consider,
+\begin{align*}
+	||\phi||^2_{L^2(\Omega)} &= \int_0^1 \phi^2 \: dx \\ 
+	&= \int_0^1 \Big( \int_{x_0}^x \phi'(t) \: dt + \phi(x_0) \Big)^2 \: dx \\
+	&\leq \int_0^1 2 \Big( \int_{x_0}^x \phi'(t) \: dt \Big)^2 \: dx + 2 \phi(x_0)^2 \\
+	&\leq 2 \int_0^1 |x - x_0| \Big|\int_{x_0}^x (\phi'(t))^2 \: dt \Big| \: dx + 2\phi(x_0)^2 \\ 
+	&\leq 2(\phi^2(x_0) + |\phi|^2_{H^1(\Omega)})
+\end{align*}
+In the above work, we used the inequality $(a + b)^2 \leq 2a^2 + 2b^2$ and the Cauchy-Schwarz inequality. 
+
+By the Meyers-Serrin theorem, for $u \in H^1(\Omega)$, we can find a sequence $\{ \phi_n \}_{n\in\mathbb{N}} \subset C^\infty(\Omega) \cap H^1(\Omega)$ such that $\phi_n \to u$ in $H^1(\Omega)$.
+This implies that $||\phi_n||_{L^2(\Omega)} \to ||u||_{L^2(\Omega)}$ and $|\phi_n|_{H^1(\Omega)} \to |u|_{H^1(\Omega)}$.
+Additionally, since $\Omega$ is 1D, functions in $H^1(\Omega)$ are continuous, so by the Sobolev embedding theorem, $||v||_{C^0(\overline{\Omega})} \leq C ||v||_{H^1(\Omega)}$.
+This implies that $||\phi_n||_{C^0(\overline{\Omega})} \to ||u||_{C^0(\overline{\Omega})}$, i.e. $\phi_n(x_0) \to u(x_0)$. 
+Thus, because we have convergence in $H^1$ and pointwise, the Poincar\`{e}-type inequality must hold for functions in $H^1(\Omega)$.
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+{\bf b.} Consider the fourth-order boundary value problem
+\begin{equation}
+    u^{(4)} = f \quad \text{ in } \Omega, \quad u(0) = 0, \quad u''(0) = 0, \quad  u''(1) + u'(1) = 1, \quad u'''(1) = 0.
+\end{equation}
+Derive a weak formulation of this problem assuming that $f \in L^2(\Omega)$.
+
+
+\vskip 1cm
+
+
+\textbf{Solution:} Multiply by a test function $v$ and integrate by parts,
+\begin{align*}
+    \int_0^1 u^{(4)} v \: dx &= u''' v \Big|_0^1 - \int_0^1 u''' v' \: dx \\
+    &= u'''(1) v(1) - u'''(0) v(0) - u'' v'\Big|_0^1 + \int_0^1 u'' v'' \: dx \\
+    &= -u'''(0) v(0) - u''(1) v'(1) + u''(0) v'(0) + \int_0^1 u'' v'' \: dx \\
+	&= - u'''(0) v(0) -v'(1) + u'(1) v'(1) + \int_0^1 u'' v'' \: dx.
+\end{align*}
+Now since we have no information of $u'''(0)$, we will impose the condition, $v(0) = 0$, on our test functions.
+So our bilinear and linear forms will be 
+\begin{align*}
+    a(u,v) &= \int_0^1 u'' v'' \: dx + u'(1) v'(1) \\
+	f(v) &= \int_0^1 f v \: dx + v'(1).
+\end{align*}
+Lastly, our sobolev space will be,
+\begin{equation*}
+    V := \{ v \in H^2(0,1) \: : \: v(0) = 0 \},
+\end{equation*}
+and our weak formulation becomes: find $u \in V$ such that $a(u,v) = f(v)$ for all $v \in V$.
+$\blacksquare$
+
+
+
+
+\vskip 2cm
+
+
+\textbf{c.} Show that the weak formulation that you derived in part b. above has a unique solution.
+
+
+\vskip 1cm
+
+
+\textbf{Proof:} We will use Lax-Milgram to show existence and uniqueness. 
+First, it is an easy check to show that $f$ is continuous.
+So lets show that $a$ is coercive. 
+Note since our space is a subspace of $H^2$, our norm is $||\cdot ||_{H^2(0,1)}$.
+We will need a trick from part a. that is, notice that if $u \in H^2(0,1)$ then $u' \in H^1(0,1)$. 
+So the inequality from part a. can be applied to $u'$.
+In addition, one can also prove the inequality,
+\begin{equation*}
+    ||u||^2_{L^2(0,1)} \leq |u|^2_{H^1(0,1)} \quad \text{ for all } u \in V
+\end{equation*}
+So consider,
+\begin{align*}
+    a(u,u) &= \int_0^1 (u'')^2 \: dx + (u'(1))^2 \\
+    &\geq \frac{1}{2} |u|^2_{H^2(0,1)} + \frac{1}{2}(|u|^2_{H^2(0,1)} + (u'(1))^2) \\ 
+    &\geq \frac{1}{2}|u|^2_{H^2(0,1)} + \frac{1}{4} |u|^2_{H^1(0,1)} \\
+    &\geq \frac{1}{2}|u|^2_{H^2(0,1)} + \frac{1}{8}|u|^2_{H^1(0,1)} + \frac{1}{8}||u||^2_{L^2(0,1)}  \\
+    &\geq \frac{1}{8} ||u||^2_{H^2(0,1)}.
+\end{align*}
+Therefore $a$ is coercive. 
+Now for continuity, we have,
+\begin{align*}
+	|a(u,v)| &\leq \Big|\int_0^1 u''v'' \: dx\Big| + |u'(1) v'(1)| \\
+	&\leq ||u''||_{L^2(0,1)} ||v''||_{L^2(0,1)} + |u'(1) v'(1)| \\
+	&\leq ||u||_{H^2(0,1)} ||v||_{H^2(0,1)} + ||u'||_{C^0([0,1])} ||v'||_{C^0([0,1])} \\
+	&\leq ||u||_{H^2(0,1)} ||v||_{H^2(0,1)} + C||u'||_{H^1(0,1)} ||v'||_{H^1(0,1)} \\
+	&\leq C||u||_{H^2(0,1)} ||v||_{H^2(0,1)},
+\end{align*}
+and 
+\begin{align*}
+	|F(v)| &\leq \Big| \int_0^1 f(x) v(x) \: dx \Big| + |v'(1)| \\
+	&\leq ||f||_{L^2(0,1)} ||v||_{L^2(0,1)} + C||v'||_{H^1(0,1)} \\
+	&\leq (||f||_{L^2(0,1)} + C)||v||_{H^2(0,1)}. 
+\end{align*}
+Note we have not distinguished the constants in the proofs of continuity.
+Thus by Lax-Milgram, we have existence and uniqueness.
+$\blacksquare$
+
+
+
+\vskip 2cm
+
+
+
+\textbf{d.} Using Hermite cubic finite element spaces (i.e., piecewise cubic elements lying in $C^1(\Omega)$) derive a finite element method for the problem in part (b).
+Be sure to carefully define your finite element space.
+
+\vskip 1cm
+
+
+\textbf{Proof:} Let $\widehat{K} = [0,1]$ be the reference element and $K_i := [x_{i-1},x_i]$ be the global elements for $i = 1, \ldots, N$, such that $\bigcup_{i=1}^N K_i = [0,1]$. 
+In particular, we define our mesh as $\mathcal{T}_h := \{ K_i \}_{i=1}^N$.
+We also define the affine geometric mappings, $T_{K_i} : \widehat{K} \to K_i$, defined as $T_{K_i}(\hat{x}) = h_i \hat{x} + x_{i-1}$ with $h_i := x_i - x_{i-1}$.
+We now define our finite element space as,
+\begin{equation}
+	V_h := \{ v \in C^1(\Omega) : v\circ T_{K_i} \in \mathbb{P}_3, \forall K_i \in \mathcal{T}_h, v(0) = 0 \}.
+\end{equation}
+The basis for this space is composed of the cubic Hermite polynomials.
+(Not going into the details about these polynomials here.)
+Therefore, the discrete variational problem becomes: find $u_h \in V_h$ such that $a(u_h,v_h) = F(v_h)$ for all $v_h \in V_h$.
+$\blacksquare$
+
+
+
+
+\vskip 2cm
+
+{\bf e.} Show that the finite element method you derived has a unique solution $u_h$ and derive an optimal-order error estimate for $u - u_h$ in the $H^2(\Omega)$-norm. {\it Hint:} A correct proof will involve using an interpolation error bound. You may state and use such a bound without proving it.
+\\[8pt]
+
+
+{\bf Proof}: First note that our finite dimensional space $V_h$ is a subspace of $V$, so by Lax-Milgram, we know there exists a unique solution $u_h\in V_h$.
+Since we have a unique solution on our finite dimensional space, this means we can use Cea's Lemma.
+In addition, let $\mathcal{I}_h$ be the interpolant of $u$ on our space $V_h$. Then we have the following,
+\begin{align*}
+	||u - u_h||_{H^2(\Omega)}^2 &\leq C \Big(\inf_{v_h\in V_h} ||u - v_h||_{H^2(\Omega)}\Big)^2 \\
+	&\leq C||u - \mathcal{I}_h(u)||_{H^2(\Omega)}^2 \\
+	&= C\sum_{i=1}^N |u - \mathcal{I}_h(u)|^2_{H^2(K_i)} + |u- \mathcal{I}_h(u)|^2_{H^1(K_i)} + |u - \mathcal{I}_h(u)|^2_{L^2(K_i)}.
+\end{align*}
+Now we can use the Bramble-Hilbert lemma (or theorem) to bound each of these seminorms. Thus we have 
+\begin{align*}
+	||u - u_h||_{H^2(\Omega)}^2 &\leq C\sum_{i=1}^N (h^{4-2})^2|u|_{H^2(K_i)}^2 + (h^{4-1})^2|u|_{H^1(K_i)}^2 + (h^4)^2||u||_{L^2(K_i)}^2 \\
+	&\leq C\sum_{i=1}^N h^4||u||_{H^2(K_i)}^2 + h^6||u||_{H^2(K_i)}^2 + h^8||u||_{H^2(K_i)}^2 \\
+	&\leq Ch^4\sum_{i=1}^N ||u||_{H^2(K_i)}^2 \\
+	&\leq Ch^4||u||_{H^2(\Omega)}^2
+\end{align*}
+Taking the square root of both sides, we thus have our optimal error estimate
+\[ ||u - u_h||_{H^2(\Omega)} \leq Ch^2||u||_{H^2(\Omega)} \]
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+
+
+\textbf{Problem 3.} Let $u(x,t)$ be a smooth solution satisfying
+\begin{equation}
+    \partial_t u + \beta \partial_x u = 0, \quad x \in \Omega := (0,1), \quad t > 0 \quad \text{ and } \quad u(0,x) = \phi(x), \quad x\in \Omega
+\end{equation}
+where $\beta \in \mathbb{R}$ and $\phi$ is a given smooth function.
+In addition, we assume that $u(x,t)$ satisfies the periodic boundary condition $u(0,t) = u(1,t)$, $t > 0$. 
+Let $V = \{ v \in H^1(\Omega) : v(0) = v(1) \}$.
+
+
+\vskip 1cm
+
+
+\textbf{a.} Let $N\in \mathbb{N}$, set $h := \frac{1}{N+1}$ and consider the uniform mesh $\mathcal{T}_h$ composed of the cells $[x_i,x_{i+1}]$, $i= 0,\ldots,N$.
+Let $P(\mathcal{T}_h)$ be the finite element space composed of continuous piecewise linear functions on $\mathcal{T}_h$.
+Given $\phi_h \in V \cap P(\mathcal{T}_h)$ an approximation of $\phi$, consider the semi-discrete method: For $t >0$, find $u_h(t, \cdot) \in V \cap P(\mathcal{T}_h)$ such that $u_h(0,x) = \phi_h(x)$ and for every $v_h \in  P(\mathcal{T}_h)$ with $v_h(0) = v_h(1)$ there holds 
+\begin{equation} \label{pb3:equation}
+    \frac{h}{2} \sum_{i=0}^N (\partial_t u_h (t, x_{i+1}) v_h(x_{i+1}) + \partial_t u_h(t, x_i) v_h(x_i)) + \beta \int_\Omega \partial_x u_h(t,x) v_h(x) \: dx = 0.
+\end{equation}
+Show that the above problem can be reformulated as a system of ODEs and express this system in matrix-vector form. 
+
+Note: we assume that as a function of $t$, $u_h(t) \to V \cap P(\mathcal{T}_h)$ is smooth.
+
+\vskip 1cm
+
+\textbf{Solution}: Let $\{\varphi_i\}_{i=0}^{N+1}$ be the basis of $P(\mathcal{T}_h)$ consisting of the usual ``tent" functions.
+Then since $u_h(t,\cdot) \in V \cap P(\mathcal{T}_h)$ we write can write $u_h(t,x)$ as,
+\begin{equation}
+    u_h(t,x) = \sum_{j=0}^{N+1} U_j(t) \varphi_j(x).
+\end{equation}
+Then we can plug this $u_h$ into \eqref{pb3:equation} and take $v_h(x) = \varphi_k(x)$ for some $k \in \{0:N+1\}$.
+Doing so gives us the following,
+\begin{equation}
+\begin{split}
+    \frac{h}{2} \sum_{i=0}^N \Bigg[ \Big(\sum_{j=0}^{N+1} U_j'(t) \varphi_j(x_{i+1}) \Big) \varphi_k(x_{i+1}) &+ \Big(\sum_{j=0}^{N+1} U_j'(t)  \varphi_j(x_i) \Big) \varphi_k(x_i) \Bigg] \\
+    &\qquad + \beta \sum_{j=0}^{N+1} U_j(t) \int_\Omega \varphi_j'(x) \varphi_k(x) \: dx = 0.
+\end{split}
+\end{equation}
+Using the fact that $\varphi_j(x_i) = \delta_{j,i}$, we can further rewrite this equation as,
+\begin{equation}
+    \sum_{j=0}^{N+1} U'_j(t) \Big[ \frac{h}{2} \sum_{i=0}^N  \big( \delta_{j,i+1} \delta_{k,i+1} + \delta_{j,i} \delta_{k,i} \big) \Big] + \beta \sum_{j=0}^{N+1} U_j(t) \int_\Omega \varphi_j'(x) \varphi_k(x) \: dx = 0. 
+\end{equation}
+Let $M$ and $A$ be matrices with entries defined as, $m_{j,k} := \tfrac{h}{2} \sum_{i=0}^N (\delta_{j,i+1} \delta_{k,i+1} + \delta_{j,i} \delta_{k,i})$
+and $a_{j,k} := \beta \int_{\Omega} \varphi'_j(x) \varphi_k(x) \: dx$, respectively.
+Then we can write the problem as a system of ODEs in the following form,
+\begin{equation}
+    M\mathbf{U}'(t) + A\mathbf{U}(t) = 0,
+\end{equation}
+where $\mathbf{U}(t) = (U_0(t), \ldots, U_{N+1})$.
+$\blacksquare$
+
+
+\vskip 2cm
+
+
+\textbf{b.} Show that the Finite Element approximation $u_h(t)$ satisfies
+\begin{equation}
+    \frac{d}{dt} \sum_{i=0}^N u_h(t,x_i)^2 = 0.
+\end{equation}
+
+\vskip 1cm
+
+\textbf{Solution}: We start by setting $v_h := u_h(t,x)$ (for fixed $t$) in \eqref{pb3:equation}.
+Then \eqref{pb3:equation} can be written as,
+\begin{equation}
+    \frac{h}{2} \sum_{i=0}^N \big(\tfrac{1}{2} \partial_t(u_h(t,x_{i+1})^2) + \tfrac{1}{2} \partial_t (u_h(t,x_i))^2 \big) + \beta \int_\Omega \tfrac{1}{2} \partial_x(u_h(t,x)^2) \: dx = 0.
+\end{equation}
+Note that the integral over omega will vanish due to the periodic boundary condition.
+Then the remaining summation can be written in the following way,
+\begin{equation}
+    \frac{h}{2}  \frac{d}{dt} \Big[ \sum_{i=1}^{N} u_h(t,x_i)^2 + \tfrac{1}{2} u_h(t,x_0) + \tfrac{1}{2} u_h(t,x_{N+1})  \Big] = 0
+\end{equation}
+Again by the periodic boundary condition we have $u_h(t,x_{N+1}) = u_h(t,x_0)$. 
+Thus we have, 
+\begin{equation}
+    \frac{d}{dt} \sum_{i=0}^N u_h(t,x_i)^2 = 0.
+\end{equation}
+$\blacksquare$
+
+\vskip 2cm
+
+
+\textbf{c.} Show that 
+\begin{equation}
+    c^{-1} \int_\Omega u^2_h(t,x) \: dx \leq h \sum_{i=0}^N u_h(t,x_i)^2 \leq c \int_\Omega u^2_h(t,x) \: dx
+\end{equation}
+and deduce the estimate 
+\begin{equation}
+    \int_\Omega u^2_h(t,x) \: dx \leq C\int_\Omega \phi^2_h(0,x) \: dx.
+\end{equation}
+Here $c$ and $C$ are constants independent of $h$.
+
+\vskip 1cm
+
+\textbf{Solution}: 
+
+\vskip 2cm
+
+
+
+\end{document}
+
