@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<body>
+<h3>Two Tanks Problem</h3>
+In this problem, we solve a Riemann-like problem where two square domains are connected by a small tube. 
+The initial states begin at rest with high pressure and density in the left tank. 
+The material passes through the tube and into the right tank.
+We show a comparison between the van der Waals and ideal equations of state.
+Simulation details are given below.
+
+<p><a href="https://youtu.be/EPhgtGauiQU">Two Tanks Problem</a></p>
+
+<p><b>Geometry:</b> \( \{(-3,-1) \times (-1,1)\} \cup \{(-1,1)\times (-0.1,0.1) \} \cup \{(1,3)\times (-1,1)\} \)</p>
+<p><b>Boundary Conditions:</b> The slip boundary condition (\(\boldsymbol{u} \cdot \boldsymbol{n} = 0 \)) is enforced on all sides.
+<p><b>Discretization:</b> The mesh was composed of uniform quadrilaterals (squares in this case) with 863,297 DoFs.</p>
+<p> Final time: \(t = 50\). CFL = 0.9</p>
+<p><b>Initial State:</b> \( (\rho_L, v_L, p_L) = (0.7, 0, 0.6) \) and \( (\rho_R, v_R, p_R) = (0.125, 0, 0.1) \). The diaphram is at \( \{x = -1\} \). </p>
+<p><b>Equation of state:</b> van der Waals: \[ p(\rho, e) = (\gamma-1) \frac{\rho e + a\rho^2}{1 - b\rho} - a \rho^2 \] </p>
+<p><b>Parameters</b>: \(\gamma = 1.4, a = 0.3215, b = 0.1\). </p>
+<p><b>Software</b>: Ryujin (put citation here.)</p>
+</body>
+</html>
