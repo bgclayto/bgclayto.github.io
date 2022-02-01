@@ -14,13 +14,13 @@ Simulation details are given below.
 <p><a href="https://youtu.be/todvZwfX35c">Two Tanks Problem</a></p>
 
 <p><b>Geometry:</b> \( \{(-3,-1) \times (-1,1)\} \cup \{(-1,1)\times (-0.1,0.1) \} \cup \{(1,3)\times (-1,1)\} \)</p>
-<p><b>Boundary Conditions:</b> The slip boundary condition (\(\boldsymbol{u} \cdot \boldsymbol{n} = 0 \)) is enforced on all sides.
+<p><b>Boundary Conditions:</b> The slip boundary condition (\(\boldsymbol{m} \cdot \boldsymbol{n} = 0 \)) is enforced on the triangle and on the top and bottom sides. </p>
 <p><b>Discretization:</b> The mesh was composed of uniform quadrilaterals (squares in this case) with 863,297 DoFs.</p>
-<p> Final time: \(t = 50\). CFL = 0.9</p>
-<p><b>Initial State:</b> \( (\rho_L, v_L, p_L) = (0.7, 0, 0.6) \) and \( (\rho_R, v_R, p_R) = (0.125, 0, 0.1) \). The diaphram is at \( \{x = -1\} \). </p>
+<p><b>Final time:</b> \(t = 50\). CFL = 0.9</p>
+<p><b>Initial State:</b> \( (\rho_L, \boldsymbol{v}_L, p_L) = (0.7, \boldsymbol{0}, 0.6) \) and \( (\rho_R, \boldsymbol{v}_R, p_R) = (0.125, \boldsymbol{0}, 0.1) \). The diaphram is at \( \{x = -1\} \). </p>
 <p><b>Equation of state:</b> van der Waals: \[ p(\rho, e) = (\gamma-1) \frac{\rho e + a\rho^2}{1 - b\rho} - a \rho^2 \] </p>
-<p><b>Parameters</b>: \(\gamma = 1.4, a = 0.3215, b = 0.1\). </p>
-<p><b>Software</b>: Ryujin (put citation here.)</p>
+<p><b>Parameters</b>: \(\gamma = 1.4\), \(a = 0.3215\), \(b = 0.1\). </p>
+<p><b>Software</b>: A modified version of <a href="https://github.com/conservation-laws/ryujin">Ryujin</a></p>
 
 
 <h3 style="font-size:150%">Isentropic Vortex</h3>
@@ -38,11 +38,28 @@ A detailed derivation can be found here: (<i>Put a link here</i>).
 <h3 style="font-size:150%">Mach 3 Step</h3>
 <p> <i> Coming soon... </i>
 
-<h3 style="font-size:150%">Shock Hitting Triangle</h3>
-<p> <i> Coming soon... </i>
+<h3 style="font-size:150%">Shock Hitting Triangle (<i>in progress</i>)</h3>
+<p> 
+The setup for this problem involves a shock moving with Mach ??? to the right which collides with a triangular obstacle. 
+We follow the same setup given in <a href="https://www.sciencedirect.com/science/article/pii/S0021999115006300">Toro, Casto, Lee (2015)</a>. 
+The problem is motivated from real physical experiments (CITE). 
+</p>
+
+<p><b>Geometry:</b> \( \{(-0.65,0.5) \times (-0.5,0.5)\} \setminus K \) where \(K\) is the triangle formed by the vertices: \( (-0.2,0.0) \), \( (0.1, -1/6) \),  \( (0.1, 1/6) \). </p>
+<p><b>Boundary Conditions:</b> The slip boundary condition (\(\boldsymbol{m} \cdot \boldsymbol{n} = 0 \)) is enforced on all sides. No boundary conditions were applied to the left or right sides. </p>
+<p><b>Discretization:</b> The mesh is unstructured and composed of triangles. The mesh is generated using <a href="http://www.cs.cmu.edu/~quake/triangle.html">Triangle</a>.</p>
+<p><b>Final time:</b> \(t = 0.0022\). CFL = ???</p>
+<p><b>Initial State:</b> \( (\rho_L, \boldsymbol{v}_L, p_L) = (1.82039, 148.597, 0, 185145) \) and \( (\rho_R, \boldsymbol{v}_R, p_R) = (1.225, 0, 0, 101325) \). The diaphram is at \( \{x = -0.55\} \). </p>
+<p><b>Equation of state:</b> van der Waals: \[ p(\rho, e) = (\gamma-1) \frac{\rho e + a\rho^2}{1 - b\rho} - a \rho^2 \] </p>
+<p><b>Parameters</b>: \(\gamma = c_p/c_V = 864.7/577.8\), \(a = 0.14\), \(b = 3.258 \times 10^{-5}\). </p>
+<p><b>Software</b>: In-house Fortran code.</p>
+
+
+
 
 <h3 style="font-size:150%">Shock Expansion Around Corner</h3>
-<p> <i> Coming soon... </i>
+<p> <i> Coming soon... </i></p>
+
 
 <h3 style="font-size:150%">3D Shock Tube with Partially Ruptured Diaphram</h3>
 <p> <i> Coming soon... </i>
