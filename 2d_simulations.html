@@ -57,9 +57,22 @@ The problem is motivated from real physical experiments (CITE).
 
 
 
-<h3 style="font-size:150%">Shock Expansion Around Corner</h3>
-<p> <i> Coming soon... </i></p>
+<h3 style="font-size:150%">Shock Diffraction on Backward Facing Corner</h3>
+<p> This problem models a shock exiting a "tube".
+Similar to the Shock Hitting Triangle problem, we start with an initial state and a Mach number and compute the state behind the shock using the Rankine-Hugoniot conditions.
+As the shock leaves the tube, we observe the effect of diffraction around the corner.
+The setup for this problem can greatly vary see CITE CITE CITE.
+We follow the setup described in CITE.
+</p>
 
+<p><b>Geometry:</b> The computation domain is: \( [0,2]^2 \setminus ((0,0.5) \times (0,1)) \).</p>
+<p><b>Boundary Conditions:</b> Dirichlet conditions are enforced on the far left and far right sides of the domain  and slip boundary conditions (\(\boldsymbol{m} \cdot \boldsymbol{n} = 0 \)) are enforced on all other sides.</p>
+<p><b>Discretization:</b> The mesh was composed of uniform quadrilaterals (squares in this case) with DoFs.</p>
+<p><b>Final time:</b> \(t = 0.01\). CFL = </p>
+<p><b>Initial State:</b> \( (\rho_L, \boldsymbol{v}_L, p_L) = (???, ???, 0, ???) \) and \( (\rho_R, \boldsymbol{v}_R, p_R) = (1, 0, 0, 1) \). The diaphram is at \( \{x = 0.5\} \). </p>
+<p><b>Equation of state:</b> Jones-Wilkins-Lee: \[ p(\rho, e) = A \Big(1 - \frac{\omega}{R_1}\cdot \frac{\rho}{\rho_0} \Big) \exp\Big(-R_1 \frac{\rho_0}{\rho}\Big) + B \Big(1 - \frac{\omega}{R_2} \cdot \frac{\rho}{\rho_0} \Big) \exp\Big(-R_2 \frac{\rho_0}{\rho}\Big) + \rho \omega e  \] </p>
+<p><b>Parameters:</b> \(A = \), \(B = \), \(R_1 = \), \(R_2 = \), \(\omega = \), and \(\rho_0 = \). </p>
+<p><b>Software:</b> A modified version of <a href="https://github.com/conservation-laws/ryujin">Ryujin</a></p>
 
 <h3 style="font-size:150%">3D Shock Tube with Partially Ruptured Diaphram</h3>
 <p> <i> Coming soon... </i>
