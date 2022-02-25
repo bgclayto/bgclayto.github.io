@@ -29,6 +29,31 @@ An ansantz solution is prescribed to the velocity and the derivation follows.
 A detailed derivation can be found here: (<i>Put a link here</i>).
 </p>
 
+<h3 style="font-size:150%">2D Riemann Problem</h3>
+
+<p><b>Geometry:</b> \( [-0.5,-0.5]^2 \)</p>
+<p><b>Boundary Conditions:</b> The slip boundary condition (\(\boldsymbol{m} \cdot \boldsymbol{n} = 0 \)) is enforced on all sides. </p>
+<p><b>Discretization:</b> The mesh was composed of uniform quadrilaterals (squares in this case) with ??? DoFs.</p>
+<p><b>Final time:</b> \(t = ???\). CFL = ???</p>
+<p><b>Initial State:</b> The initial states are given with reference to the cardinal directions: north-west (NW), north-east (NE), south-west (SW), and south-east (SE).
+\[
+	(\rho_{\text{NW}}, u_{\text{NW}}, v_{\text{NW}}, p_{\text{NW}}) = ... 
+\]
+\[
+	(\rho_{\text{NE}}, u_{\text{NE}}, v_{\text{NE}}, p_{\text{NE}}) = ...
+\]
+\[
+	(\rho_{\text{SW}}, u_{\text{SW}}, v_{\text{SW}}, p_{\text{SW}}) = ... 
+\]
+\[
+	(\rho_{\text{SE}}, u_{\text{SE}}, v_{\text{SE}}, p_{\text{SE}}) = ... 
+\]
+The center point is \( (0.25,0.25) \).
+</p>
+<p><b>Equation of state:</b></p>
+<p><b>Parameters:</b></p>
+<p><b>Software:</b> A modified version of <a href="https://github.com/conservation-laws/ryujin">Ryujin</a></p>
+
 <h3 style="font-size:150%">Mach 10 Double Reflection</h3>
 <p> <i> Coming soon... </i>
 
@@ -45,10 +70,12 @@ We follow the same setup given in <a href="https://www.sciencedirect.com/science
 The problem is motivated from real physical experiments (CITE). 
 </p>
 
+
+
 <p><b>Geometry:</b> \( \{(-0.65,0.5) \times (-0.5,0.5)\} \setminus K \) where \(K\) is the triangle formed by the vertices: \( (-0.2,0.0) \), \( (0.1, -1/6) \),  \( (0.1, 1/6) \). </p>
 <p><b>Boundary Conditions:</b> The slip boundary condition (\(\boldsymbol{m} \cdot \boldsymbol{n} = 0 \)) is enforced on all sides. No boundary conditions were applied to the left or right sides. </p>
-<p><b>Discretization:</b> The mesh is unstructured and composed of triangles. The mesh is generated using <a href="http://www.cs.cmu.edu/~quake/triangle.html">Triangle</a>.</p>
-<p><b>Final time:</b> \(t = 0.0022\). CFL = ???</p>
+<p><b>Discretization:</b> The mesh is unstructured and composed of triangles with 1,222,183 DoFs. The mesh is generated using <a href="http://www.cs.cmu.edu/~quake/triangle.html">Triangle</a>.</p>
+<p><b>Final time:</b> \(t = 0.0022\). CFL = 0.33</p>
 <p><b>Initial State:</b> \( (\rho_L, \boldsymbol{v}_L, p_L) = (1.82039, 148.597, 0, 185145) \) and \( (\rho_R, \boldsymbol{v}_R, p_R) = (1.225, 0, 0, 101325) \). The diaphram is at \( \{x = -0.55\} \). </p>
 <p><b>Equation of state:</b> van der Waals: \[ p(\rho, e) = (\gamma-1) \frac{\rho e + a\rho^2}{1 - b\rho} - a \rho^2 \] </p>
 <p><b>Parameters</b>: \(\gamma = c_p/c_V = 864.7/577.8\), \(a = 0.14\), \(b = 3.258 \times 10^{-5}\). </p>
