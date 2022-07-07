@@ -24,6 +24,8 @@
 	\setlength{\textheight}{21.0cm}
 	\baselineskip=24pt
 
+\newcommand{\wh}{\widehat}
+
 \title{Applied/Numerical Qualifier Solution: August 2017}
 
 \author{Bennett Clayton}
@@ -296,27 +298,46 @@ $\blacksquare$
 
 \vskip 2cm
 
-{\bf e.} Show that the finite element method you derived has a unique solution $u_h$ and derive an optimal-order error estimate for $u - u_h$ in the $H^2(\Omega)$-norm. {\it Hint:} A correct proof will involve using an interpolation error bound. You may state and use such a bound without proving it.
-\\[8pt]
+\textbf{e.} Show that the finite element method you derived has a unique solution $u_h$ and derive an optimal-order error estimate for $u - u_h$ in the $H^2(\Omega)$-norm. 
+\textit{Hint:} A correct proof will involve using an interpolation error bound. You may state and use such a bound without proving it.
+
+\vskip 0.5cm
 
 
-{\bf Proof}: First note that our finite dimensional space $V_h$ is a subspace of $V$, so by Lax-Milgram, we know there exists a unique solution $u_h\in V_h$.
+\textbf{Proof}: First note that our finite dimensional space $V_h$ is a subspace of $V$, so by Lax-Milgram, we know there exists a unique solution $u_h\in V_h$.
 Since we have a unique solution on our finite dimensional space, this means we can use Cea's Lemma.
 In addition, let $\mathcal{I}_h$ be the interpolant of $u$ on our space $V_h$. Then we have the following,
 \begin{align*}
-	||u - u_h||_{H^2(\Omega)}^2 &\leq C \Big(\inf_{v_h\in V_h} ||u - v_h||_{H^2(\Omega)}\Big)^2 \\
+	\Vert u - u_h\Vert_{H^2(\Omega)}^2 &\leq C \Big(\inf_{v_h\in V_h} \Vert u - v_h\Vert_{H^2(\Omega)}\Big)^2 \\
 	&\leq C||u - \mathcal{I}_h(u)||_{H^2(\Omega)}^2 \\
 	&= C\sum_{i=1}^N |u - \mathcal{I}_h(u)|^2_{H^2(K_i)} + |u- \mathcal{I}_h(u)|^2_{H^1(K_i)} + |u - \mathcal{I}_h(u)|^2_{L^2(K_i)}.
 \end{align*}
-Now we can use the Bramble-Hilbert lemma (or theorem) to bound each of these seminorms. Thus we have 
+Next, we transfer to the reference element.
 \begin{align*}
-	||u - u_h||_{H^2(\Omega)}^2 &\leq C\sum_{i=1}^N (h^{4-2})^2|u|_{H^2(K_i)}^2 + (h^{4-1})^2|u|_{H^1(K_i)}^2 + (h^4)^2||u||_{L^2(K_i)}^2 \\
-	&\leq C\sum_{i=1}^N h^4||u||_{H^2(K_i)}^2 + h^6||u||_{H^2(K_i)}^2 + h^8||u||_{H^2(K_i)}^2 \\
-	&\leq Ch^4\sum_{i=1}^N ||u||_{H^2(K_i)}^2 \\
-	&\leq Ch^4||u||_{H^2(\Omega)}^2
+	\Vert u - u_h\Vert_{H^2(\Omega)}^2 
+	&\leq C \sum_{i=1}^N \Big( \int_{\wh{K}} \Big( \frac{1}{h^2}\frac{d^2}{d\wh{x}^2} (\wh{u} - \wh{\mathcal{I}}_h(\wh{u})) \Big)^2 h \: d\wh{x} 
+	+ \int_{\wh{K}} \Big( \frac{1}{h}\frac{d^2}{d\wh{x}^2} (\wh{u} - \wh{\mathcal{I}}_h(\wh{u})) \Big)^2 h \: d\wh{x} \\
+	&\qquad\qquad + \int_{\wh{K}} \big(\wh{u} - \wh{\mathcal{I}}_h(\wh{u}) \big)^2 h \: d\wh{x} \Big) \\
+	&= C \sum_{i=1}^N \Big( \frac{1}{h^3} |(\text{Id} - \wh{I}_h)(\wh{u}) |^2_{H^2(\wh{K})}
+		+ \frac{1}{h} |(\text{Id} - \wh{I}_h)(\wh{u}) |^2_{H^1(\wh{K})} 
+	+  h \Vert(\text{Id} - \wh{I}_h)(\wh{u}) \Vert^2_{L^2(\wh{K})} \Big)
+\end{align*}
+Now we can use the Bramble-Hilbert lemma (or theorem) since 
+$|(\text{Id} - \wh{\mathcal{I}}_h)(\cdot) |_{H^2(\wh{K})}$, 
+$|(\text{Id} - \wh{\mathcal{I}}_h)(\cdot) |_{H^1(\wh{K})}$, and 
+$\Vert(\text{Id} - \wh{\mathcal{I}}_h)(\cdot) \Vert_{L^2(\wh{K})}$ 
+are bounded sublinear functionals which are all zero on $\mathbb{P}^3$.  
+Applying the Bramble-Hilbert lemma and transferring back to the global element $K_i$ we have,
+\begin{align*}
+	\Vert u - u_h\Vert_{H^2(\Omega)}^2 &\leq C \sum_{i=1}^N \Big( \frac{1}{h^3}|\wh{u}|^2_{H^4(\wh{K})} 
++ \frac{1}{h}|\wh{u}|^2_{H^4(\wh{K})} + h|\wh{u}|^2_{H^4(\wh{K})} \Big) \\
+	&\leq C\sum_{i=1}^N (h^{4-2})^2|u|_{H^4(K_i)}^2 + (h^{4-1})^2|u|_{H^4(K_i)}^2 + (h^4)^2\Vert u\Vert _{H^4(K_i)}^2 \\
+	&\leq C\sum_{i=1}^N (h^4 + h^6 + h^8) |u|_{H^4(K_i)}^2 \\
+	&\leq Ch^4\sum_{i=1}^N |u|_{H^4(K_i)}^2 \\
+	&\leq Ch^4 |u|_{H^4(\Omega)}^2
 \end{align*}
 Taking the square root of both sides, we thus have our optimal error estimate
-\[ ||u - u_h||_{H^2(\Omega)} \leq Ch^2||u||_{H^2(\Omega)} \]
+\[ ||u - u_h||_{H^2(\Omega)} \leq Ch^2 |u|_{H^4(\Omega)} \]
 $\blacksquare$
 
 
