@@ -1,0 +1,294 @@
+% resume.tex
+%
+% (c) 2002 Matthew Boedicker <mboedick@mboedick.org> (original author) http://mboedick.org
+% (c) 2003 David J. Grant <dgrant@ieee.org> http://www.davidgrant.ca
+% (c) 2007 Todd C. Miller <Todd.Miller@courtesan.com> http://www.courtesan.com/todd
+%
+%This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/1.0/ or send a letter to Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+
+\documentclass[letterpaper,10pt]{article}
+\usepackage[us,12hr]{datetime} % `us' makes \today behave as usual in TeX/
+%-----------------------------------------------------------
+
+%\usepackage{timestamp}
+%\usepackage[empty]{fullpage}
+\usepackage{amsmath}
+\usepackage{color}
+\usepackage{url}
+\definecolor{mygrey}{gray}{0.80}
+\raggedbottom
+%\raggedright
+\setlength{\tabcolsep}{0in}
+
+\title{Bennett Clayton}
+% Adjust margins to 0.5in on all sides
+%\addtolength{\oddsidemargin}{-1in}
+%\addtolength{\evensidemargin}{-4in}
+%\addtolength{\textwidth}{1.0in}
+%\addtolength{\topmargin}{0in}
+%\addtolength{\textheight}{1.0in}
+
+%-----------------------------------------------------------
+%Custom commands
+\newcommand{\resitem}[1]{\item #1 \vspace{-2pt}}
+\newcommand{\resheading}[1]{{\large \colorbox{mygrey}{\begin{minipage}{\textwidth}{\textbf{#1 \vphantom{p\^{E}}}}\end{minipage}}}}
+\newcommand{\ressubheading}[4]{
+\begin{tabular*}{7.0in}{l@{\extracolsep{\fill}}r}
+		\textbf{#1} & #2 \\
+		\textit{#3} & \textit{#4} \\
+\end{tabular*}\vspace{-6pt}}
+%-----------------------------------------------------------
+
+\setlength{\oddsidemargin}{0.3cm} \setlength{\topmargin}{0in}
+\setlength{\textwidth}{6.4in}
+\setlength{\textheight}{8.5in} \setlength{\parindent}{-0.1in}
+
+\begin{document}
+\hfill{\today\ }
+\vspace{1cm}
+\begin{center}
+{\textbf{\LARGE Bennett Clayton}}\\
+\vspace{.2cm}
+\textbf{Email:} {\color{blue} bgclayto@tamu.edu}
+%\Large August 2011
+\end{center}
+
+
+\vspace{0.1in}
+
+\resheading{Education}
+
+\begin{itemize}
+\item \textbf{Texas A\&M University}, \hfill Fall 2016 -
+	Present \\PhD in Mathematics 
+\vspace{0.1cm}
+
+\item \textbf{University of North Carolina at Charlotte},
+	\hfill Spring 2014 \\Masters of Science in
+	Mathematics 
+\vspace{0.1cm}
+
+\item \textbf{University of North Carolina at Charlotte},
+	\hfill Fall 2011 \\Bachelor of Science in
+	Mathematics
+\vspace{0.1cm}
+\textit{Cum Laude}
+
+\vspace{0.5cm}
+\end{itemize}
+
+\resheading{Publications}
+\begin{itemize}
+	\item B. Clayton, J.-L. Guermond, M. Maier, B.
+		Popov, E. J. Tovar. (Preprint) \textit{Robust
+		second-order approximation of the
+	compressible Euler equations with an arbitrary
+equation of state.} ArXiv (2022).
+\url{https://arxiv.org/abs/2207.12832}.  
+	\item B. Clayton, J.-L. Guermond, B. Popov.
+		\textit{Invariant Domain Preserving
+		Approximations for the Euler Equations with
+	Tabulated Equation of State.} SIAM Journal on
+	Scientific Computing, 44 (2022), pp. A444-A470.
+\end{itemize}
+\vspace{0.5cm}
+
+\resheading{Research interests}
+
+\begin{itemize}
+\item \textbf{Conservation Laws (Euler Equations)}
+\item \textbf{Numerical Analysis}
+\end{itemize}
+\vspace{0.5cm}
+
+
+\resheading{Current Research}
+
+\begin{itemize}
+\item \textbf{Advisors}: Dr. Popov, Dr. Guermond, and Dr.
+	Maier. \textbf{Research}: Development of invariant
+	domain preserving methods for the Euler equations
+	with tabulated EOS. 
+\end{itemize}
+\vspace{0.5cm}
+
+
+\resheading{Presentations}
+\begin{itemize}
+\item \textbf{WCCM-APCOM 2022 (Virtual)} \hfill August
+	2022\\ Yokohama, Japan.  Title: \textit{Invariant
+		Domain Preserving Methods for the Euler
+		equations with a Tabulated Equation of
+	State.}
+\item \textbf{4th Annual Meeting of the SIAM Texas-Louisiana
+		Section} \hfill November 2021\\ South Padre
+		Island, TX, USA.  Title:
+		\textit{Invariant-Domain Preserving
+			Approximation of the Compressible
+			Euler Equations with Tabulated
+		Equations of State.} 
+\item \textbf{Center for Large-Scale Scientific Simulations
+		Seminar} \hfill April 2021 \\ Texas A\&M
+		University, College Station, TX, USA. Title:
+		\textit{Invariant-Domain Preserving
+			Approximation of the Compressible
+		Euler Equations with Tabulated Equations of
+	State.} 
+\end{itemize}
+
+
+\resheading{Teaching Experience}
+\vspace{0.4cm}
+
+\large{\textbf{Texas A\&M University}, Instructor of Record
+	\hfill Summer 2022
+
+\normalsize
+
+\begin{enumerate}
+\item[] \textbf{MATH 140 Mathematics for Business and Social
+	Sciences} \hfill Summer 2022 \\ \textit{One class}
+\end{enumerate}
+
+\large{\textbf{Texas A\&M University}, Teaching Assistant
+\hfill Fall 2017 - Summer 2021} \\
+
+\normalsize
+
+\begin{enumerate}
+\item[] \textbf{Numerical Qualifier Preparatory Class} \hfill Summer 2021 \\
+\textit{One class} \\
+\textit{Duties included: preparing graduate students for their numerical PhD qualifying exam.}
+\item[] \textbf{MATH 442 Math Modeling} \hfill Fall 2019 \\
+\textit{One class} \\
+\textit{Duties included: preparing assignments and projects, grading, teaching Python, \\ and managing a lab.}
+\item[] \textbf{Numerical Qualifier Preparatory Class} \hfill Summer 2019 \\
+\textit{One class} \\
+\textit{Duties included: preparing graduate students for their numerical PhD qualifying exam.}
+\item[] \textbf{MATH 417 Numerical Analysis} \hfill Spring 2019 \\
+\textit{One section.} \\
+\textit{Duties included: teaching Python, recitation, and grading.}
+\item[] \textbf{MATH 151 Engineering Calculus I} \hfill Fall 2018 \\
+\textit{Three sections.} \\
+\textit{Duties included: teaching MATLAB, recitation, quiz preparation, and grading.}
+\item[] \textbf{MATH 152 Engineering Calculus II} \hfill Spring 2018 \\
+\textit{Three sections.} \\
+\textit{Duties included: teaching MATLAB, recitation, and grading.}
+\item[] \textbf{MATH 151 Engineering Calculus I} \hfill Fall 2017 \\
+\textit{Three sections.} \\
+\textit{Duties included: teaching MATLAB, recitation, quiz preparation, and grading.}
+\end{enumerate}
+
+\large{\textbf{UNC Charlotte}, Part-time Instructor \hfill Fall 2014 - Spring 2016}
+\vspace{0.1cm}
+
+\normalsize
+
+%Courses: 
+
+\begin{itemize}
+\item \textbf{MATH 1100 College Algebra} (\textit{Two
+	courses}) \hfill Spring 2016 \\ \textbf{MATH 1241
+Calculus I} (\textit{One course}) \\ \textbf{MATH 2164
+Linear Algebra} (\textit{One course}) 
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{MATH 1100 College Algebra}  
+(\textit{Two courses}) \hfill Fall 2015 \\
+\textbf{MATH 1120 Business Calculus}
+(\textit{Two courses})
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{MATH 1120 Business Calculus} 
+    (\textit{One course}) \hfill Spring 2015 \\
+    \textbf{MATH 1242 Calculus II} (Online)
+    (\textit{One course})
+\end{itemize}
+
+\begin{itemize}
+    \item \textbf{MATH 1120 Business Calculus} (Online)
+	  (\textit{One course}) \hfill Fall 2014 \\
+    \textbf{MATH 1120 Business Calculus} (\textit{One
+    course}) \\
+    \textbf{Calculus for Engineering Technology}
+    (\textit{Two courses})
+\end{itemize}
+
+%\large{\textbf{UNC Charlotte}, Graduate Student \hfill Spring 2014}
+%
+%\normalsize
+%
+%\begin{itemize}
+%\item \textbf{MATH 1103 Precalculus} \hfill Spring 2014 \\
+%(\textit{One course})
+%\end{itemize}
+
+\vspace{0.5cm}
+
+
+\resheading{Outreach}
+
+\begin{itemize}
+\item \textbf{Texas Junior Science and Humanities Symposia} \hfill January 2022 \\
+(\textit{Judge for Mathematics and Comp. Sci. Group})
+\item \textbf{Texas A\&M Integral Bee} \hfill Spring 2019 \\
+(\textit{Volunteer})
+\item \textbf{Texas A\&M High School Mathematics Contest} \hfill Fall 2016 \\
+(\textit{Volunteer Grader})
+\end{itemize}
+\vspace{0.5cm}
+
+
+\resheading{Leadership}
+
+\begin{itemize}
+    \item \textbf{Society for Industrial and Applied Math} \hfill Fall 2019 - Spring 2020 \\
+    (\textit{TAMU Graduate Student Chapter: President})
+    \item \textbf{Society for Industrial and Applied Math} \hfill Fall 2018 - Spring 2019 \\
+    (\textit{TAMU Graduate Student Chapter: Liason Officer})
+\end{itemize}
+\vskip 0.5cm
+
+
+\resheading{Skills}
+
+\begin{itemize}
+    \item \textbf{Programming Languages}: Fortran and C++.
+    \item \textbf{Other Sofware/Programs}: LaTeX, \texttt{deal.II}, MATLAB
+\end{itemize}
+\vspace{0.5cm}
+
+
+\resheading{Software Development} 
+\begin{itemize}
+\item \textbf{Ryujin}: A high performance multi-threaded
+	parallel C++ code based on the \texttt{deal.II}
+	finite element library for solving the Euler
+	equations. 
+\item \textbf{In-house Fortran Code}: A Fortran program for
+	solving the Euler equations using continuous finite
+	elements. 
+\end{itemize}
+
+
+\resheading{Languages}
+
+\begin{itemize}
+\item English: Native language
+\item Russian: Intermediate level
+\item Korean: Beginner level
+\end{itemize}
+\vspace{0.5cm}
+
+
+\resheading{Awards}
+
+\begin{itemize}
+\item \textbf{Award for Academic Excellence}   \hfill Spring 2009 \\
+UNC Charlotte, Department of Russian Studies 
+\end{itemize}
+\vspace{0.5cm}
+
+\end{document}
